@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="git,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 01 | 版本管理的演变123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354VCS 出现前1. 用目录拷贝区别不用的版本2. 公共文件容易被覆盖3. 成员沟通成本很高，代码集成效率低下v1.0	app	config	dbv1.1	app	co">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="玩转 Git 三剑客">
+<meta property="og:url" content="http://yoursite.com/2019/01/09/玩转-Git-三剑客/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="[TOC] 01 | 版本管理的演变123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354VCS 出现前1. 用目录拷贝区别不用的版本2. 公共文件容易被覆盖3. 成员沟通成本很高，代码集成效率低下v1.0	app	config	dbv1.1	app	co">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-02T15:22:04.776Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="玩转 Git 三剑客">
+<meta name="twitter:description" content="[TOC] 01 | 版本管理的演变123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354VCS 出现前1. 用目录拷贝区别不用的版本2. 公共文件容易被覆盖3. 成员沟通成本很高，代码集成效率低下v1.0	app	config	dbv1.1	app	co">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/09/玩转-Git-三剑客/">
+
+
+
+
+
+  <title>玩转 Git 三剑客 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/玩转-Git-三剑客/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">玩转 Git 三剑客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-09T23:56:44+08:00">
+                2019-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/vcs/" itemprop="url" rel="index">
+                    <span itemprop="name">vcs</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h5 id="01-版本管理的演变"><a href="#01-版本管理的演变" class="headerlink" title="01 | 版本管理的演变"></a>01 | 版本管理的演变</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">VCS 出现前</span><br><span class="line"><span class="number">1</span>. 用目录拷贝区别不用的版本</span><br><span class="line"><span class="number">2</span>. 公共文件容易被覆盖</span><br><span class="line"><span class="number">3</span>. 成员沟通成本很高，代码集成效率低下</span><br><span class="line"></span><br><span class="line">v1.<span class="number">0</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">v1.<span class="number">1</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">v1.<span class="number">2</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">	</span><br><span class="line">集中式 VCS </span><br><span class="line"><span class="number">1</span>. 有集中的版本管理服务器</span><br><span class="line"><span class="number">2</span>. 具备文件版本管理和分支管理能力</span><br><span class="line"><span class="number">3</span>. 集成效率有明显地提高</span><br><span class="line"><span class="number">4</span>. 客户端必须时刻和服务器相连</span><br><span class="line"></span><br><span class="line">[computer A]		[Central VCS Server]		[computer B]</span><br><span class="line">   File ---------&gt;		version3		&lt;--------- File </span><br><span class="line">   						version2</span><br><span class="line">   						version3</span><br><span class="line"></span><br><span class="line">分布式 VCS</span><br><span class="line"><span class="number">1</span>. 服务端你和客户端都有完整的版本库</span><br><span class="line"><span class="number">2</span>. 脱离服务端，客户端照样可以管理版本</span><br><span class="line"><span class="number">3</span>. 查看历史和版本比较等多数操作，都不需要访问服务器，比集中式 VCS 更能提高版本管理效率</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[computer A]		[Server Computer]		[computer B]</span><br><span class="line">   File 			[version database]			File </span><br><span class="line">[version database]       version3				[version database]								</span><br><span class="line">   version3				 version2				   version3</span><br><span class="line">   version2				 version1				   version2</span><br><span class="line">   version1										   version1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">A version database-----&gt;		version database			&lt;-----B version database</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#### Git 的特点</span></span><br><span class="line"><span class="number">1</span>. 最优的存储能力</span><br><span class="line"><span class="number">2</span>. 非凡的性能</span><br><span class="line"><span class="number">3</span>. 开源的</span><br><span class="line"><span class="number">4</span>. 很容易做备份</span><br><span class="line"><span class="number">5</span>. 支持离线操作</span><br><span class="line"><span class="number">6</span>. 很容易制定工作流</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Git 官网：</p>
+<p><a href="https://git-scm.com" target="_blank" rel="noopener">https://git-scm.com</a></p>
+</li>
+<li><p>GitHub：<br><a href="https://github.com" target="_blank" rel="noopener">https://github.com</a></p>
+</li>
+<li><p>GitLab：</p>
+<p><a href="https://about.gitlab.com" target="_blank" rel="noopener">https://about.gitlab.com</a></p>
+</li>
+<li><p>SVN：</p>
+<p><a href="https://subversion.apache.org" target="_blank" rel="noopener">https://subversion.apache.org</a></p>
+</li>
+</ul>
+<a id="more"></a>
+<h5 id="02-安装-Git"><a href="#02-安装-Git" class="headerlink" title="02 | 安装 Git"></a>02 | 安装 Git</h5><p><a href="https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git" target="_blank" rel="noopener">安装 Git</a></p>
+<h5 id="03-使用Git之前需要做的最小配置"><a href="#03-使用Git之前需要做的最小配置" class="headerlink" title="03 | 使用Git之前需要做的最小配置"></a>03 | 使用Git之前需要做的最小配置</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">'your_name'</span></span><br><span class="line">git config --global user.email <span class="string">'your_email@domain.com'</span></span><br><span class="line"></span><br><span class="line">config 的三个作用域</span><br><span class="line">缺省等同于 local</span><br><span class="line">git config --local		local只对某个仓库有效</span><br><span class="line">git config --global		global对当前用户所有仓库有效</span><br><span class="line">git config --system		system对系统所有登录的用户有效</span><br><span class="line"></span><br><span class="line">显示 config 的配置，加 --list</span><br><span class="line">git config --list --local </span><br><span class="line">git config --list --global</span><br><span class="line">git config --list --system	</span><br><span class="line"></span><br><span class="line">[实操] </span><br><span class="line">➜  ~ git config --list --global</span><br><span class="line">user.name=smniuhe</span><br><span class="line">user.email=smniuhe@<span class="number">163</span>.com</span><br><span class="line">alias.lg=log --graph --pretty=format:<span class="string">'%Cred%h%Creset -%C(yellow)% d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset'</span> --abbrev-commit --date=relative</span><br><span class="line">alias.psm=push origin master</span><br><span class="line">alias.plm=pull origin master</span><br><span class="line">color.ui=true</span><br><span class="line">core.quotepath=false</span><br><span class="line">core.excludesfile=/Users/niuhesm/.gitignore_global</span><br><span class="line">core.autocrlf=input</span><br><span class="line">filter.lfs.process=git-lfs filter-process</span><br><span class="line">filter.lfs.required=true</span><br><span class="line">filter.lfs.clean=git-lfs clean -- %f</span><br><span class="line">filter.lfs.smudge=git-lfs smudge -- %f</span><br><span class="line">difftool.sourcetree.cmd=opendiff <span class="string">"<span class="variable">$LOCAL</span>"</span> <span class="string">"<span class="variable">$REMOTE</span>"</span></span><br><span class="line">difftool.sourcetree.path=</span><br><span class="line">mergetool.sourcetree.cmd=/Users/niuhesm/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh <span class="string">"<span class="variable">$LOCAL</span>"</span> <span class="string">"<span class="variable">$REMOTE</span>"</span> -ancestor <span class="string">"<span class="variable">$BASE</span>"</span> -merge <span class="string">"<span class="variable">$MERGED</span>"</span></span><br><span class="line">mergetool.sourcetree.trustexitcode=true</span><br><span class="line">commit.template=/Users/niuhesm/.stCommitMsg</span><br><span class="line"></span><br><span class="line">➜  ~ git config --list --local</span><br><span class="line">fatal: --local 只能在一个仓库内使用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">➜  ~ git config --list --system</span><br><span class="line">credential.helper=osxkeychain</span><br><span class="line">(<span class="keyword">END</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="04-创建第一个仓库并配置-local-用户信息"><a href="#04-创建第一个仓库并配置-local-用户信息" class="headerlink" title="04 | 创建第一个仓库并配置 local 用户信息"></a>04 | 创建第一个仓库并配置 local 用户信息</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">建 Git 仓库</span><br><span class="line">两种场景：</span><br><span class="line"><span class="number">1</span>.把已有的项目代码纳入Git管理</span><br><span class="line">$ cd 项目代码所在的文件夹</span><br><span class="line">$ git init</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>.新建的项目直接用Git管理</span><br><span class="line">$ cd 某个文件夹</span><br><span class="line">$ git init your_project		<span class="comment"># 会在当前路径下创建和项目名称同名的文件夹</span></span><br><span class="line">$ cd your_project</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[实操]</span><br><span class="line">➜  geekTime cd ~</span><br><span class="line">➜  ~</span><br><span class="line">➜  ~</span><br><span class="line">➜  ~</span><br><span class="line">➜  ~</span><br><span class="line">➜  ~ cd resouces/geekTime</span><br><span class="line">➜  geekTime git init git_learning</span><br><span class="line">已初始化空的 Git 仓库于 /Users/niuhesm/resouces/geekTime/git_learning/.git/</span><br><span class="line">➜  geekTime cd git_learning</span><br><span class="line">➜  git_learning git:(master) ls -al</span><br><span class="line">total <span class="number">0</span></span><br><span class="line">drwxr-xr-x  <span class="number">3</span> niuhesm  staff   <span class="number">96</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">10</span> .</span><br><span class="line">drwxr-xr-x  <span class="number">3</span> niuhesm  staff   <span class="number">96</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">10</span> ..</span><br><span class="line">drwxr-xr-x  <span class="number">9</span> niuhesm  staff  <span class="number">288</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">10</span> .git</span><br><span class="line">➜  git_learning git:(master) ls</span><br><span class="line">➜  git_learning git:(master) git config --global --list</span><br><span class="line">user.name=smniuhe</span><br><span class="line">user.email=smniuhe@<span class="number">163</span>.com</span><br><span class="line">alias.lg=log --graph --pretty=format:<span class="string">'%Cred%h%Creset -%C(yellow)% d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset'</span> --abbrev-commit --date=relative</span><br><span class="line">alias.psm=push origin master</span><br><span class="line">alias.plm=pull origin master</span><br><span class="line">color.ui=true</span><br><span class="line">core.quotepath=false</span><br><span class="line">core.excludesfile=/Users/niuhesm/.gitignore_global</span><br><span class="line">core.autocrlf=input</span><br><span class="line">filter.lfs.process=git-lfs filter-process</span><br><span class="line">filter.lfs.required=true</span><br><span class="line">filter.lfs.clean=git-lfs clean -- %f</span><br><span class="line">filter.lfs.smudge=git-lfs smudge -- %f</span><br><span class="line">difftool.sourcetree.cmd=opendiff <span class="string">"<span class="variable">$LOCAL</span>"</span> <span class="string">"<span class="variable">$REMOTE</span>"</span></span><br><span class="line">difftool.sourcetree.path=</span><br><span class="line">mergetool.sourcetree.cmd=/Users/niuhesm/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh <span class="string">"<span class="variable">$LOCAL</span>"</span> <span class="string">"<span class="variable">$REMOTE</span>"</span> -ancestor <span class="string">"<span class="variable">$BASE</span>"</span> -merge <span class="string">"<span class="variable">$MERGED</span>"</span></span><br><span class="line">mergetool.sourcetree.trustexitcode=true</span><br><span class="line">commit.template=/Users/niuhesm/.stCommitMsg</span><br><span class="line">➜  git_learning git:(master) git config --local user.name <span class="string">'smniuhe'</span></span><br><span class="line">➜  git_learning git:(master) git config --local user.email <span class="string">'smniuhe@gmail.com'</span></span><br><span class="line"><span class="comment">## --local --list  等价于	 --list --local</span></span><br><span class="line">➜  git_learning git:(master) git config --local --list</span><br><span class="line">➜  git_learning git:(master) git config --list --local</span><br><span class="line">drwxr-xr-x   <span class="number">3</span> niuhesm  staff    <span class="number">96</span>B <span class="number">10</span> <span class="number">28</span> <span class="number">17</span>:<span class="number">03</span> Jekins</span><br><span class="line">core.repositoryformatversion=<span class="number">0</span></span><br><span class="line">core.filemode=true</span><br><span class="line">core.bare=false</span><br><span class="line">core.logallrefupdates=true</span><br><span class="line">core.ignorecase=true</span><br><span class="line">core.precomposeunicode=true</span><br><span class="line">user.name=smniuhe</span><br><span class="line">user.email=smniuhe@gmail.com</span><br><span class="line">➜  git_learning git:(master) clear</span><br><span class="line"></span><br><span class="line">[实操]</span><br><span class="line">➜  git_learning git:(master) pwd</span><br><span class="line">/Users/niuhesm/resouces/geekTime/git_learning</span><br><span class="line">➜  git_learning git:(master) cp ../readme .</span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'Add readme'</span></span><br><span class="line">位于分支 master</span><br><span class="line"></span><br><span class="line">初始提交</span><br><span class="line"></span><br><span class="line">未跟踪的文件:</span><br><span class="line">	readme</span><br><span class="line"></span><br><span class="line">提交为空，但是存在尚未跟踪的文件</span><br><span class="line">➜  git_learning git:(master) ✗</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">## 把git命令行中的中文提示修改成英文</span><br><span class="line">普通的命令行</span><br><span class="line">echo &quot;alias git=&apos;LANG=en_GB git&apos;&quot; &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br><span class="line">安装了zsh的命令行</span><br><span class="line">echo &quot;alias git=&apos;LANG=en_GB git&apos;&quot; &gt;&gt; ~/.zshrc</span><br><span class="line"></span><br><span class="line">然后重新打开一个命令行在运行git命令就行啦</span><br><span class="line">--------------------- </span><br><span class="line">作者：zhalcie2011 </span><br><span class="line">来源：CSDN </span><br><span class="line">原文：https://blog.csdn.net/zhalcie2011/article/details/82837236 </span><br><span class="line">版权声明：本文为博主原创文章，转载请附上博文链接！</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'Add readme'</span></span><br><span class="line">[master (root-commit) <span class="number">343</span>e510] Add readme</span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">0</span> insertions(+), <span class="number">0</span> deletions(-)</span><br><span class="line"> create mode <span class="number">100644</span> readme</span><br><span class="line">➜  git_learning git:(master) git log</span><br><span class="line">commit <span class="number">343</span>e5104b2a333cc5dc1032ef7f2e7edb0805eca (HEAD -&gt; master)</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">37</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add readme</span><br><span class="line">(<span class="keyword">END</span>)</span><br><span class="line">➜  git_learning git:(master)</span><br><span class="line"></span><br><span class="line">结论：</span><br><span class="line"><span class="number">1</span>. 由 Author 显示的，可以看出 local &gt; global</span><br><span class="line"><span class="number">2</span>. 直接 commit 文件是不行的，必须要 add</span><br></pre></td></tr></table></figure>
+<h5 id="05-通过几次-commit-来认识工作区和暂存区"><a href="#05-通过几次-commit-来认识工作区和暂存区" class="headerlink" title="05 | 通过几次 commit 来认识工作区和暂存区"></a>05 | 通过几次 commit 来认识工作区和暂存区</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line">➜  git_learning git:(master) cp ../<span class="number">0</span>-material/index.html.<span class="number">01</span> index.html</span><br><span class="line">➜  git_learning git:(master) ✗ cp -r ../<span class="number">0</span>-material/images .</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">	images/</span><br><span class="line">	index.html</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use <span class="string">"git add"</span> to track)</span><br><span class="line">➜  git_learning git:(master) ✗ git add index.html images</span><br><span class="line">➜  git_learning git:(master) ✗ ls -al</span><br><span class="line">total <span class="number">8</span></span><br><span class="line">drwxr-xr-x   <span class="number">6</span> niuhesm  staff   <span class="number">192</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">56</span> .</span><br><span class="line">drwxr-xr-x   <span class="number">7</span> niuhesm  staff   <span class="number">224</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">53</span> ..</span><br><span class="line">drwxr-xr-x  <span class="number">12</span> niuhesm  staff   <span class="number">384</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">57</span> .git</span><br><span class="line">drwxr-xr-x@  <span class="number">3</span> niuhesm  staff    <span class="number">96</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">56</span> images</span><br><span class="line">-rwxr-xr-x@  <span class="number">1</span> niuhesm  staff  <span class="number">1303</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">56</span> index.html</span><br><span class="line">-rw-r--r--@  <span class="number">1</span> niuhesm  staff     <span class="number">0</span>  <span class="number">1</span>  <span class="number">9</span> <span class="number">22</span>:<span class="number">20</span> readme</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">	new file:   images/git-logo.png</span><br><span class="line">	new file:   index.html</span><br><span class="line"></span><br><span class="line">➜  git_learning git:(master) ✗ open index.html</span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'Add index + logo'</span></span><br><span class="line">[master <span class="number">79</span>de2a3] Add index + logo</span><br><span class="line"> <span class="number">2</span> files changed, <span class="number">49</span> insertions(+)</span><br><span class="line"> create mode <span class="number">100755</span> images/git-logo.png</span><br><span class="line"> create mode <span class="number">100755</span> index.html</span><br><span class="line">➜  git_learning git:(master) git log</span><br><span class="line">commit <span class="number">79</span>de2a3b157e03bfb630d87bd64316be7078801f (HEAD -&gt; master)</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">59</span>:<span class="number">27</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add index + logo</span><br><span class="line"></span><br><span class="line">commit <span class="number">343</span>e5104b2a333cc5dc1032ef7f2e7edb0805eca</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">37</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add readme</span><br><span class="line">(<span class="keyword">END</span>)</span><br><span class="line">➜  git_learning git:(master) mkdir styles</span><br><span class="line">➜  git_learning git:(master) cp ../<span class="number">0</span>-material/styles/style.css styles/style.css</span><br><span class="line">➜  git_learning git:(master) ✗ cd styles</span><br><span class="line">➜  styles git:(master) ✗ vi style.css</span><br><span class="line">➜  styles git:(master) ✗ vim style.css</span><br><span class="line">➜  styles git:(master) ✗ cd ..</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">	styles/</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use <span class="string">"git add"</span> to track)</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">	new file:   styles/style.css</span><br><span class="line"></span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'Add style.css'</span></span><br><span class="line">[master <span class="number">7108122</span>] Add style.css</span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">50</span> insertions(+)</span><br><span class="line"> create mode <span class="number">100755</span> styles/style.css</span><br><span class="line">➜  git_learning git:(master) git log </span><br><span class="line">commit <span class="number">710812243</span>b15658b7ffb9bbbc45eb7a5191fb4db (HEAD -&gt; master)</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">05</span>:<span class="number">50</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add style.css</span><br><span class="line"></span><br><span class="line">commit <span class="number">79</span>de2a3b157e03bfb630d87bd64316be7078801f</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">59</span>:<span class="number">27</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add index + logo</span><br><span class="line"></span><br><span class="line">commit <span class="number">343</span>e5104b2a333cc5dc1032ef7f2e7edb0805eca</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">37</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add readme</span><br><span class="line">(<span class="keyword">END</span>)</span><br><span class="line">➜  git_learning git:(master) mkdir js</span><br><span class="line">➜  git_learning git:(master) cp ../<span class="number">0</span>-material/js/script.js js/script.js</span><br><span class="line">➜  git_learning git:(master) ✗ git add js/script.js</span><br><span class="line">➜  git_learning git:(master) ✗ git commit</span><br><span class="line">Aborting commit due to empty commit message.</span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'add script.js'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 修改两个文件</span></span><br><span class="line">➜  git_learning git:(master) vim index.html</span><br><span class="line">➜  git_learning git:(master) ✗ open index.html</span><br><span class="line">➜  git_learning git:(master) ✗ vim styles/style.css</span><br><span class="line">➜  git_learning git:(master) ✗ open index.html</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">"git checkout -- &lt;file&gt;..."</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">	modified:   index.html</span><br><span class="line">	modified:   styles/style.css</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">"git add"</span> and/or <span class="string">"git commit -a"</span>)</span><br><span class="line">➜  git_learning git:(master) ✗</span><br><span class="line"></span><br><span class="line">[添加所有被 git 已经管理的文件(git add -u)]</span><br><span class="line">➜  git_learning git:(master) ✗ git add -u</span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'edit projects'</span></span><br><span class="line">[master e7c86ee] edit projects</span><br><span class="line"> <span class="number">2</span> files changed, <span class="number">23</span> insertions(+), <span class="number">1</span> deletion(-)</span><br><span class="line">➜  git_learning git:(master) git log</span><br><span class="line">commit e7c86ee07b75b3e73198226bc6d31893dccfaf4e (HEAD -&gt; master)</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">32</span>:<span class="number">44</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    edit projects</span><br><span class="line"></span><br><span class="line">commit d469e8d9abbf1e8e4d9044c59d5ad3ca5980335f</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">11</span>:<span class="number">32</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    add script.js</span><br><span class="line"></span><br><span class="line">commit <span class="number">710812243</span>b15658b7ffb9bbbc45eb7a5191fb4db</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">05</span>:<span class="number">50</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add style.css</span><br><span class="line"></span><br><span class="line">commit <span class="number">79</span>de2a3b157e03bfb630d87bd64316be7078801f</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">59</span>:<span class="number">27</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add index + logo</span><br><span class="line"></span><br><span class="line">commit <span class="number">343</span>e5104b2a333cc5dc1032ef7f2e7edb0805eca</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">37</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add readme</span><br><span class="line">(<span class="keyword">END</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="06-给文件重命名的简便方式"><a href="#06-给文件重命名的简便方式" class="headerlink" title="06 | 给文件重命名的简便方式"></a>06 | 给文件重命名的简便方式</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">➜  git_learning git:(master) mv readme readme.md</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">"git add/rm &lt;file&gt;..."</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">"git checkout -- &lt;file&gt;..."</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">	deleted:    readme</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">	readme.md</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">"git add"</span> and/or <span class="string">"git commit -a"</span>)</span><br><span class="line">➜  git_learning git:(master) ✗ git add readme.md</span><br><span class="line">➜  git_learning git:(master) ✗ git rm readme</span><br><span class="line">rm <span class="string">'readme'</span></span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">	renamed:    readme -&gt; readme.md</span><br><span class="line"></span><br><span class="line">[清空暂存区(git rest -- hart)]</span><br><span class="line">➜  git_learning git:(master) ✗ git reset --hard</span><br><span class="line">HEAD is now at e7c86ee edit projects</span><br><span class="line">➜  git_learning git:(master) git status</span><br><span class="line">On branch master</span><br><span class="line">nothing to commit, working tree clean</span><br><span class="line">➜  git_learning git:(master)</span><br><span class="line">[重命名(git mv readme readme.md)]</span><br><span class="line">➜  git_learning git:(master) git mv readme readme.md</span><br><span class="line">➜  git_learning git:(master) ✗ git status</span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">	renamed:    readme -&gt; readme.md</span><br><span class="line"></span><br><span class="line">➜  git_learning git:(master) ✗ git commit -m <span class="string">'move readme to readme.md'</span></span><br><span class="line">[master <span class="number">9</span>ca7ca6] move readme to readme.md</span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">0</span> insertions(+), <span class="number">0</span> deletions(-)</span><br><span class="line"> rename readme =&gt; readme.md (<span class="number">100</span>%)</span><br><span class="line">➜  git_learning git:(master) git log</span><br><span class="line">commit <span class="number">9</span>ca7ca6a7cef46fe8735a94509770d08b431d638 (HEAD -&gt; master)</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">44</span>:<span class="number">33</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    move readme to readme.md</span><br><span class="line"></span><br><span class="line">commit e7c86ee07b75b3e73198226bc6d31893dccfaf4e</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">32</span>:<span class="number">44</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    edit projects</span><br><span class="line"></span><br><span class="line">commit d469e8d9abbf1e8e4d9044c59d5ad3ca5980335f</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">11</span>:<span class="number">32</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    add script.js</span><br><span class="line"></span><br><span class="line">commit <span class="number">710812243</span>b15658b7ffb9bbbc45eb7a5191fb4db</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">23</span>:<span class="number">05</span>:<span class="number">50</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add style.css</span><br><span class="line"></span><br><span class="line">commit <span class="number">79</span>de2a3b157e03bfb630d87bd64316be7078801f</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">59</span>:<span class="number">27</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line"></span><br><span class="line">    Add index + logo</span><br><span class="line"></span><br><span class="line">commit <span class="number">343</span>e5104b2a333cc5dc1032ef7f2e7edb0805eca</span><br><span class="line">Author: smniuhe &lt;smniuhe@gmail.com&gt;</span><br><span class="line">Date:   Wed Jan <span class="number">9</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">37</span> <span class="number">2019</span> +<span class="number">0800</span></span><br><span class="line">➜  git_learning git:(master)</span><br></pre></td></tr></table></figure>
+<h5 id="07-通过-git-log-查看版本演变历史"><a href="#07-通过-git-log-查看版本演变历史" class="headerlink" title="07 | 通过 git log 查看版本演变历史"></a>07 | 通过 git log 查看版本演变历史</h5>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/12/多条件查询遵循-Restful-API-规范的改如何设计？/" rel="next" title="多条件查询遵循 Restful API 规范的改如何设计？">
+                <i class="fa fa-chevron-left"></i> 多条件查询遵循 Restful API 规范的改如何设计？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/02/Cloud-Toolkit-运用/" rel="prev" title="Cloud Toolkit 运用">
+                Cloud Toolkit 运用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <p class="site-description motion-element" itemprop="description">大家好，我是牛河</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                前辈链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="阿里中间件" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="美团技术团队" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="Mercy Ma" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="当然我在扯淡" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="周立" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="芋道源码" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="程序猿DD" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="梁桂钊" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="纯洁的微笑" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#01-版本管理的演变"><span class="nav-number">1.</span> <span class="nav-text">01 | 版本管理的演变</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#02-安装-Git"><span class="nav-number">2.</span> <span class="nav-text">02 | 安装 Git</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#03-使用Git之前需要做的最小配置"><span class="nav-number">3.</span> <span class="nav-text">03 | 使用Git之前需要做的最小配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#04-创建第一个仓库并配置-local-用户信息"><span class="nav-number">4.</span> <span class="nav-text">04 | 创建第一个仓库并配置 local 用户信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#05-通过几次-commit-来认识工作区和暂存区"><span class="nav-number">5.</span> <span class="nav-text">05 | 通过几次 commit 来认识工作区和暂存区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#06-给文件重命名的简便方式"><span class="nav-number">6.</span> <span class="nav-text">06 | 给文件重命名的简便方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#07-通过-git-log-查看版本演变历史"><span class="nav-number">7.</span> <span class="nav-text">07 | 通过 git log 查看版本演变历史</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

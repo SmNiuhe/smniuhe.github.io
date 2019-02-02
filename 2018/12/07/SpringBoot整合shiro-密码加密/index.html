@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="shiro,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据库中密码相关字段都不是明文,肯定是加密之后的，传统方式一般是使用MD5加密。 单纯使用不加盐的MD5加密方式，当两个用户的密码相同时，会发现数据库中存在相同内容的密码，这样也是不安全的。我们希望即便是两个人的原始密码一样，加密后的结果也不一样。">
+<meta name="keywords" content="shiro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合shiro 密码加密">
+<meta property="og:url" content="http://yoursite.com/2018/12/07/SpringBoot整合shiro-密码加密/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="数据库中密码相关字段都不是明文,肯定是加密之后的，传统方式一般是使用MD5加密。 单纯使用不加盐的MD5加密方式，当两个用户的密码相同时，会发现数据库中存在相同内容的密码，这样也是不安全的。我们希望即便是两个人的原始密码一样，加密后的结果也不一样。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-02T14:11:52.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot整合shiro 密码加密">
+<meta name="twitter:description" content="数据库中密码相关字段都不是明文,肯定是加密之后的，传统方式一般是使用MD5加密。 单纯使用不加盐的MD5加密方式，当两个用户的密码相同时，会发现数据库中存在相同内容的密码，这样也是不安全的。我们希望即便是两个人的原始密码一样，加密后的结果也不一样。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/07/SpringBoot整合shiro-密码加密/">
+
+
+
+
+
+  <title>SpringBoot整合shiro 密码加密 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/07/SpringBoot整合shiro-密码加密/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot整合shiro 密码加密</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-07T22:02:52+08:00">
+                2018-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/encrypt/" itemprop="url" rel="index">
+                    <span itemprop="name">encrypt</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>数据库中密码相关字段都不是明文,肯定是加密之后的，传统方式一般是使用MD5加密。</p>
+<p>单纯使用不加盐的MD5加密方式，当两个用户的密码相同时，会发现数据库中存在相同内容的密码，这样也是不安全的。我们希望即便是两个人的原始密码一样，加密后的结果也不一样。</p>
+<a id="more"></a>
+<p>下面进行shiro密码 加密加盐配置：</p>
+<h5 id="1-ShiroConfig中添加密码比较器"><a href="#1-ShiroConfig中添加密码比较器" class="headerlink" title="1.ShiroConfig中添加密码比较器"></a>1.ShiroConfig中添加密码比较器</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 配置密码比较器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Bean</span>(<span class="string">"credentialsMatcher"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> RetryLimitHashedCredentialsMatcher <span class="title">retryLimitHashedCredentialsMatcher</span><span class="params">()</span></span>&#123;</span><br><span class="line">    RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = <span class="keyword">new</span> RetryLimitHashedCredentialsMatcher();</span><br><span class="line">    retryLimitHashedCredentialsMatcher.setRedisManager(redisManager());</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果密码加密,可以打开下面配置</span></span><br><span class="line">    <span class="comment">//加密算法的名称</span></span><br><span class="line">    retryLimitHashedCredentialsMatcher.setHashAlgorithmName(<span class="string">"MD5"</span>);</span><br><span class="line">    <span class="comment">//配置加密的次数</span></span><br><span class="line">    retryLimitHashedCredentialsMatcher.setHashIterations(<span class="number">2</span>);</span><br><span class="line">    <span class="comment">//是否存储为16进制</span></span><br><span class="line">    retryLimitHashedCredentialsMatcher.setStoredCredentialsHexEncoded(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retryLimitHashedCredentialsMatcher;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-将密码比较器配置给ShiroRealm"><a href="#2-将密码比较器配置给ShiroRealm" class="headerlink" title="2.将密码比较器配置给ShiroRealm"></a>2.将密码比较器配置给ShiroRealm</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  身份认证realm; (这个需要自己写，账号密码校验；权限等)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ShiroRealm <span class="title">shiroRealm</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ShiroRealm shiroRealm = <span class="keyword">new</span> ShiroRealm();</span><br><span class="line">    shiroRealm.setCachingEnabled(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//启用身份验证缓存，即缓存AuthenticationInfo信息，默认false</span></span><br><span class="line">    shiroRealm.setAuthenticationCachingEnabled(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//缓存AuthenticationInfo信息的缓存名称 在ehcache-shiro.xml中有对应缓存的配置</span></span><br><span class="line">    shiroRealm.setAuthenticationCacheName(<span class="string">"authenticationCache"</span>);</span><br><span class="line">    <span class="comment">//启用授权缓存，即缓存AuthorizationInfo信息，默认false</span></span><br><span class="line">    shiroRealm.setAuthorizationCachingEnabled(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//缓存AuthorizationInfo信息的缓存名称  在ehcache-shiro.xml中有对应缓存的配置</span></span><br><span class="line">    shiroRealm.setAuthorizationCacheName(<span class="string">"authorizationCache"</span>);</span><br><span class="line">    <span class="comment">//配置自定义密码比较器</span></span><br><span class="line">    shiroRealm.setCredentialsMatcher(retryLimitHashedCredentialsMatcher());</span><br><span class="line">    <span class="keyword">return</span> shiroRealm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="3-密码比较器RetryLimitHashedCredentialsMatcher"><a href="#3-密码比较器RetryLimitHashedCredentialsMatcher" class="headerlink" title="3.密码比较器RetryLimitHashedCredentialsMatcher"></a>3.密码比较器RetryLimitHashedCredentialsMatcher</h5><p>自定义的密码比较器，跟前面博客中逻辑没有变化,唯一变的是 继承的类从 <code>SimpleCredentialsMatcher</code> 变为 <code>HashedCredentialsMatcher</code></p>
+<p>在密码比较器中做了： 如果用户输入密码连续错误5次，将锁定账号,具体参考博客：<a href="https://blog.csdn.net/qq_34021712/article/details/80461177" target="_blank" rel="noopener">https://blog.csdn.net/qq_34021712/article/details/80461177</a></p>
+<p>RetryLimitHashedCredentialsMatcher完整内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.test.shiro.config.shiro;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.entity.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.log4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.AuthenticationToken;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.LockedAccountException;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.credential.HashedCredentialsMatcher;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: SmNiuhe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span>: 2018/12/7</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span>: 登陆次数限制</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RetryLimitHashedCredentialsMatcher</span> <span class="keyword">extends</span> <span class="title">HashedCredentialsMatcher</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = Logger.getLogger(RetryLimitHashedCredentialsMatcher.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_RETRYLIMIT_CACHE_KEY_PREFIX = <span class="string">"shiro:cache:retrylimit:"</span>;</span><br><span class="line">    <span class="keyword">private</span> String keyPrefix = DEFAULT_RETRYLIMIT_CACHE_KEY_PREFIX;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line">    <span class="keyword">private</span> RedisManager redisManager;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRedisManager</span><span class="params">(RedisManager redisManager)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.redisManager = redisManager;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getRedisKickoutKey</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.keyPrefix + username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">doCredentialsMatch</span><span class="params">(AuthenticationToken token, AuthenticationInfo info)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户名</span></span><br><span class="line">        String username = (String)token.getPrincipal();</span><br><span class="line">        <span class="comment">//获取用户登录次数</span></span><br><span class="line">        AtomicInteger retryCount = (AtomicInteger)redisManager.get(getRedisKickoutKey(username));</span><br><span class="line">        <span class="keyword">if</span> (retryCount == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//如果用户没有登陆过,登陆次数加1 并放入缓存</span></span><br><span class="line">            retryCount = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (retryCount.incrementAndGet() &gt; <span class="number">5</span>) &#123;</span><br><span class="line">            <span class="comment">//如果用户登陆失败次数大于5次 抛出锁定用户异常  并修改数据库字段</span></span><br><span class="line">            User user = userMapper.findByUserName(username);</span><br><span class="line">            <span class="keyword">if</span> (user != <span class="keyword">null</span> &amp;&amp; <span class="string">"0"</span>.equals(user.getState()))&#123;</span><br><span class="line">                <span class="comment">//数据库字段 默认为 0  就是正常状态 所以 要改为1</span></span><br><span class="line">                <span class="comment">//修改数据库的状态字段为锁定</span></span><br><span class="line">                user.setState(<span class="string">"1"</span>);</span><br><span class="line">                userMapper.update(user);</span><br><span class="line">            &#125;</span><br><span class="line">            logger.info(<span class="string">"锁定用户"</span> + user.getUsername());</span><br><span class="line">            <span class="comment">//抛出用户锁定异常</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> LockedAccountException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//判断用户账号和密码是否正确</span></span><br><span class="line">        <span class="keyword">boolean</span> matches = <span class="keyword">super</span>.doCredentialsMatch(token, info);</span><br><span class="line">        <span class="keyword">if</span> (matches) &#123;</span><br><span class="line">            <span class="comment">//如果正确,从缓存中将用户登录计数 清除</span></span><br><span class="line">            redisManager.del(getRedisKickoutKey(username));</span><br><span class="line">        &#125;&#123;</span><br><span class="line">            redisManager.set(getRedisKickoutKey(username), retryCount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> matches;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名 解锁用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlockAccount</span><span class="params">(String username)</span></span>&#123;</span><br><span class="line">        User user = userMapper.findByUserName(username);</span><br><span class="line">        <span class="keyword">if</span> (user != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">//修改数据库的状态字段为锁定</span></span><br><span class="line">            user.setState(<span class="string">"0"</span>);</span><br><span class="line">            userMapper.update(user);</span><br><span class="line">            redisManager.del(getRedisKickoutKey(username));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="4-修改ShiroRealm中doGetAuthenticationInfo方法"><a href="#4-修改ShiroRealm中doGetAuthenticationInfo方法" class="headerlink" title="4.修改ShiroRealm中doGetAuthenticationInfo方法"></a>4.修改ShiroRealm中doGetAuthenticationInfo方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.test.shiro.config.shiro;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.PermissionMapper;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.RoleMapper;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.entity.Permission;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.entity.Role;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.springboot.test.shiro.modules.user.dao.entity.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.SecurityUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authc.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.AuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.authz.SimpleAuthorizationInfo;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.realm.AuthorizingRealm;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.subject.PrincipalCollection;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: SmNiuhe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span>: 2018/12/7</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span>: 在Shiro中，最终是通过Realm来获取应用程序中的用户、角色及权限信息的</span></span><br><span class="line"><span class="comment"> * 在Realm中会直接从我们的数据源中获取Shiro需要的验证信息。可以说，Realm是专用于安全框架的DAO.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroRealm</span> <span class="keyword">extends</span> <span class="title">AuthorizingRealm</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RoleMapper roleMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> PermissionMapper permissionMapper;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 验证用户身份</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> authenticationToken</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> AuthenticationException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doGetAuthenticationInfo</span><span class="params">(AuthenticationToken authenticationToken)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户名密码 第一种方式</span></span><br><span class="line">        <span class="comment">//String username = (String) authenticationToken.getPrincipal();</span></span><br><span class="line">        <span class="comment">//String password = new String((char[]) authenticationToken.getCredentials());</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户名 密码 第二种方式</span></span><br><span class="line">        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;</span><br><span class="line">        String username = usernamePasswordToken.getUsername();</span><br><span class="line">        String password = <span class="keyword">new</span> String(usernamePasswordToken.getPassword());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//从数据库查询用户信息</span></span><br><span class="line">        User user = <span class="keyword">this</span>.userMapper.findByUserName(username);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//可以在这里直接对用户名校验,或者调用 CredentialsMatcher 校验</span></span><br><span class="line">        <span class="keyword">if</span> (user == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnknownAccountException(<span class="string">"用户名或密码错误！"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//这里将 密码对比 注销掉,否则 无法锁定  要将密码对比 交给 密码比较器</span></span><br><span class="line">        <span class="comment">//if (!password.equals(user.getPassword())) &#123;</span></span><br><span class="line">        <span class="comment">//    throw new IncorrectCredentialsException("用户名或密码错误！");</span></span><br><span class="line">        <span class="comment">//&#125;</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"1"</span>.equals(user.getState())) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> LockedAccountException(<span class="string">"账号已被锁定,请联系管理员！"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        SimpleAuthenticationInfo info = <span class="keyword">new</span> SimpleAuthenticationInfo(user, user.getPassword(),<span class="keyword">new</span> MyByteSource(user.getUsername()),getName());</span><br><span class="line">        <span class="keyword">return</span> info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 授权用户权限</span></span><br><span class="line"><span class="comment">     * 授权的方法是在碰到&lt;shiro:hasPermission name=''&gt;&lt;/shiro:hasPermission&gt;标签的时候调用的</span></span><br><span class="line"><span class="comment">     * 它会去检测shiro框架中的权限(这里的permissions)是否包含有该标签的name值,如果有,里面的内容显示</span></span><br><span class="line"><span class="comment">     * 如果没有,里面的内容不予显示(这就完成了对于权限的认证.)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * shiro的权限授权是通过继承AuthorizingRealm抽象类，重载doGetAuthorizationInfo();</span></span><br><span class="line"><span class="comment">     * 当访问到页面的时候，链接配置了相应的权限或者shiro标签才会执行此方法否则不会执行</span></span><br><span class="line"><span class="comment">     * 所以如果只是简单的身份认证没有权限的控制的话，那么这个方法可以不进行实现，直接返回null即可。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 在这个方法中主要是使用类：SimpleAuthorizationInfo 进行角色的添加和权限的添加。</span></span><br><span class="line"><span class="comment">     * authorizationInfo.addRole(role.getRole()); authorizationInfo.addStringPermission(p.getPermission());</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 当然也可以添加set集合：roles是从数据库查询的当前用户的角色，stringPermissions是从数据库查询的当前用户对应的权限</span></span><br><span class="line"><span class="comment">     * authorizationInfo.setRoles(roles); authorizationInfo.setStringPermissions(stringPermissions);</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 就是说如果在shiro配置文件中添加了filterChainDefinitionMap.put("/add", "perms[权限添加]");</span></span><br><span class="line"><span class="comment">     * 就说明访问/add这个链接必须要有“权限添加”这个权限才可以访问</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 如果在shiro配置文件中添加了filterChainDefinitionMap.put("/add", "roles[100002]，perms[权限添加]");</span></span><br><span class="line"><span class="comment">     * 就说明访问/add这个链接必须要有 "权限添加" 这个权限和具有 "100002" 这个角色才可以访问</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> principalCollection</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> AuthorizationInfo <span class="title">doGetAuthorizationInfo</span><span class="params">(PrincipalCollection principalCollection)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"查询权限方法调用了！！！"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户</span></span><br><span class="line">        User user = (User) SecurityUtils.getSubject().getPrincipal();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户角色</span></span><br><span class="line">        Set&lt;Role&gt; roles =<span class="keyword">this</span>.roleMapper.findRolesByUserId(user.getUid());</span><br><span class="line">        <span class="comment">//添加角色</span></span><br><span class="line">        SimpleAuthorizationInfo authorizationInfo =  <span class="keyword">new</span> SimpleAuthorizationInfo();</span><br><span class="line">        <span class="keyword">for</span> (Role role : roles) &#123;</span><br><span class="line">            authorizationInfo.addRole(role.getRole());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取用户权限</span></span><br><span class="line">        Set&lt;Permission&gt; permissions = <span class="keyword">this</span>.permissionMapper.findPermissionsByRoleId(roles);</span><br><span class="line">        <span class="comment">//添加权限</span></span><br><span class="line">        <span class="keyword">for</span> (Permission permission:permissions) &#123;</span><br><span class="line">            authorizationInfo.addStringPermission(permission.getPermission());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> authorizationInfo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写方法,清除当前用户的的 授权缓存</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> principals</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearCachedAuthorizationInfo</span><span class="params">(PrincipalCollection principals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.clearCachedAuthorizationInfo(principals);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写方法，清除当前用户的 认证缓存</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> principals</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearCachedAuthenticationInfo</span><span class="params">(PrincipalCollection principals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.clearCachedAuthenticationInfo(principals);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearCache</span><span class="params">(PrincipalCollection principals)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.clearCache(principals);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义方法：清除所有 授权缓存</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearAllCachedAuthorizationInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        getAuthorizationCache().clear();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义方法：清除所有 认证缓存</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearAllCachedAuthenticationInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        getAuthenticationCache().clear();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义方法：清除所有的  认证缓存  和 授权缓存</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clearAllCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        clearAllCachedAuthenticationInfo();</span><br><span class="line">        clearAllCachedAuthorizationInfo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跟之前的 <code>ShiroRealm</code> 相比,唯一改变的了<br><code>SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(),new MyByteSource(user.getUsername()),getName());</code>这一行代码,添加了 加盐参数。</p>
+<p><code>注意：</code>大家可能看到了使用了 <code>MyByteSource</code> 而不是 <code>ByteSource.Util.bytes(user.getUsername())</code>具体原因参考博客：<a href="https://blog.csdn.net/qq_34021712/article/details/84567437" target="_blank" rel="noopener">https://blog.csdn.net/qq_34021712/article/details/84567437</a></p>
+<h5 id="5-下面是生成密码加密加盐的方法-可以在注册的时候对明文进行加密-加盐-入库"><a href="#5-下面是生成密码加密加盐的方法-可以在注册的时候对明文进行加密-加盐-入库" class="headerlink" title="5.下面是生成密码加密加盐的方法,可以在注册的时候对明文进行加密 加盐 入库"></a>5.下面是生成密码加密加盐的方法,可以在注册的时候对明文进行加密 加盐 入库</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.test.shiro;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.crypto.hash.SimpleHash;</span><br><span class="line"><span class="keyword">import</span> org.apache.shiro.util.ByteSource;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: SmNiuhe</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span>: 2018/12/7</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span>: 给 密码进行 加密加盐  盐值默认为 用户名</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PasswordSaltTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(md5(<span class="string">"123456"</span>,<span class="string">"admin"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String <span class="title">md5</span><span class="params">(String password, String salt)</span></span>&#123;</span><br><span class="line">        <span class="comment">//加密方式</span></span><br><span class="line">        String hashAlgorithmName = <span class="string">"MD5"</span>;</span><br><span class="line">        <span class="comment">//盐：为了即使相同的密码不同的盐加密后的结果也不同</span></span><br><span class="line">        ByteSource byteSalt = ByteSource.Util.bytes(salt);</span><br><span class="line">        <span class="comment">//密码</span></span><br><span class="line">        Object source = password;</span><br><span class="line">        <span class="comment">//加密次数</span></span><br><span class="line">        <span class="keyword">int</span> hashIterations = <span class="number">2</span>;</span><br><span class="line">        SimpleHash result = <span class="keyword">new</span> SimpleHash(hashAlgorithmName, source, byteSalt, hashIterations);</span><br><span class="line">        <span class="keyword">return</span> result.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="可能出现的问题"><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h5><p>可能会发生这种情况，测试发现密码不对，具体原因debug都可以发现,这里直接把结果发出来：</p>
+<h5 id="第一种："><a href="#第一种：" class="headerlink" title="第一种："></a>第一种：</h5><p>debug发现 传入的密码 经过加密加盐之后是对的,但是 从数据库中 获取的密码 却是明文,原因是在<code>ShiroRealm</code>中 <code>doGetAuthenticationInfo</code>方法中,最后返回的<code>SimpleAuthenticationInfo</code> 第二个参数 是密码,这个密码 不是从前台传过来的密码,而是从数据库中查询出来的</p>
+<h6 id="第二种："><a href="#第二种：" class="headerlink" title="第二种："></a>第二种：</h6><p>debug发现 传入的密码 经过加密加盐之后是对的,但是 从数据库中 获取的密码 却是更长的一段密文,原因是在<code>ShiroConfig</code>中配置的<code>RetryLimitHashedCredentialsMatcher</code>一个属性：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//是否存储为16进制</span></span><br><span class="line">retryLimitHashedCredentialsMatcher.setStoredCredentialsHexEncoded(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>默认是<code>true</code>，如果改为<code>false</code>，则会出现 对比的时候从数据库拿出密码,然后转 <code>base64</code> 变成了另外一个更长的字符串,所以怎么对比都是不通过的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/shiro/" rel="tag"># shiro</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/06/Spring-Boot-web-应用加速/" rel="next" title="Spring Boot web 应用加速">
+                <i class="fa fa-chevron-left"></i> Spring Boot web 应用加速
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/12/多条件查询遵循-Restful-API-规范的改如何设计？/" rel="prev" title="多条件查询遵循 Restful API 规范的改如何设计？">
+                多条件查询遵循 Restful API 规范的改如何设计？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <p class="site-description motion-element" itemprop="description">大家好，我是牛河</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                前辈链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="阿里中间件" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="美团技术团队" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="Mercy Ma" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="当然我在扯淡" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="周立" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="芋道源码" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="程序猿DD" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="梁桂钊" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="纯洁的微笑" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-ShiroConfig中添加密码比较器"><span class="nav-number">1.</span> <span class="nav-text">1.ShiroConfig中添加密码比较器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-将密码比较器配置给ShiroRealm"><span class="nav-number">2.</span> <span class="nav-text">2.将密码比较器配置给ShiroRealm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-密码比较器RetryLimitHashedCredentialsMatcher"><span class="nav-number">3.</span> <span class="nav-text">3.密码比较器RetryLimitHashedCredentialsMatcher</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-修改ShiroRealm中doGetAuthenticationInfo方法"><span class="nav-number">4.</span> <span class="nav-text">4.修改ShiroRealm中doGetAuthenticationInfo方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-下面是生成密码加密加盐的方法-可以在注册的时候对明文进行加密-加盐-入库"><span class="nav-number">5.</span> <span class="nav-text">5.下面是生成密码加密加盐的方法,可以在注册的时候对明文进行加密 加盐 入库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#可能出现的问题"><span class="nav-number">6.</span> <span class="nav-text">可能出现的问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第一种："><span class="nav-number">7.</span> <span class="nav-text">第一种：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第二种："><span class="nav-number">7.1.</span> <span class="nav-text">第二种：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

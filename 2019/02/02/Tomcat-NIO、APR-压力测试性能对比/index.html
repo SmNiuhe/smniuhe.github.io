@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tomcat,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Tomcat 三种线程模式 一、bio(blocking I/O) 即阻塞式I/O操作，表示Tomcat使用的是传统的Java I/O操作(即java.io包及其子包)。是基于JAVA的HTTP/1.1连接器，Tomcat7以下版本在默认情况下是以bio模式运行的。一般而言，bio模式是三种运行模式中性能最低的一种。我们可以通过Tomcat Manager来查看服务器的当前状态。（Tomcat7或">
+<meta name="keywords" content="tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat NIO、APR 压力测试性能对比">
+<meta property="og:url" content="http://yoursite.com/2019/02/02/Tomcat-NIO、APR-压力测试性能对比/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="Tomcat 三种线程模式 一、bio(blocking I/O) 即阻塞式I/O操作，表示Tomcat使用的是传统的Java I/O操作(即java.io包及其子包)。是基于JAVA的HTTP/1.1连接器，Tomcat7以下版本在默认情况下是以bio模式运行的。一般而言，bio模式是三种运行模式中性能最低的一种。我们可以通过Tomcat Manager来查看服务器的当前状态。（Tomcat7或">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-02T15:21:53.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat NIO、APR 压力测试性能对比">
+<meta name="twitter:description" content="Tomcat 三种线程模式 一、bio(blocking I/O) 即阻塞式I/O操作，表示Tomcat使用的是传统的Java I/O操作(即java.io包及其子包)。是基于JAVA的HTTP/1.1连接器，Tomcat7以下版本在默认情况下是以bio模式运行的。一般而言，bio模式是三种运行模式中性能最低的一种。我们可以通过Tomcat Manager来查看服务器的当前状态。（Tomcat7或">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/02/Tomcat-NIO、APR-压力测试性能对比/">
+
+
+
+
+
+  <title>Tomcat NIO、APR 压力测试性能对比 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/02/Tomcat-NIO、APR-压力测试性能对比/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tomcat NIO、APR 压力测试性能对比</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-02T23:19:44+08:00">
+                2019-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/tomcat/" itemprop="url" rel="index">
+                    <span itemprop="name">tomcat</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Tomcat-三种线程模式"><a href="#Tomcat-三种线程模式" class="headerlink" title="Tomcat 三种线程模式"></a>Tomcat 三种线程模式</h4><blockquote>
+<p><strong>一、bio(blocking I/O)</strong></p>
+<p>即阻塞式I/O操作，表示Tomcat使用的是传统的Java I/O操作(即java.io包及其子包)。是基于JAVA的HTTP/1.1连接器，Tomcat7以下版本在默认情况下是以bio模式运行的。一般而言，bio模式是三种运行模式中性能最低的一种。我们可以通过Tomcat Manager来查看服务器的当前状态。（<strong>Tomcat7</strong>或以下，在 <strong>Linux</strong> 系统中默认使用这种方式）</p>
+<p>一个线程处理一个请求，缺点：并发量高时，线程数较多，浪费资源</p>
+<p><strong>二、nio(new I/O)</strong></p>
+<p>是Java SE 1.4及后续版本提供的一种新的I/O操作方式(即java.nio包及其子包)。Java nio是一个基于缓冲区、并能提供非阻塞I/O操作的Java API，因此nio也被看成是non-blocking I/O的缩写。它拥有比传统I/O操作(bio)更好的并发运行性能。要让Tomcat以nio模式来运行只需要在Tomcat安装目录/conf/server.xml 中将对应的中protocol的属性值改为 org.apache.coyote.http11.Http11NioProtocol即可</p>
+<p>利用 Java 的异步请求 IO 处理，可以通过少量的线程处理大量的请求</p>
+<p>注意： <strong>Tomcat8</strong> 以上版本在 <strong>Linux</strong> 系统中，默认使用的就是NIO模式，不需要额外修改 ，Tomcat7必须修改Connector配置来启动</p>
+<p>undefined</p>
+<p><strong>三、apr(Apache Portable Runtime/Apache可移植运行时)</strong> （ 安装配置过程相对复杂）</p>
+<p>Tomcat将以JNI的形式调用Apache HTTP服务器的核心动态链接库来处理文件读取或网络传输操作，从而大大地提高Tomcat对静态文件的处理性能。Tomcat apr也是在Tomcat上运行高并发应用的首选模式。从操作系统级别来解决异步的IO问题</p>
+<p>undefined</p>
+<p><strong>zhuawang’s blog</strong><a href="http://www.cnblogs.com/jpfss/p/9257309.htmlTomcat" target="_blank" rel="noopener">三种高级运行模式</a></p>
+</blockquote>
+<a id="more"></a>
+<h5 id="主要注意的一点："><a href="#主要注意的一点：" class="headerlink" title="主要注意的一点："></a><em>主要注意的一点：</em></h5><p> 毕竟 APR 是 c 语言编写的，是非跨平台的，如果你追求稳定和简单的话，推荐还是默认的 NIO 模式</p>
+<p>Tomcat启动的时候，可以通过log看到Connector使用的是哪一种运行模式：</p>
+<ul>
+<li>Starting ProtocolHandler [“http-bio-8080”]</li>
+<li>Starting ProtocolHandler [“http-nio-8080”]</li>
+<li>Starting ProtocolHandler [“http-apr-8080”]</li>
+</ul>
+<h4 id="APR-安装"><a href="#APR-安装" class="headerlink" title="APR 安装"></a>APR 安装</h4><h5 id="APR-官网下载地址"><a href="#APR-官网下载地址" class="headerlink" title="APR 官网下载地址"></a><a href="http://apr.apache.org/download.cgi" target="_blank" rel="noopener">APR 官网下载地址</a></h5><ul>
+<li>APR 1.6.5 is the best available version</li>
+<li>APR-util 1.6.1 is the best available version</li>
+<li>APR iconv 1.2.2 is the best available version</li>
+</ul>
+<h5 id="安装顺序"><a href="#安装顺序" class="headerlink" title="安装顺序"></a>安装顺序</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 下载APR依赖包</span><br><span class="line">yum install -y expat expat-devel</span><br><span class="line"></span><br><span class="line">安装步骤</span><br><span class="line">1. apr</span><br><span class="line">   1. 解压至安装目录(# tar -xvf apr-1.6.5.tar.gz -C ../install/)</span><br><span class="line">   2. ./configure -prefix=/usr/local/apr</span><br><span class="line">   3. make</span><br><span class="line">   4. make install</span><br><span class="line">2. apr-iconv</span><br><span class="line">   1. 解压至安装目录(# tar -xvf apr-iconv-1.2.2.tar.gz -C ../install/)</span><br><span class="line">   2. ./configure -prefix=/usr/local/apr-iconv --with-apr=/usr/local/apr</span><br><span class="line">   3. make</span><br><span class="line">   4. make install</span><br><span class="line">3. apr-util</span><br><span class="line">   1. 解压至安装目录(# tar -xvf apr-util-1.6.1.tar.gz -C ../install/)</span><br><span class="line">   2. ./configure -prefix=/usr/local/apr-util --with-apr=/usr/local/apr --with-apriconv=/usr/local/apr-iconv</span><br><span class="line">   3. make</span><br><span class="line">   4. make install</span><br></pre></td></tr></table></figure>
+<h5 id="Tomcat-APR模式配置"><a href="#Tomcat-APR模式配置" class="headerlink" title="Tomcat APR模式配置"></a>Tomcat APR模式配置</h5><h6 id="Native-解压配置"><a href="#Native-解压配置" class="headerlink" title="Native 解压配置"></a>Native 解压配置</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apr-util-1.6.1]# cd /opt/install/apache-tomcat-9.0.14/bin</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]# ls</span><br><span class="line">bootstrap.jar		      configtest.bat	  makebase.bat	    tomcat-juli.jar</span><br><span class="line">catalina.bat		      configtest.sh	  makebase.sh	    tomcat-native.tar.gz</span><br><span class="line">catalina.sh		      daemon.sh		  setclasspath.bat  tool-wrapper.bat</span><br><span class="line">catalina-tasks.xml	      digest.bat	  setclasspath.sh   tool-wrapper.sh</span><br><span class="line">ciphers.bat		      digest.sh		  shutdown.bat	    version.bat</span><br><span class="line">ciphers.sh		      guns-logs		  shutdown.sh	    version.sh</span><br><span class="line">commons-daemon.jar	      guns-rest.log	  startup.bat</span><br><span class="line">commons-daemon-native.tar.gz  hs_err_pid6741.log  startup.sh</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]# tar -zxf tomcat-native.tar.gz</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]# cd tomcat-native-1.2.19-src/</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ tomcat-native-1.2.19-src]# cd native/</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ native]# ls</span><br><span class="line">build	    build-outputs.mk  include	       Makefile.in	  os		tcnative.pc.in</span><br><span class="line">buildconf   config.layout     libtcnative.dsp  NMAKEmakefile	  src		tcnative.spec</span><br><span class="line">build.conf  configure	      libtcnative.dsw  NMAKEmakefile.inc  srclib</span><br><span class="line">BUILDING    configure.in      LICENSE.bin.win  NOTICE.bin.win	  tcnative.dsp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[提示 java home 找不到]</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ native]# ./configure --with-apr=/usr/local/apr</span><br><span class="line">checking build system type... x86_64-pc-linux-gnu</span><br><span class="line">checking host system type... x86_64-pc-linux-gnu</span><br><span class="line">checking target system type... x86_64-pc-linux-gnu</span><br><span class="line">checking for a BSD-compatible install... /usr/bin/install -c</span><br><span class="line">checking for working mkdir -p... yes</span><br><span class="line">Tomcat Native Version: 1.2.19</span><br><span class="line">checking for chosen layout... tcnative</span><br><span class="line">checking for APR... yes</span><br><span class="line">configure: APR 1.6.5 detected.</span><br><span class="line">  setting CC to &quot;gcc&quot;</span><br><span class="line">  setting CPP to &quot;gcc -E&quot;</span><br><span class="line">  setting LIBTOOL to &quot;/usr/local/apr/build-1/libtool&quot;</span><br><span class="line">checking for JDK location... configure: error: Java Home not defined. Rerun with --with-java-home=... parameter</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ install]# vim /etc/profile</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_111</span><br><span class="line">export PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ install]# source /etc/profile</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ install]# echo $JAVA_HOME</span><br><span class="line">/usr/java/jdk1.8.0_111</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ native]# ./configure --with-apr=/usr/local/apr - -with-java-home=/usr/java/jdk1.8.0_111</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ native]# make &amp; make install</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. 修改 catalina.sh</span><br><span class="line">LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib export LD_LIBRARY_PATH</span><br><span class="line"></span><br><span class="line">3. 修改 server.xml</span><br><span class="line">protocol=&quot;org.apache.coyote.http11.Http11AprProtocol&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="NIO-和-APR-压力测试"><a href="#NIO-和-APR-压力测试" class="headerlink" title="NIO 和 APR 压力测试"></a>NIO 和 APR 压力测试</h4><h5 id="安装压力测试-apache-A-B-测试"><a href="#安装压力测试-apache-A-B-测试" class="headerlink" title="安装压力测试 apache A/B 测试"></a>安装压力测试 apache A/B 测试</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-tomcat-9.0.14]# yum install httpd-tools</span><br></pre></td></tr></table></figure>
+<h5 id="启动不同模式的-Tomcat-服务"><a href="#启动不同模式的-Tomcat-服务" class="headerlink" title="启动不同模式的 Tomcat 服务"></a>启动不同模式的 Tomcat 服务</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">21-Jan-2019 17:03:41.288 信息 [main] org.apache.coyote.AbstractProtocol.start 开始协议处理句柄[&quot;http-apr-8081&quot;]</span><br><span class="line">21-Jan-2019 17:03:41.288 信息 [main] org.apache.coyote.AbstractProtocol.start 开始协议处理句柄[&quot;http-nio-8082&quot;]</span><br></pre></td></tr></table></figure>
+<h5 id="TP99-性能指标"><a href="#TP99-性能指标" class="headerlink" title="TP99 性能指标"></a>TP99 性能指标</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">ab -n 3000 -c 100 http://smniuhe.com:8081/xxx/list</span><br><span class="line">Time per request:       1335.676 [ms] (mean)</span><br><span class="line">Time per request:       1289.714 [ms] (mean)</span><br><span class="line">Time per request:       1344.385 [ms] (mean)</span><br><span class="line"></span><br><span class="line">ab -n 3000 -c 100 http://smniuhe.com:8082/xxx/list</span><br><span class="line">Time per request:       1293.279 [ms] (mean)</span><br><span class="line">Time per request:       1275.337 [ms] (mean)</span><br><span class="line">Time per request:       1291.890 [ms] (mean)</span><br><span class="line"></span><br><span class="line">数据量比较少的缘故，并不能明显的看出</span><br><span class="line">ab -n 6000 -c 100 http://smniuhe.com:8081/xxx/list</span><br><span class="line">Time per request:       995.545 [ms] (mean)</span><br><span class="line">apr_pollset_poll: The timeout specified has expired (70007)</span><br><span class="line">Total of 5983 requests completed</span><br><span class="line">apr_pollset_poll: The timeout specified has expired (70007)</span><br><span class="line">Total of 5992 requests completed</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">ab -n 6000 -c 100 http://smniuhe.com:8082/xxx/list</span><br><span class="line">Time per request:       975.884 [ms] (mean)</span><br><span class="line">Time per request:       975.526 [ms] (mean)</span><br><span class="line">Time per request:       966.517 [ms] (mean)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/02/Cloud-Toolkit-运用/" rel="next" title="Cloud Toolkit 运用">
+                <i class="fa fa-chevron-left"></i> Cloud Toolkit 运用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <p class="site-description motion-element" itemprop="description">大家好，我是牛河</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                前辈链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="阿里中间件" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="美团技术团队" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="Mercy Ma" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="当然我在扯淡" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="周立" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="芋道源码" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="程序猿DD" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="梁桂钊" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="纯洁的微笑" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat-三种线程模式"><span class="nav-number">1.</span> <span class="nav-text">Tomcat 三种线程模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主要注意的一点："><span class="nav-number">1.1.</span> <span class="nav-text">主要注意的一点：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APR-安装"><span class="nav-number">2.</span> <span class="nav-text">APR 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#APR-官网下载地址"><span class="nav-number">2.1.</span> <span class="nav-text">APR 官网下载地址</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装顺序"><span class="nav-number">2.2.</span> <span class="nav-text">安装顺序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Tomcat-APR模式配置"><span class="nav-number">2.3.</span> <span class="nav-text">Tomcat APR模式配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Native-解压配置"><span class="nav-number">2.3.1.</span> <span class="nav-text">Native 解压配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NIO-和-APR-压力测试"><span class="nav-number">3.</span> <span class="nav-text">NIO 和 APR 压力测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装压力测试-apache-A-B-测试"><span class="nav-number">3.1.</span> <span class="nav-text">安装压力测试 apache A/B 测试</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动不同模式的-Tomcat-服务"><span class="nav-number">3.2.</span> <span class="nav-text">启动不同模式的 Tomcat 服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TP99-性能指标"><span class="nav-number">3.3.</span> <span class="nav-text">TP99 性能指标</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

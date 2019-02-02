@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Jekins,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Jenkins 安装官网下载war官网下载 Download Jenkins 2.148 for: jenkins.war">
+<meta name="keywords" content="Jekins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins 搭建自动化测试环境">
+<meta property="og:url" content="http://yoursite.com/2018/10/28/Jenkins-搭建自动化测试环境/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="Jenkins 安装官网下载war官网下载 Download Jenkins 2.148 for: jenkins.war">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/10/28/Jenkins-搭建自动化测试环境/success.png">
+<meta property="og:updated_time" content="2019-02-02T14:11:42.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins 搭建自动化测试环境">
+<meta name="twitter:description" content="Jenkins 安装官网下载war官网下载 Download Jenkins 2.148 for: jenkins.war">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/28/Jenkins-搭建自动化测试环境/success.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/28/Jenkins-搭建自动化测试环境/">
+
+
+
+
+
+  <title>Jenkins 搭建自动化测试环境 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/Jenkins-搭建自动化测试环境/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jenkins 搭建自动化测试环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-28T17:06:48+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/environment/" itemprop="url" rel="index">
+                    <span itemprop="name">environment</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Jenkins-安装"><a href="#Jenkins-安装" class="headerlink" title="Jenkins 安装"></a>Jenkins 安装</h3><h4 id="官网下载war"><a href="#官网下载war" class="headerlink" title="官网下载war"></a>官网下载war</h4><p><a href="https://jenkins.io" target="_blank" rel="noopener">官网下载</a> <strong>Download Jenkins 2.148 for:</strong> jenkins.war</p>
+<a id="more"></a>
+<h4 id="安装并启动服务"><a href="#安装并启动服务" class="headerlink" title="安装并启动服务"></a>安装并启动服务</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">Last login: Sun Oct 28 16:16:56 on ttys002</span><br><span class="line">dyld: Library not loaded: /usr/local/opt/gdbm/lib/libgdbm.4.dylib</span><br><span class="line">  Referenced from: /usr/local/bin/zsh</span><br><span class="line">  Reason: image not found</span><br><span class="line">zsh: abort</span><br><span class="line">➜  ~ /Users/niuhesm/resouces/Jekins</span><br><span class="line">➜  Jekins ls</span><br><span class="line">jenkins.war</span><br><span class="line">➜  Jekins ll</span><br><span class="line">total 148272</span><br><span class="line">-rw-r--r--@ 1 niuhesm  staff    72M 10 28 17:03 jenkins.war</span><br><span class="line">➜  Jekins clear</span><br><span class="line">➜  Jekins ls</span><br><span class="line">jenkins.war</span><br><span class="line">➜  Jekins java -jar jenkins.war</span><br><span class="line">Running from: /Users/niuhesm/resouces/Jekins/jenkins.war</span><br><span class="line">webroot: $user.home/.jenkins</span><br><span class="line">十月 28, 2018 5:10:56 下午 org.eclipse.jetty.util.log.Log initialized</span><br><span class="line">信息: Logging initialized @621ms to org.eclipse.jetty.util.log.JavaUtilLog</span><br><span class="line">十月 28, 2018 5:10:57 下午 winstone.Logger logInternal</span><br><span class="line">信息: Beginning extraction from war file</span><br><span class="line">十月 28, 2018 5:10:58 下午 org.eclipse.jetty.server.handler.ContextHandler setContextPath</span><br><span class="line">警告: Empty contextPath</span><br><span class="line">十月 28, 2018 5:10:58 下午 org.eclipse.jetty.server.Server doStart</span><br><span class="line">信息: jetty-9.4.z-SNAPSHOT; built: 2018-08-30T13:59:14.071Z; git: 27208684755d94a92186989f695db2d7b21ebc51; jvm 1.8.0_121-b13</span><br><span class="line">十月 28, 2018 5:10:59 下午 org.eclipse.jetty.webapp.StandardDescriptorProcessor visitServlet</span><br><span class="line">信息: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet</span><br><span class="line">十月 28, 2018 5:10:59 下午 org.eclipse.jetty.server.session.DefaultSessionIdManager doStart</span><br><span class="line">信息: DefaultSessionIdManager workerName=node0</span><br><span class="line">十月 28, 2018 5:10:59 下午 org.eclipse.jetty.server.session.DefaultSessionIdManager doStart</span><br><span class="line">信息: No SessionScavenger set, using defaults</span><br><span class="line">十月 28, 2018 5:10:59 下午 org.eclipse.jetty.server.session.HouseKeeper startScavenging</span><br><span class="line">信息: node0 Scavenging every 660000ms</span><br><span class="line">Jenkins home directory: /Users/niuhesm/.jenkins found at: $user.home/.jenkins</span><br><span class="line">十月 28, 2018 5:11:01 下午 org.eclipse.jetty.server.handler.ContextHandler doStart</span><br><span class="line">信息: Started w.@2187fff7&#123;Jenkins v2.148,/,file:///Users/niuhesm/.jenkins/war/,AVAILABLE&#125;&#123;/Users/niuhesm/.jenkins/war&#125;</span><br><span class="line">十月 28, 2018 5:11:01 下午 org.eclipse.jetty.server.AbstractConnector doStart</span><br><span class="line">信息: Started ServerConnector@660e9100&#123;HTTP/1.1,[http/1.1]&#125;&#123;0.0.0.0:8080&#125;</span><br><span class="line">十月 28, 2018 5:11:01 下午 org.eclipse.jetty.server.Server doStart</span><br><span class="line">信息: Started @5588ms</span><br><span class="line">十月 28, 2018 5:11:01 下午 winstone.Logger logInternal</span><br><span class="line">信息: Winstone Servlet Engine v4.0 running: controlPort=disabled</span><br><span class="line">十月 28, 2018 5:11:03 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Started initialization</span><br><span class="line">十月 28, 2018 5:11:03 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Listed all plugins</span><br><span class="line">十月 28, 2018 5:11:05 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Prepared all plugins</span><br><span class="line">十月 28, 2018 5:11:05 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Started all plugins</span><br><span class="line">十月 28, 2018 5:11:05 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Augmented all extensions</span><br><span class="line">十月 28, 2018 5:11:07 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Loaded all jobs</span><br><span class="line">十月 28, 2018 5:11:07 下午 hudson.model.AsyncPeriodicWork$1 run</span><br><span class="line">信息: Started Download metadata</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.context.support.AbstractApplicationContext prepareRefresh</span><br><span class="line">信息: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@315668fb: display name [Root WebApplicationContext]; startup date [Sun Oct 28 17:11:09 CST 2018]; root of context hierarchy</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory</span><br><span class="line">信息: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@315668fb]: org.springframework.beans.factory.support.DefaultListableBeanFactory@2c5f65b3</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons</span><br><span class="line">信息: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@2c5f65b3: defining beans [authenticationManager]; root of factory hierarchy</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.context.support.AbstractApplicationContext prepareRefresh</span><br><span class="line">信息: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@48bbdcc5: display name [Root WebApplicationContext]; startup date [Sun Oct 28 17:11:09 CST 2018]; root of context hierarchy</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.context.support.AbstractApplicationContext obtainFreshBeanFactory</span><br><span class="line">信息: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@48bbdcc5]: org.springframework.beans.factory.support.DefaultListableBeanFactory@53866d40</span><br><span class="line">十月 28, 2018 5:11:09 下午 org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons</span><br><span class="line">信息: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@53866d40: defining beans [filter,legacy]; root of factory hierarchy</span><br><span class="line">十月 28, 2018 5:11:09 下午 jenkins.install.SetupWizard init</span><br><span class="line">信息:</span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line"></span><br><span class="line">Jenkins initial setup is required. An admin user has been created and a password generated.</span><br><span class="line">Please use the following password to proceed to installation:</span><br><span class="line"></span><br><span class="line">cc2e5c2985cc437e8cd33d1ea7e37210</span><br><span class="line"></span><br><span class="line">This may also be found at: /Users/niuhesm/.jenkins/secrets/initialAdminPassword</span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line"></span><br><span class="line">十月 28, 2018 5:12:27 下午 hudson.model.AsyncPeriodicWork$1 run</span><br><span class="line">信息: Finished Download metadata. 80,614 ms</span><br><span class="line">十月 28, 2018 5:14:01 下午 hudson.model.UpdateSite updateData</span><br><span class="line">信息: Obtained the latest update center data file for UpdateSource default</span><br><span class="line">十月 28, 2018 5:14:02 下午 jenkins.InitReactorRunner$1 onAttained</span><br><span class="line">信息: Completed initialization</span><br><span class="line">十月 28, 2018 5:14:02 下午 hudson.UDPBroadcastThread run</span><br><span class="line">信息: Cannot listen to UDP port 33,848, skipping: java.net.SocketException: Can't assign requested address</span><br><span class="line">十月 28, 2018 5:14:02 下午 hudson.WebAppMain$3 run</span><br><span class="line">信息: Jenkins is fully up and running</span><br></pre></td></tr></table></figure>
+<h5 id="查看密码登录"><a href="#查看密码登录" class="headerlink" title="查看密码登录"></a>查看密码登录</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ vim /Users/niuhesm/.jenkins/secrets/initialAdminPassword</span><br><span class="line">➜  ~ cat /Users/niuhesm/.jenkins/secrets/initialAdminPassword</span><br><span class="line">cc2e5c2985cc437e8cd33d1ea7e37210</span><br><span class="line">➜  ~</span><br></pre></td></tr></table></figure>
+<h5 id="选择安装方式"><a href="#选择安装方式" class="headerlink" title="选择安装方式"></a>选择安装方式</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. Install suggested plugins</span><br><span class="line">2. Select plugins to install</span><br><span class="line"></span><br><span class="line">选择第一种，推荐的安装模式，安装需要一段时间</span><br></pre></td></tr></table></figure>
+<h5 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h5><p>填写相关的用户信息（smniuhe,smniuhe），点击 <code>Save and Continue</code></p>
+<h5 id="Instance-Configuration"><a href="#Instance-Configuration" class="headerlink" title="Instance Configuration"></a>Instance Configuration</h5><p>Jenkins URL:     <a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a> ，点击 <code>Save and Finish</code>  <code>Start using Jenkins</code></p>
+<h4 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">系统管理》插件管理》选择available》filter过滤插件</span><br><span class="line">Rebuilder 用于构建插件</span><br><span class="line">safe restart 安全重启插件</span><br></pre></td></tr></table></figure>
+<h4 id="基础设置"><a href="#基础设置" class="headerlink" title="基础设置"></a>基础设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">全局安全配置》Authorization》安全矩阵</span><br><span class="line">add user or groups... , 输入smniuhe,授予所有权限</span><br><span class="line">管理用户》添加用户</span><br><span class="line">创建一个 guest 用户，授予所有权限(去除 administer)</span><br></pre></td></tr></table></figure>
+<h4 id="应用服务器"><a href="#应用服务器" class="headerlink" title="应用服务器"></a>应用服务器</h4><h5 id="linux-系统准备"><a href="#linux-系统准备" class="headerlink" title="linux 系统准备"></a>linux 系统准备</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">1. 确认ip地址</span><br><span class="line">2. 确认登录用户名、密码</span><br><span class="line">3. 确定启动了ssh服务</span><br><span class="line">4. 确定防火墙是否关闭</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看ip地址</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# ifconfig</span><br><span class="line">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.19.106.154  netmask 255.255.240.0  broadcast 172.19.111.255</span><br><span class="line">        ether 00:16:3e:06:03:ef  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 7782177  bytes 1405512494 (1.3 GiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 7414005  bytes 1016904340 (969.7 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        loop  txqueuelen 1  (Local Loopback)</span><br><span class="line">        RX packets 5404745  bytes 341429566 (325.6 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 5404745  bytes 341429566 (325.6 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看 ssh 服务是否启动</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# netstat -anp|grep :22</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1804/sshd</span><br><span class="line">tcp        0      0 172.19.106.154:22       220.175.70.154:30021    ESTABLISHED 31085/sshd: root@pt</span><br><span class="line">tcp        0     36 172.19.106.154:22       117.166.23.61:13830     ESTABLISHED 31827/sshd: root@pt</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 如果没有启动，该命令是启动 ssh 服务</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# service sshd start</span><br><span class="line">Redirecting to /bin/systemctl start sshd.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 检查防火墙的状态</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# service iptables status</span><br><span class="line">Redirecting to /bin/systemctl status iptables.service</span><br><span class="line">Unit iptables.service could not be found.</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# firewall-cmd --state</span><br><span class="line">not running</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 停止 firewall</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# systemctl stop firewalld.service</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 静止 firewall 开机启动</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# systemctl disable firewalld.service</span><br></pre></td></tr></table></figure>
+<h5 id="安装Java环境"><a href="#安装Java环境" class="headerlink" title="安装Java环境"></a>安装Java环境</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# yum install java</span><br></pre></td></tr></table></figure>
+<h5 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# yum install git</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# git version</span><br><span class="line">git version 1.8.3.1</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# git config --global user.name "smniuhe"</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# git config --global user.email "smniuhe@163.com"</span><br></pre></td></tr></table></figure>
+<h5 id="SSH证书"><a href="#SSH证书" class="headerlink" title="SSH证书"></a>SSH证书</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# ssh-keygen -t rsa -C "smniuhe@163.com"</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# cd ~/.ssh/</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]# ls</span><br><span class="line">authorized_keys  id_rsa  id_rsa.pub</span><br></pre></td></tr></table></figure>
+<h5 id="Github关联linux服务器"><a href="#Github关联linux服务器" class="headerlink" title="Github关联linux服务器"></a>Github关联linux服务器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#Github上 SSH keys Add key</span></span></span><br><span class="line">Title LinuxEnv</span><br><span class="line">Key 如下</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]# cat id_rsa.pub</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDR0r/R1UdT9BRr8TsjONLmf8Kj0M6G/6fbGbD7ChHs1EAPFRjxSpJhl0noIKFdQYg9kJ8PpIkj6fIslXHvpYupqrDKGZ1l4xAJt+u1iUQsLEfv7XrarL6I1V3+nWowsAO1CpIdxS41A4lKZ34snt5IG55BVm+Gnq3puD59qrE4iNwfV1zfZRwDdjHI7/x8TY9PdHHSQNEk4GesUF9y3ynUnxMIwRxIui9c5D+iLaw2RgMLb0Y8Zh7F/pQ2uUYkvbA7Fz0N/883201BrWGFbyqn19geZqfvF6enKipa6H0whW6uM1KPkMIur3HTvRKOTdzsvP5jiknGAwufkMCQVsjr smniuhe@163.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#验证centos是否授信github</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]# ssh git@github.com</span><br><span class="line">The authenticity of host 'github.com (192.30.253.113)' can't be established.</span><br><span class="line">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span><br><span class="line">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? yes</span><br><span class="line">Warning: Permanently added 'github.com,192.30.253.113' (RSA) to the list of known hosts.</span><br><span class="line">PTY allocation request failed on channel 0</span><br><span class="line">Hi SmNiuhe! You've successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">Connection to github.com closed.</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]#</span><br></pre></td></tr></table></figure>
+<h5 id="安装并配置Maven"><a href="#安装并配置Maven" class="headerlink" title="安装并配置Maven"></a>安装并配置Maven</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">http://maven.apache.org/ -》Download -》Binary zip archive	apache-maven-3.5.4-bin.zip</span><br><span class="line">复制其地址</span><br><span class="line">http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]# wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip</span><br><span class="line">--2018-10-28 22:09:35--  http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip</span><br><span class="line">Resolving mirrors.tuna.tsinghua.edu.cn (mirrors.tuna.tsinghua.edu.cn)... 101.6.8.193, 2402:f000:1:408:8100::1</span><br><span class="line">Connecting to mirrors.tuna.tsinghua.edu.cn (mirrors.tuna.tsinghua.edu.cn)|101.6.8.193|:80... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 9001022 (8.6M) [application/zip]</span><br><span class="line">Saving to: 'apache-maven-3.5.4-bin.zip'</span><br><span class="line"></span><br><span class="line"><span class="meta">100%</span><span class="bash">[====================================================================================================================================&gt;] 9,001,022   29.3MB/s   <span class="keyword">in</span> 0.3s</span></span><br><span class="line"></span><br><span class="line">2018-10-28 22:09:36 (29.3 MB/s) - 'apache-maven-3.5.4-bin.zip' saved [9001022/9001022]</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ .ssh]# cd ~</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# unzip apache-maven-3.5.4-bin.zip</span><br><span class="line">-bash: unzip: 未找到命令</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# yum install -y unzip zip</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# vim /etc/profile</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 配置文件的末端添加如下参数，相当于windows下配置环境变量中的path参数</span></span></span><br><span class="line">export MAVEN_HOME=/root/apache-maven-3.5.4</span><br><span class="line">export PATH=$MAVEN_HOME/bin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 加载下刚配置的文件</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-maven-3.5.4]# . /etc/profile</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 验证maven配置是否生效</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-maven-3.5.4]# mvn -version</span><br><span class="line">Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-18T02:33:14+08:00)</span><br><span class="line">Maven home: /root/apache-maven-3.5.4</span><br><span class="line">Java version: 1.8.0_111, vendor: Oracle Corporation, runtime: /usr/java/jdk1.8.0_111/jre</span><br><span class="line">Default locale: en_US, platform encoding: ANSI_X3.4-1968</span><br><span class="line">OS name: "linux", version: "3.10.0-514.26.2.el7.x86_64", arch: "amd64", family: "unix"</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-maven-3.5.4]#</span><br></pre></td></tr></table></figure>
+<h5 id="安装并配置Tomcat"><a href="#安装并配置Tomcat" class="headerlink" title="安装并配置Tomcat"></a>安装并配置Tomcat</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ tomcat]# wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-9/v9.0.12/bin/apache-tomcat-9.0.12.zip</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ tomcat]# ll</span><br><span class="line">total 10284</span><br><span class="line">-rw-r--r--  1 root root 10520486 Sep  5 06:35 apache-tomcat-9.0.12.zip</span><br><span class="line">drwxr-xr-x 10 root root     4096 Apr  4  2018 tomcat-8081</span><br><span class="line">drwxr-xr-x  9 root root     4096 Apr  4  2018 tomcat-8082</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ tomcat]# unzip apache-tomcat-9.0.12.zip</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ tomcat]# ll</span><br><span class="line">total 10288</span><br><span class="line">drwxr-xr-x  9 root root     4096 Sep  4 23:15 apache-tomcat-9.0.12</span><br><span class="line">-rw-r--r--  1 root root 10520486 Sep  5 06:35 apache-tomcat-9.0.12.zip</span><br><span class="line">drwxr-xr-x 10 root root     4096 Apr  4  2018 tomcat-8081</span><br><span class="line">drwxr-xr-x  9 root root     4096 Apr  4  2018 tomcat-8082</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 赋予执行权限</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-tomcat-9.0.12]# chmod a+x -R *</span><br><span class="line">chomd 修改权限的命令</span><br><span class="line">a+x 赋予登录的所有人，可执行权限</span><br><span class="line">-R 表示当前路径和子路径</span><br><span class="line">* 表示所有问题</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 更换端口，8090</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-tomcat-9.0.12]# vim conf/server.xml</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 启动验证Tomcat</span></span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-tomcat-9.0.12]# ps -ef|grep tomcat</span><br><span class="line">root     32153     1 23 22:52 pts/0    00:00:02 /usr/bin/java -Djava.util.logging.config.file=/usr/local/tomcat/apache-tomcat-9.0.12/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -Dorg.apache.catalina.security.SecurityListener.UMASK=0027 -Dignore.endorsed.dirs= -classpath /usr/local/tomcat/apache-tomcat-9.0.12/bin/bootstrap.jar:/usr/local/tomcat/apache-tomcat-9.0.12/bin/tomcat-juli.jar -Dcatalina.base=/usr/local/tomcat/apache-tomcat-9.0.12 -Dcatalina.home=/usr/local/tomcat/apache-tomcat-9.0.12 -Djava.io.tmpdir=/usr/local/tomcat/apache-tomcat-9.0.12/temp org.apache.catalina.startup.Bootstrap start</span><br><span class="line">root     32185 31829  0 22:52 pts/0    00:00:00 grep --color=auto tomcat</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ apache-tomcat-9.0.12]# lsof -i:8090</span><br><span class="line">COMMAND   PID USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME</span><br><span class="line">java    32153 root   49u  IPv4 3994555      0t0  TCP *:8090 (LISTEN)</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 浏览器验证</span></span></span><br><span class="line">http://smniuhe.com:8090/</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 新建节点</span></span></span><br></pre></td></tr></table></figure>
+<h5 id="Linux注册到-Jenkins-上"><a href="#Linux注册到-Jenkins-上" class="headerlink" title="Linux注册到 Jenkins 上"></a>Linux注册到 Jenkins 上</h5><h5 id="新建节点"><a href="#新建节点" class="headerlink" title="新建节点"></a>新建节点</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">系统管理》节点管理》New Node</span><br><span class="line">Node name: TestEnv</span><br><span class="line">选择固定节点</span><br><span class="line">Description：这是一台测试环境的Linux主机</span><br><span class="line">Remote root directory：/root/.jenkins</span><br><span class="line">Launch method：Launch agent agents via SSH</span><br><span class="line">主机：smniuhe.com</span><br><span class="line">Credintials：xxxxx</span><br></pre></td></tr></table></figure>
+<h5 id="启动节点，验证"><a href="#启动节点，验证" class="headerlink" title="启动节点，验证"></a>启动节点，验证</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">点击当前节点，再返回到节点列表，可以查看linux主机的相关信息</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 验证</span></span></span><br><span class="line">进入主页》New 任务</span><br><span class="line">Enter an item name：TestTask</span><br><span class="line">选择：构建一个自由风格的软件项目</span><br><span class="line">点击Ok，</span><br><span class="line">选中 `Restrict where this project can be run</span><br><span class="line">Label Expression： TestEnv(表示只能在这个节点上运行)</span><br><span class="line"></span><br><span class="line">Build》执行 shell</span><br><span class="line">Command: ifconfig</span><br><span class="line">点击保存</span><br><span class="line"></span><br><span class="line">立即构建</span><br><span class="line">点击 Build History&gt;#1</span><br><span class="line">点击 Console Output</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 验证成功 shell 命令生效</span></span></span><br><span class="line">由用户 smniuheQm 启动</span><br><span class="line">在远程节点 TestEnv 上构建 在工作空间 /root/.jenkins/workspace/TestTask 中</span><br><span class="line">[TestTask] $ /bin/sh -xe /tmp/jenkins403614120976103060.sh</span><br><span class="line">+ ifconfig</span><br><span class="line">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.19.106.154  netmask 255.255.240.0  broadcast 172.19.111.255</span><br><span class="line">        ether 00:16:3e:06:03:ef  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 7834286  bytes 1466452360 (1.3 GiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 7436834  bytes 1020460157 (973.1 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        loop  txqueuelen 1  (Local Loopback)</span><br><span class="line">        RX packets 5406822  bytes 341559418 (325.7 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 5406822  bytes 341559418 (325.7 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">Finished: SUCCESS</span><br></pre></td></tr></table></figure>
+<h4 id="部署应用介绍与前期准备"><a href="#部署应用介绍与前期准备" class="headerlink" title="部署应用介绍与前期准备"></a>部署应用介绍与前期准备</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">新建一个项目，Push 到 Github 上</span><br><span class="line">复制url: git@github.com:SmNiuhe/springboot-jenkins.git</span><br></pre></td></tr></table></figure>
+<h4 id="自动化部署任务开发"><a href="#自动化部署任务开发" class="headerlink" title="自动化部署任务开发"></a>自动化部署任务开发</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">git 同步最新代码 =》 maven 打包 =》 停止 Tomcat =》 部署应用 =》 启动tomcat =》验证结果</span><br><span class="line"></span><br><span class="line">创建Jenkins部署任务</span><br><span class="line">创建Jenkins任务	=》填写Server信息 =》配置git参数 =》填写构建语句，实际部署测试环境</span><br><span class="line"></span><br><span class="line">1. 创建任务</span><br><span class="line">2. 填写相关信息</span><br><span class="line">勾选 `Restrict where this project can be run`</span><br><span class="line">`Label Expression` 输入并选择 `TestEnv`</span><br><span class="line">3. 配置git参数</span><br><span class="line">Source Code Management 选择 `Git`</span><br><span class="line">Repository URL	`git@github.com:SmNiuhe/springboot-jenkins.git`</span><br><span class="line">Additional Behaviours	`add按钮` `Check out to a sub-directory`</span><br><span class="line">Local subdirectory for repo	 `springboot-jenkins`</span><br><span class="line">Build `add build step` `执行shell`</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command 脚本命令如下 ||</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BUILD_ID=DONTKILLME</span><br><span class="line"></span><br><span class="line">. /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">配置运行参数</span></span><br><span class="line">export PROJ_PATH=`pwd`</span><br><span class="line">export TOMCAT_APP_PATH=/usr/local/tomcat/apache-tomcat-9.0.12</span><br><span class="line"></span><br><span class="line">sh $PROJ_PATH/springboot-jenkins/deploy.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">运行部署任务</span><br><span class="line">执行Jenkins部署任务 =》 确定执行结果成功 =》 打开浏览器访问部署应用程序 =》确定发布结果的正确性</span><br><span class="line">单机立即构建</span><br><span class="line">http://smniuhe.com:8090/ 出现了 &#123;"name":"zhangsan","age":"15"&#125;</span><br><span class="line">nice success ！</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ /]# find -name springboot-jenkins</span><br><span class="line">./root/.jenkins/workspace/DeploySpringboot-jenkins/springboot-jenkins</span><br><span class="line">./root/.m2/repository/com/smniuhe/springboot-jenkins</span><br><span class="line">./root/projects/springboot-jenkins</span><br><span class="line">./usr/local/tomcat/apache-tomcat-9.0.12/webapps/ROOT/META-INF/maven/com.smniuhe/springboot-jenkins</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ /]# cd /root/.m2/repository/com/smniuhe/springboot-jenkins</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ springboot-jenkins]# ll</span><br><span class="line">total 8</span><br><span class="line">drwxr-xr-x 2 root root 4096 Oct 29 23:51 1.0</span><br><span class="line">-rw-r--r-- 1 root root  305 Oct 30 00:03 maven-metadata-local.xml</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ springboot-jenkins]# cd 1.0</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ 1.0]# ll</span><br><span class="line">total 15868</span><br><span class="line">-rw-r--r-- 1 root root      198 Oct 30 00:03 _remote.repositories</span><br><span class="line">-rw-r--r-- 1 root root     2393 Oct 30 00:03 springboot-jenkins-1.0.pom</span><br><span class="line">-rw-r--r-- 1 root root 16237933 Oct 30 00:03 springboot-jenkins-1.0.war</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ 1.0]# cd /root/.jenkins/workspace/DeploySpringboot-jenkins/springboot-jenkins</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ springboot-jenkins]# ll</span><br><span class="line">total 32</span><br><span class="line">-rw-r--r--  1 root root 1026 Oct 29 23:32 deploy.sh</span><br><span class="line">-rwxr-xr-x  1 root root 6468 Oct 29 23:32 mvnw</span><br><span class="line">-rw-r--r--  1 root root 4994 Oct 29 23:32 mvnw.cmd</span><br><span class="line">-rw-r--r--  1 root root 2393 Oct 30 00:03 pom.xml</span><br><span class="line">drwxr-xr-x  4 root root 4096 Oct 29 23:32 src</span><br><span class="line">drwxr-xr-x 10 root root 4096 Oct 30 00:03 target</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ springboot-jenkins]#</span><br></pre></td></tr></table></figure>
+<img src="/2018/10/28/Jenkins-搭建自动化测试环境/success.png" title="成功界面">
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Jekins/" rel="tag"># Jekins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/07/焦油坑,没有银弹/" rel="next" title="焦油坑，没有银弹">
+                <i class="fa fa-chevron-left"></i> 焦油坑，没有银弹
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/04/WireMock-伪造REST服务/" rel="prev" title="WireMock 伪造REST服务">
+                WireMock 伪造REST服务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <p class="site-description motion-element" itemprop="description">大家好，我是牛河</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                前辈链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="阿里中间件" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="美团技术团队" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="Mercy Ma" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="当然我在扯淡" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="周立" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="芋道源码" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="程序猿DD" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="梁桂钊" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="纯洁的微笑" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-安装"><span class="nav-number">1.</span> <span class="nav-text">Jenkins 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#官网下载war"><span class="nav-number">1.1.</span> <span class="nav-text">官网下载war</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装并启动服务"><span class="nav-number">1.2.</span> <span class="nav-text">安装并启动服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看密码登录"><span class="nav-number">1.2.1.</span> <span class="nav-text">查看密码登录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#选择安装方式"><span class="nav-number">1.2.2.</span> <span class="nav-text">选择安装方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建用户"><span class="nav-number">1.2.3.</span> <span class="nav-text">创建用户</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Instance-Configuration"><span class="nav-number">1.2.4.</span> <span class="nav-text">Instance Configuration</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插件安装"><span class="nav-number">1.3.</span> <span class="nav-text">插件安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基础设置"><span class="nav-number">1.4.</span> <span class="nav-text">基础设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用服务器"><span class="nav-number">1.5.</span> <span class="nav-text">应用服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#linux-系统准备"><span class="nav-number">1.5.1.</span> <span class="nav-text">linux 系统准备</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装Java环境"><span class="nav-number">1.5.2.</span> <span class="nav-text">安装Java环境</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装Git"><span class="nav-number">1.5.3.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SSH证书"><span class="nav-number">1.5.4.</span> <span class="nav-text">SSH证书</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Github关联linux服务器"><span class="nav-number">1.5.5.</span> <span class="nav-text">Github关联linux服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装并配置Maven"><span class="nav-number">1.5.6.</span> <span class="nav-text">安装并配置Maven</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装并配置Tomcat"><span class="nav-number">1.5.7.</span> <span class="nav-text">安装并配置Tomcat</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linux注册到-Jenkins-上"><span class="nav-number">1.5.8.</span> <span class="nav-text">Linux注册到 Jenkins 上</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新建节点"><span class="nav-number">1.5.9.</span> <span class="nav-text">新建节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动节点，验证"><span class="nav-number">1.5.10.</span> <span class="nav-text">启动节点，验证</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署应用介绍与前期准备"><span class="nav-number">1.6.</span> <span class="nav-text">部署应用介绍与前期准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动化部署任务开发"><span class="nav-number">1.7.</span> <span class="nav-text">自动化部署任务开发</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="solr,solr-cluster,solr 集群,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="搭建zookeeper集群12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# cd /usr/local/[root@iZuf6iq8e7ya9v3ix71k0pZ local]# mkdir solr-c">
+<meta name="keywords" content="solr,solr-cluster,solr 集群">
+<meta property="og:type" content="article">
+<meta property="og:title" content="solr 集群搭建">
+<meta property="og:url" content="http://yoursite.com/2018/03/13/solr-集群搭建/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="搭建zookeeper集群12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# cd /usr/local/[root@iZuf6iq8e7ya9v3ix71k0pZ local]# mkdir solr-c">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/03/13/solr-集群搭建/tomcat关联zookeeper.png">
+<meta property="og:updated_time" content="2019-02-02T14:13:11.728Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="solr 集群搭建">
+<meta name="twitter:description" content="搭建zookeeper集群12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849[root@iZuf6iq8e7ya9v3ix71k0pZ ~]# cd /usr/local/[root@iZuf6iq8e7ya9v3ix71k0pZ local]# mkdir solr-c">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/13/solr-集群搭建/tomcat关联zookeeper.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/13/solr-集群搭建/">
+
+
+
+
+
+  <title>solr 集群搭建 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/solr-集群搭建/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">solr 集群搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-13T15:43:46+08:00">
+                2018-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术积累/" itemprop="url" rel="index">
+                    <span itemprop="name">技术积累</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="搭建zookeeper集群"><a href="#搭建zookeeper集群" class="headerlink" title="搭建zookeeper集群"></a>搭建zookeeper集群</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]<span class="comment"># cd /usr/local/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ <span class="built_in">local</span>]<span class="comment"># mkdir solr-cluster</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ <span class="built_in">local</span>]<span class="comment"># cd solr-cluster/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp /usr/local/zookeeper/zookeeper-3.4.10.tar.gz /usr/local/solr-cluster/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># tar zxvf zookeeper-3.4.10.tar.gz</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># mv zookeeper-3.4.10 zookeeper01</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r zookeeper01 zookeeper02</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r zookeeper01 zookeeper03</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf zookeeper-3.4.10.tar.gz</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># ll</span></span><br><span class="line">总用量 12</span><br><span class="line">drwxr-xr-x 10 root root 4096 3月  13 16:33 zookeeper01</span><br><span class="line">drwxr-xr-x 10 root root 4096 3月  13 16:32 zookeeper02</span><br><span class="line">drwxr-xr-x 10 root root 4096 3月  13 16:32 zookeeper03</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建 data 目录，并创建 myid 文件，编辑标识 1</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># mkdir data</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ data]<span class="comment"># vim myid (或者echo 1 &gt; myid)</span></span><br><span class="line">1</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名配置文件，修改配置文件</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ data]<span class="comment"># cd ../conf</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ conf]<span class="comment"># mv zoo_sample.cfg zoo.cfg</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ conf]<span class="comment"># vim zoo.cfg</span></span><br><span class="line"><span class="comment"># The number of milliseconds of each tick</span></span><br><span class="line">tickTime=2000</span><br><span class="line"><span class="comment"># The number of ticks that the initial</span></span><br><span class="line"><span class="comment"># synchronization phase can take</span></span><br><span class="line">initLimit=10</span><br><span class="line"><span class="comment"># The number of ticks that can pass between</span></span><br><span class="line"><span class="comment"># sending a request and getting an acknowledgement</span></span><br><span class="line">syncLimit=5</span><br><span class="line"><span class="comment"># the directory where the snapshot is stored.</span></span><br><span class="line"><span class="comment"># do not use /tmp for storage, /tmp here is just</span></span><br><span class="line"><span class="comment"># example sakes.</span></span><br><span class="line">dataDir=/tmp/zookeeper</span><br><span class="line"><span class="comment"># the port at which the clients will connect</span></span><br><span class="line">clientPort=2181</span><br><span class="line"><span class="comment"># the maximum number of client connections.</span></span><br><span class="line"><span class="comment"># increase this if you need to handle more clients</span></span><br><span class="line"><span class="comment">#maxClientCnxns=60</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<h5 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h5><p>clientPort=客户端连接端口<br>dataDir=data目录(/usr/local/solr-cluster/zookeeper01/data)<br>server.1=127.0.0.1:2881:3881 (1 myid标识,2881 zookeeper 连接内部通讯端口,3881 选举端口)</p>
+<h5 id="配置修改如下"><a href="#配置修改如下" class="headerlink" title="配置修改如下"></a>配置修改如下</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The number of milliseconds of each tick</span></span><br><span class="line">tickTime=2000</span><br><span class="line"><span class="comment"># The number of ticks that the initial</span></span><br><span class="line"><span class="comment"># synchronization phase can take</span></span><br><span class="line">initLimit=10</span><br><span class="line"><span class="comment"># The number of ticks that can pass between</span></span><br><span class="line"><span class="comment"># sending a request and getting an acknowledgement</span></span><br><span class="line">syncLimit=5</span><br><span class="line"><span class="comment"># the directory where the snapshot is stored.</span></span><br><span class="line"><span class="comment"># do not use /tmp for storage, /tmp here is just</span></span><br><span class="line"><span class="comment"># example sakes.</span></span><br><span class="line">dataDir=/usr/<span class="built_in">local</span>/solr-cluster/zookeeper01/data</span><br><span class="line"><span class="comment"># the port at which the clients will connect</span></span><br><span class="line">clientPort=2182</span><br><span class="line"><span class="comment"># the maximum number of client connections.</span></span><br><span class="line"><span class="comment"># increase this if you need to handle more clients</span></span><br><span class="line"><span class="comment">#maxClientCnxns=60</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Be sure to read the maintenance section of the</span></span><br><span class="line"><span class="comment"># administrator guide before turning on autopurge.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The number of snapshots to retain in dataDir</span></span><br><span class="line"><span class="comment">#autopurge.snapRetainCount=3</span></span><br><span class="line"><span class="comment"># Purge task interval in hours</span></span><br><span class="line"><span class="comment"># Set to "0" to disable auto purge feature</span></span><br><span class="line"><span class="comment">#autopurge.purgeInterval=1</span></span><br><span class="line">server.1=127.0.0.1:2881:3881</span><br><span class="line">server.2=127.0.0.1:2882:3882</span><br><span class="line">server.3=127.0.0.1:2883:3883</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置zookeeper02,03</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ sorl-cluster] </span><br></pre></td></tr></table></figure>
+<h5 id="生成批处理文件，启动并查看状态"><a href="#生成批处理文件，启动并查看状态" class="headerlink" title="生成批处理文件，启动并查看状态"></a>生成批处理文件，启动并查看状态</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建批处理文件</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ sorl-cluster] vim start-zookeeper.sh</span><br><span class="line">▽</span><br><span class="line"><span class="built_in">cd</span> zookeeper01/bin</span><br><span class="line">./zkServer.sh start</span><br><span class="line"><span class="built_in">cd</span> ../../</span><br><span class="line"><span class="built_in">cd</span> zookeeper02/bin</span><br><span class="line">./zkServer.sh start</span><br><span class="line"><span class="built_in">cd</span> ../../</span><br><span class="line"><span class="built_in">cd</span> zookeeper03/bin</span><br><span class="line">./zkServer.sh start</span><br><span class="line"><span class="built_in">cd</span> ../../</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line"><span class="string">"start-zookeeper.sh"</span> 9L, 147C</span><br><span class="line"></span><br><span class="line"><span class="comment"># 授权</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># chmod +x start-zookeeper.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动查看状态</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># ./start-zookeeper.sh</span></span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper01/bin/../conf/zoo.cfg</span><br><span class="line">Starting zookeeper ... STARTED</span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper02/bin/../conf/zoo.cfg</span><br><span class="line">Starting zookeeper ... STARTED</span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper03/bin/../conf/zoo.cfg</span><br><span class="line">Starting zookeeper ... STARTED</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># zookeeper01/bin/zkServer.sh status</span></span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper01/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># zookeeper02/bin/zkServer.sh status</span></span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper02/bin/../conf/zoo.cfg</span><br><span class="line">Mode: leader</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># zookeeper03/bin/zkServer.sh status</span></span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /usr/<span class="built_in">local</span>/solr-cluster/zookeeper03/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<h4 id="搭建solr集群"><a href="#搭建solr集群" class="headerlink" title="搭建solr集群"></a>搭建solr集群</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp /usr/local/tomcat/apache-tomcat-8.5.27.tar.gz /usr/local/solr-cluster/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># tar zxvf apache-tomcat-8.5.27.tar.gz</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf apache-tomcat-8.5.27.tar.gz</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># mv apache-tomcat-8.5.27/ tomcat01</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r tomcat01/ tomcat02</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r tomcat01/ tomcat02</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r tomcat01/ tomcat03</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r tomcat01/ tomcat04</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat01/conf/server.xml</span></span><br><span class="line">	tomcat01	tomcat02	tomcat03	tomcat04</span><br><span class="line">8005 +10 8015		8016		8017		8018</span><br><span class="line">8080 +10 8090		8091		8092		8093	</span><br><span class="line">8009 +10 8019		8020		8021		8022</span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># ll</span></span><br><span class="line">总用量 32</span><br><span class="line">-rwxr-xr-x  1 root root  147 3月  13 17:36 start-zookeeper.sh</span><br><span class="line">drwxr-xr-x  9 root root 4096 3月  14 09:57 tomcat01</span><br><span class="line">drwxr-xr-x  9 root root 4096 3月  14 10:00 tomcat02</span><br><span class="line">drwxr-xr-x  9 root root 4096 3月  14 10:01 tomcat03</span><br><span class="line">drwxr-xr-x  9 root root 4096 3月  14 10:01 tomcat04</span><br><span class="line">drwxr-xr-x 11 root root 4096 3月  13 16:39 zookeeper01</span><br><span class="line">drwxr-xr-x 11 root root 4096 3月  13 17:02 zookeeper02</span><br><span class="line">drwxr-xr-x 11 root root 4096 3月  13 17:28 zookeeper03</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制solr相关配置</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/tomcat-8082/webapps/solr/ /usr/local/solr-cluster/tomcat01/webapps/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/tomcat-8082/webapps/solr/ /usr/local/solr-cluster/tomcat02/webapps/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/tomcat-8082/webapps/solr/ /usr/local/solr-cluster/tomcat03/webapps/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/tomcat-8082/webapps/solr/ /usr/local/solr-cluster/tomcat04/webapps/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/solrhome /usr/local/solr-cluster/solrhome01</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/solrhome /usr/local/solr-cluster/solrhome02</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/solrhome /usr/local/solr-cluster/solrhome03</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># cp -r /usr/local/solr/solrhome /usr/local/solr-cluster/solrhome04</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改solrcloud配置(solrtomcat01为例)</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim solrhome01/solr.xml </span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim solrhome02/solr.xml </span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim solrhome03/solr.xml </span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim solrhome04/solr.xml </span></span><br><span class="line">&lt;solr&gt;</span><br><span class="line"></span><br><span class="line">  &lt;solrcloud&gt;</span><br><span class="line"></span><br><span class="line">    &lt;str name=<span class="string">"host"</span>&gt;<span class="variable">$&#123;host:&#125;</span>&lt;/str&gt;</span><br><span class="line">    &lt;int name=<span class="string">"hostPort"</span>&gt;<span class="variable">$&#123;jetty.port:8983&#125;</span>&lt;/int&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&lt;solr&gt;</span><br><span class="line"></span><br><span class="line">  &lt;solrcloud&gt;</span><br><span class="line"></span><br><span class="line">    &lt;str name=<span class="string">"host"</span>&gt;127.0.0.1&lt;/str&gt;</span><br><span class="line">    &lt;int name=<span class="string">"hostPort"</span>&gt;8090&lt;/int&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># solr实例绑定对应的solrhome(solrhome1为例)</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat01/webapps/solr/WEB-INF/web.xml</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat02/webapps/solr/WEB-INF/web.xml</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat03/webapps/solr/WEB-INF/web.xml</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat04/webapps/solr/WEB-INF/web.xml</span></span><br><span class="line">&lt;env-entry&gt;</span><br><span class="line">       &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;</span><br><span class="line">       &lt;env-entry-value&gt;/usr/<span class="built_in">local</span>/solr/solrhome&lt;/env-entry-value&gt;</span><br><span class="line">       &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;</span><br><span class="line">&lt;/env-entry&gt;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">&lt;env-entry&gt;</span><br><span class="line">       &lt;env-entry-name&gt;solr/home&lt;/env-entry-name&gt;</span><br><span class="line">       &lt;env-entry-value&gt;/usr/<span class="built_in">local</span>/solr-cluster/solrhome01&lt;/env-entry-value&gt;</span><br><span class="line">       &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;</span><br><span class="line">&lt;/env-entry&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="tomcat关联zookeeper"><a href="#tomcat关联zookeeper" class="headerlink" title="tomcat关联zookeeper"></a>tomcat关联zookeeper</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat01/bin/catalina.sh</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat02/bin/catalina.sh</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat03/bin/catalina.sh</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim tomcat04/bin/catalina.sh</span></span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">JAVA_OPTS=<span class="string">"-DzkHost=127.0.0.1:2182,127.0.0.1:2183,127.0.0.1:2184"</span></span><br></pre></td></tr></table></figure>
+<img src="/2018/03/13/solr-集群搭建/tomcat关联zookeeper.png" title="[tomcat关联zookeeper]">
+<h5 id="zookeeper-统一管理配置文件"><a href="#zookeeper-统一管理配置文件" class="headerlink" title="zookeeper 统一管理配置文件"></a>zookeeper 统一管理配置文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 让zookeeper统一管理配置文件。需要把solrhome/mycore/conf目录上传到zookeeper。上传任意solrhome中的配置文件即可。</span></span><br><span class="line"><span class="comment"># ./zkcli.sh -zkhost 127.0.0.1:2182,127.0.0.1:2183,127.0.0.1:2184 -cmd upconfig -confdir /usr/local/solr-cluster/solrhome01/mycore/conf/ -confname myconf</span></span><br><span class="line"></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]<span class="comment"># cd solr-7.2.1/server/scripts/cloud-scripts/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ cloud-scripts]<span class="comment"># ./zkcli.sh -zkhost 127.0.0.1:2182,127.0.0.1:2183,127.0.0.1:2184 -cmd upconfig -confdir /usr/local/solr-cluster/solrhome01/mycore/conf/ -confname myconf</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看上传的文件</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ cloud-scripts]<span class="comment"># cd /usr/local/solr-cluster/zookeeper01/bin/</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]<span class="comment"># ./zkCli.sh -server 127.0.0.1:2182</span></span><br><span class="line">[zk: 127.0.0.1:2182(CONNECTED) 2] ls /configs/myconf</span><br><span class="line">[data-config.xml, managed-schema, protwords.txt, solrconfig.xml, synonyms.txt, stopwords.txt, dataimport.properties, params.json, lang, managed-schema的副本]</span><br><span class="line">[zk: 127.0.0.1:2182(CONNECTED) 3]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建快速启动文件</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim start-tomcat.sh</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># chmod +x start-tomcat.sh</span></span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat01/bin/startup.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat02/bin/startup.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat03/bin/startup.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat04/bin/startup.sh</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># vim stop-tomcat.sh</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># chmod +x stop-tomcat.sh</span></span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat01/bin/shutdown.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat02/bin/shutdown.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat03/bin/shutdown.sh</span><br><span class="line">/usr/<span class="built_in">local</span>/solr-cluster/tomcat04/bin/shutdown.sh</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># ./start-tomcat.sh</span></span><br></pre></td></tr></table></figure>
+<p>访问xxxxxx:8090/solr/index.html 报错：SolrCore Initialization Failures<br><a href="https://segmentfault.com/q/1010000012076404/a-1020000012123299" target="_blank" rel="noopener">https://segmentfault.com/q/1010000012076404/a-1020000012123299</a><br>原因：solr启动的时候会去检测home的collection，但是你那个core1是从单节点拷贝过来的，结构上肯定不一样，单节点上core和collection可以理解成相等的，集群中collection是有分布在不通节点上的core组成的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf solrhome01/mycore</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf solrhome02/mycore</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf solrhome03/mycore</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ solr-cluster]<span class="comment"># rm -rf solrhome04/mycore</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/solr/" rel="tag"># solr</a>
+          
+            <a href="/tags/solr-cluster/" rel="tag"># solr-cluster</a>
+          
+            <a href="/tags/solr-集群/" rel="tag"># solr 集群</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/hexo-localSearch/" rel="next" title="hexo localSearch">
+                <i class="fa fa-chevron-left"></i> hexo localSearch
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/ActiveMQ-的搭建/" rel="prev" title="ActiveMQ 的搭建">
+                ActiveMQ 的搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <p class="site-description motion-element" itemprop="description">大家好，我是牛河</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                前辈链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="阿里中间件" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="美团技术团队" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="Mercy Ma" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="CoolShell" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="当然我在扯淡" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="周立" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="芋道源码" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="程序猿DD" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="梁桂钊" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="纯洁的微笑" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#搭建zookeeper集群"><span class="nav-number">1.</span> <span class="nav-text">搭建zookeeper集群</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#参数说明"><span class="nav-number">1.1.</span> <span class="nav-text">参数说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置修改如下"><span class="nav-number">1.2.</span> <span class="nav-text">配置修改如下</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#生成批处理文件，启动并查看状态"><span class="nav-number">1.3.</span> <span class="nav-text">生成批处理文件，启动并查看状态</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#搭建solr集群"><span class="nav-number">2.</span> <span class="nav-text">搭建solr集群</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tomcat关联zookeeper"><span class="nav-number">2.1.</span> <span class="nav-text">tomcat关联zookeeper</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#zookeeper-统一管理配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">zookeeper 统一管理配置文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
