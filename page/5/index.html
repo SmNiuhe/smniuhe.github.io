@@ -390,6 +390,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/05/geotools解析Shapefile文件/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/01/05/geotools解析Shapefile文件/" class="post-title-link" itemprop="url">geotools解析Shapefile文件</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-01-05 11:37:06" itemprop="dateCreated datePublished" datetime="2018-01-05T11:37:06+08:00">2018-01-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:12:41" itemprop="dateModified" datetime="2019-02-02T22:12:41+08:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/GEO/" itemprop="url" rel="index"><span itemprop="name">GEO</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="交代背景"><a href="#交代背景" class="headerlink" title="交代背景"></a>交代背景</h5><p>前段工程师给了我 <font color="gray" size="4"><a href="https://baike.baidu.com/item/%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F/171830?fromtitle=GIS&amp;fromid=31541" target="_blank" rel="noopener">gis</a></font> 相关的一些文件，想让我解析里面的数据，简单点就是解析 <font color="gray" size="4"><a href="https://baike.baidu.com/item/shapefile%E6%96%87%E4%BB%B6/11041662" target="_blank" rel="noopener">Shapefile</a></font> 文件，由于地理信息相关的数据都是 <font color="gray" size="4"><a href="https://baike.baidu.com/item/GeoJson" target="_blank" rel="noopener">GeoJson</a> </font>的数据格式；也是第一次接触 gis，所以先简单的了解了下这些专用的名词。</p>
+<h5 id="Shapefile"><a href="#Shapefile" class="headerlink" title="Shapefile"></a>Shapefile</h5><blockquote><p>一个Shapefile文件最少包括三个文件：<br>主文件（<em>.shp）、–存储地理要素的几何图形的文件。<br>索引文件（</em>.shx）、–存储图形要素与属性信息索引的文件。<br>dBASE表文件（<em>.dbf），–存储要素信息属性的dBase表文件。<br>除此之外还有可选的文件包括：<br>空间参考文件（</em>.prj）、<br>几何体的空间索引文件（<em>.sbn 和 </em>.sbx）、<br>只读的Shapefiles的几何体的空间索引文件（<em>.fbn 和</em>.fbx）、<br>列表中活动字段的属性索引（<em>.ain 和 </em>.aih）、<br>可读写Shapefile文件的地理编码索引（.ixs）、<br>可读写Shapefile文件的地理编码索引（<em>.mxs）、<br>dbf文件的属性索引（</em>.atx）、<br>以XML格式保存元数据（<em>.shp.xml）、<br>用于描述.dbf文件的代码页，指明其使用的字符编码的描述文件（</em>.cpg）。</p>
+<footer><strong>Shapefile百度百科</strong><cite><a href="https://baike.baidu.com/item/shapefile%E6%96%87%E4%BB%B6/11041662?fr=aladdin" target="_blank" rel="noopener">地址</a></cite></footer></blockquote>
+<h5 id="Geotools"><a href="#Geotools" class="headerlink" title="Geotools"></a>Geotools</h5><blockquote><p>GeoTools 是英国利兹大学(University of Leeds)的James Macgll 从1996 年开始研发的一个操作和显示地图的开源Java 代码库，[1]  提供了一系列符合规范的操作地理空间数据的方法，例如可以用它来实现一个地理信息系统（GIS）。GeoTools库在开发时执行OGC规范。目前GeoTools的最新版本是 GeoTools 17 Releases。</p>
+<footer><strong>GeoTools官网</strong><cite><a href="http://geotools.org/" target="_blank" rel="noopener">地址</a></cite></footer></blockquote>
+<h5 id="Geojson"><a href="#Geojson" class="headerlink" title="Geojson"></a>Geojson</h5><blockquote><p>要素组合的数据格式如下：</p>
+<footer><strong>简书</strong><cite><a href="https://www.jianshu.com/p/144033b1b87e" target="_blank" rel="noopener">brandonxiang</a></cite></footer></blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123; <span class="attr">"type"</span>: <span class="string">"FeatureCollection"</span>,</span><br><span class="line">​    "features": [</span><br><span class="line">​      &#123; "type": "Feature",</span><br><span class="line">​        "geometry": &#123;"type": "Point", "coordinates": [102.0, 0.5]&#125;,</span><br><span class="line">​        "properties": &#123;"prop0": "value0"&#125;</span><br><span class="line">​        &#125;,</span><br><span class="line">​      &#123; "type": "Feature",</span><br><span class="line">​        "geometry": &#123;</span><br><span class="line">​          "type": "LineString",</span><br><span class="line">​          "coordinates": [</span><br><span class="line">​            [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]</span><br><span class="line">​            ]</span><br><span class="line">​          &#125;,</span><br><span class="line">​        "properties": &#123;</span><br><span class="line">​          "prop0": "value0",</span><br><span class="line">​          "prop1": 0.0</span><br><span class="line">​          &#125;</span><br><span class="line">​        &#125;,</span><br><span class="line">​      &#123; "type": "Feature",</span><br><span class="line">​         "geometry": &#123;</span><br><span class="line">​           "type": "Polygon",</span><br><span class="line">​           "coordinates": [</span><br><span class="line">​             [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],</span><br><span class="line">​               [100.0, 1.0], [100.0, 0.0] ]</span><br><span class="line">​             ]</span><br><span class="line">​         &#125;,</span><br><span class="line">​         "properties": &#123;</span><br><span class="line">​           "prop0": "value0",</span><br><span class="line">​           "prop1": &#123;"this": "that"&#125;</span><br><span class="line">​           &#125;</span><br><span class="line">​         &#125;</span><br><span class="line">​       ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h5><p>github-demo <font color="gray" size="4"><a href="https://github.com/SmNiuhe/geotools/" target="_blank" rel="noopener">传送门</a></font></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/29/dozer设计通用的自定义转换器/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2231,7 +2412,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2473,7 +2654,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">70</span>
+                      
+                    
+                    <span class="site-state-item-count">72</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
