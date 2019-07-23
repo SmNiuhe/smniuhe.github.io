@@ -390,6 +390,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/5-7之sql-model/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/01/29/5-7之sql-model/" class="post-title-link" itemprop="url">5.7之sql_model</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-01-29 17:50:40" itemprop="dateCreated datePublished" datetime="2018-01-29T17:50:40+08:00">2018-01-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:11:36" itemprop="dateModified" datetime="2019-02-02T22:11:36+08:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/sql/" itemprop="url" rel="index"><span itemprop="name">sql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="问题发生背景"><a href="#问题发生背景" class="headerlink" title="问题发生背景"></a>问题发生背景</h5><p>今天在部署项目的时候发现，测试后台接口，直接报 500，仔细一看原来是操作数据库的时候报错了，在本地测试的时候是没遇到类似的问题，数据库的版本是一样的，后面查找资料，说是 MySQL 5.7 默认的 sql_model 配置是有 only_full_group_by，</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 分组查询报错</span></span><br><span class="line">[Err] 1055 - Expression <span class="comment">#1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'leping.township_info.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前MySQL sql_mode 配置</span></span><br><span class="line">mysql&gt; select version();</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| version() |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">| 5.7.18    |</span><br><span class="line">+<span class="comment">-----------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">select</span> @@sql_mode;</span><br><span class="line">+<span class="comment">--------------------------------------------+</span></span><br><span class="line">| @@sql_mode                                 |</span><br><span class="line">+<span class="comment">--------------------------------------------+</span></span><br><span class="line">| STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION |</span><br><span class="line">+<span class="comment">--------------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<blockquote><p>only_full_group_by ：使用这个就是使用和oracle一样的group 规则, select的列都要在group中,或者本身是聚合列(SUM,AVG,MAX,MIN) 才行</p>
+</blockquote>
+<h5 id="解决的办法就是将这个-sql-model-的-only-full-group-by-参数去除"><a href="#解决的办法就是将这个-sql-model-的-only-full-group-by-参数去除" class="headerlink" title="解决的办法就是将这个 sql_model 的 only_full_group_by 参数去除"></a>解决的办法就是将这个 sql_model 的 only_full_group_by 参数去除</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sql_mode=<span class="string">'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>window server 服务器，直接找到 my.ini 配置文件，如果配置中没有对应的配置，先添加 sql_model ，有则直接移除 only_full_group_by</li>
+<li>mac vim /etc/my.cof</li>
+<li>centos 7 vim /etc/my.cof</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/05/geotools解析Shapefile文件/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1704,7 +1886,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-02 22:11:39" itemprop="dateModified" datetime="2019-02-02T22:11:39+08:00">2019-02-02</time>
+                <time title="Modified: 2019-07-23 20:48:33" itemprop="dateModified" datetime="2019-07-23T20:48:33+08:00">2019-07-23</time>
               
             
           </span>
@@ -2190,187 +2372,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/01/Android O/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/07/01/Android O/" class="post-title-link" itemprop="url">Android O</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2017-07-01 08:00:47" itemprop="dateCreated datePublished" datetime="2017-07-01T08:00:47+08:00">2017-07-01</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:11:38" itemprop="dateModified" datetime="2019-02-02T22:11:38+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="交代背景1"><a href="#交代背景1" class="headerlink" title="交代背景1"></a>交代背景1</h4><p>Android O API 已发布最终版本，这是谷歌开发者6月14日发布的的标题，O（Oreo）可以理解为代号，再通俗点就是 Android 系统 8.0，对于空间内多数好友是不太关注这个的，但是你们日常吐槽 Android 手机各种功能和设计都是与他们相关的。</p>
-<h4 id="交代背景2"><a href="#交代背景2" class="headerlink" title="交代背景2"></a>交代背景2</h4><p>Android 6.0 出现最大特点就是运行时权限，什么是运行时权限呢？就是当你想要体验某个 APP ，以前是在安装的时候直接指定一些（读取联系人、获取摄像头、拨打电话‘这可能会产生费用’）权限，这些权限是必需的，潜台词是：不同意不行，要不别用我家产品，讲道理绝大数的用户是能接受的（是的，你没有听说，我们能接受，但是对于 ”自我保护意识强烈的人“ 或者 ”绝大数老外“ 来说：amazing，它太流氓，为什么不问我，就偷偷发短信，偷偷定位我的位置，偷偷修改我的手机设置），在几年前的中国也是正常的，当然和中国自古以来的信任也是有关联的，在中国，绝大多数人的行为准则都是事后处理的态度，就是等这件事发生后，才来想如何去解决，如何去比较，比如：“谁谁谁，怎么样”，“别人家的孩子”，太常见了。</p>
-<h4 id="idea"><a href="#idea" class="headerlink" title="idea"></a>idea</h4><p>写这篇文章的原因是，今早看到谷歌发了篇文章叫 “WebView 的新增安全功能“ 的文章，哥，别按 back 键，容我说完，咱们一起来思考；和上面的运行时权限一样，6.0 的运行时权限时为了增强用户的安全性，或者说是用户的主导权，因为用户是上帝；8.0 这次最大的特点就是这个 WebView 的安全功能，怎么个安全功能呢，【原话太长，简单来说就是和 Chrome 类似，WebView单独提供一个独立线程来管理，就是常说的渲染效果，通俗点就是显示手机画面】，本来是不打算写这篇文章的，看到与 Chrome 类似，我就忍不了啦，大家都说:人生苦短 我用Chrome，Chrome 是快，市场份额也达到第一了，但是你不觉得不论是企业、网吧、家庭、普通笔记本使用者，个人感觉是没有提升，就我个人观察的而言，在中国的这个拥有14亿人口的前提下。为什么呢，他太吃性能了，他管的太多了，所以他太 ”安全“ 了，如果你是 Chrome 使用者你习惯随便乱点，或者链接到自己熟悉的网站上，他总是提示你没有xxx认证，可能存在风险。有人的熟悉，这是 Chrome Google 的“一贯作风”，有人不熟悉，不知所措，只能点点其他地方或者网站了。回归主题，下个 Android 系统版本就是在你查看新闻资讯等其他操作，他家公司就是用的新版的 WebView ，开玩笑，它可是提供两级隔离，和 Chrome一样，好家伙，当出现满屏以红色为背景的不安全信息来阻止你访问，或者提示你的时候，你再来想想是否有我一样的烦恼，心想：md，真的烦，和一些权限一样，老是弹出一些“这个东西”，很多人是不关心的。</p>
-<h4 id="老铁，扎心了"><a href="#老铁，扎心了" class="headerlink" title="老铁，扎心了"></a>老铁，扎心了</h4><p>说了这么多，可能没说明白，简单来说就是不要为来安全性来剥夺用户的体验和感受，感受和安全一样重要，上次去银行办卡，居然问家住哪里，是干什么的，ATM 转账不能立刻到账等… 写的有点乱，就那意思，在保证安全的前提下，好的用户体验会让你内心波动：扎心了，老铁。 懒得检查了….</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -2412,7 +2418,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2495,7 +2501,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">33</span>
+                      
+                    
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -2656,7 +2664,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">72</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
