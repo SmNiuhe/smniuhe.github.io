@@ -390,6 +390,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/15/工厂设计模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/15/工厂设计模式/" class="post-title-link" itemprop="url">工厂设计模式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-08-15 22:24:16 / Modified: 22:31:40" itemprop="dateCreated datePublished" datetime="2019-08-15T22:24:16+08:00">2019-08-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/design-model/" itemprop="url" rel="index"><span itemprop="name">design model</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="聊聊工厂模式相关的设计"><a href="#聊聊工厂模式相关的设计" class="headerlink" title="聊聊工厂模式相关的设计"></a>聊聊工厂模式相关的设计</h3><p>《设计模式》《代码大全》都要提及抽象工厂模式、工厂方法模式，都需要创建型模式，属于常见的 23 中设计模式中，工作中设计到工厂相关的模式还有另外两种，简单工厂，静态工厂方法，他们之间的区别是什么呢？</p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/08/15/工厂设计模式/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/23/长字符串如何建立索引/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -435,12 +602,24 @@
                 
               
 
-              <time title="Created: 2019-07-23 20:36:14 / Modified: 20:59:13" itemprop="dateCreated datePublished" datetime="2019-07-23T20:36:14+08:00">2019-07-23</time>
+              <time title="Created: 2019-07-23 20:36:14" itemprop="dateCreated datePublished" datetime="2019-07-23T20:36:14+08:00">2019-07-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-15 22:33:03" itemprop="dateModified" datetime="2019-08-15T22:33:03+08:00">2019-08-15</time>
               
             
           </span>
@@ -493,15 +672,18 @@
 
       
         
-          
-            <h4 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h4><p>库中有一张表记录着所有客户文件上传或者、客户上传的<code>BASE64</code>图片资源，<code>file_store_record</code> 表中有两个字段 <code>name</code> <code>original_name</code> 分别取记录文件名称和文件的原文件名称，由于文件名称是唯一的，有些做法会在该字段下建立唯一索引，并且都是通过时间戳（秒||毫秒）+ 文件后缀的形式去生成唯一值</p>
+          <h4 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h4><p>库中有一张表记录着所有客户文件上传或者、客户上传的<code>BASE64</code>图片资源，<code>file_store_record</code> 表中有两个字段 <code>name</code> <code>original_name</code> 分别取记录文件名称和文件的原文件名称，由于文件名称是唯一的，有些做法会在该字段下建立唯一索引，并且都是通过时间戳（秒||毫秒）+ 文件后缀的形式去生成唯一值</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name				original.name</span><br><span class="line">15634508992959536.jpg		1寸白底.jpg</span><br><span class="line">15634510398049541.jpg		1寸白底.jpg</span><br></pre></td></tr></table></figure>
 <h4 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h4><p>首先我们分析下上面的情况，能如何去优化，或者说有哪些问题，首先<code>name</code> 的字段类型是 VARCHAR，VARCHAR 存储可变长度的 M 个字符，大小 0-65535 字节，如果是 UTF-8 编码的话，一个字符占 3 字节，如果是 UTF-8mb4，一个字符占 4 字节，UTF8mb4 varchar(10)=40字节；从上面的例子可以看出已经超过了 20 字符，name 字段 varchar(20)，索引的存储并不会存储你改列的实际大小，只会存储改字段定义类型所占的字节大小；第二是索引是存储在内存中的，索引的查找也是会设计到比较的，虽然是存储在内存中，一般还是建议索引的类型和长度越短越好，第三的思路是进行比较部分长度，其实在前12，13，14 位的区分度就比较高，可以建立 <code>前缀索引</code></p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">思路一</span><br><span class="line">mysql&gt; alter table SUser add index index(name(12));</span><br><span class="line">mysql&gt; alter table SUser add index index(name(13));</span><br><span class="line">mysql&gt; alter table SUser add index index(name(14));</span><br><span class="line"></span><br><span class="line">思路二</span><br><span class="line">拆分name</span><br><span class="line">name_pre, suffix</span><br><span class="line">name_pre 单独存储 15634508992959536</span><br><span class="line">suffix 存储 .jpg</span><br><span class="line">name 可以用 BIGINT 存储，存储空间为 8 字节</span><br><span class="line">虽然很明显了减少了索引的存储空间，但是索引的检索过程中，还是会进行比较长检索</span><br><span class="line"></span><br><span class="line">思路三</span><br><span class="line">在思路一的基础上进行改造，由于时间戳的前面部分基本都是一样的，区分度是非常的低，也会导致检索浪费，</span><br><span class="line">如果直接反转 name_pre，</span><br><span class="line">15634508992959536-&gt;63595929980543651</span><br><span class="line">15634510398049541-&gt;14594089301543651</span><br><span class="line">索引前半部分的区分度变得非常的高，不过也增加业务操作成本，需要进行反转拼接</span><br><span class="line"></span><br><span class="line">思路四</span><br><span class="line">索取的区分度虽然提高了，但是字段的长度还是没有太大的降低，BITLOG 8字节 长度也是比较高的，还有一种情况，</span><br><span class="line">类似于人脸机的文件存储格式为 FACE<span class="emphasis">_1166914936_</span>20190719T124010508_121.jpg，这样就比较的尴尬了，</span><br><span class="line">后面了解到有一种 crc32 ，当然需要增加额外的存储空间，不过查询的方式相比反转会更稳定点，</span><br><span class="line">应该冲突的概率比较低</span><br></pre></td></tr></table></figure>
-<blockquote><p>检错能力极强，开销小，易于用编码器及检测电路实现。从其检错能力来看，它所不能发现的错误的几率仅为0.0047%以下。从性能上和开销上考虑，均远远优于<a href="https://baike.baidu.com/item/奇偶校验" target="_blank" rel="noopener">奇偶校验</a>及算术和校验等方式。因而，在<a href="https://baike.baidu.com/item/数据存储" target="_blank" rel="noopener">数据存储</a>和<a href="https://baike.baidu.com/item/数据通讯" target="_blank" rel="noopener">数据通讯</a>领域，CRC无处不在：著名的通讯协议X.25的FCS（帧检错序列）采用的是CRC-CCITT，ARJ、LHA等压缩工具软件采用的是CRC32，<a href="https://baike.baidu.com/item/磁盘驱动器" target="_blank" rel="noopener">磁盘驱动器</a>的读写采用了CRC16，通用的图像存储格式GIF、TIFF等也都用CRC作为检错手段。</p>
-<footer><strong>CRC32 百度百科</strong></footer></blockquote>
-<h4 id="测试情况，由于样本不多，不过也能分析出大概情况"><a href="#测试情况，由于样本不多，不过也能分析出大概情况" class="headerlink" title="测试情况，由于样本不多，不过也能分析出大概情况"></a>测试情况，由于样本不多，不过也能分析出大概情况</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"># 区分度并不高</span><br><span class="line">mysql&gt; select</span><br><span class="line">    -&gt;   count(*),</span><br><span class="line">    -&gt;   count(distinct left(name,8)) as L8,</span><br><span class="line">    -&gt;   count(distinct left(name,9)) as L9,</span><br><span class="line">    -&gt;   count(distinct left(name,10)) as L10,</span><br><span class="line">    -&gt;   count(distinct left(name,30)) as L30,</span><br><span class="line">    -&gt;   count(distinct left(name,35)) as L35</span><br><span class="line">    -&gt; from file_store_record;</span><br><span class="line">+----------+----+----+-----+-----+-----+</span><br><span class="line">| count(*) | L8 | L9 | L10 | L30 | L35 |</span><br><span class="line">+----------+----+----+-----+-----+-----+</span><br><span class="line">|       13 |  8 |  8 |   8 |  11 |  13 |</span><br><span class="line">+----------+----+----+-----+-----+-----+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 前缀索引</span><br><span class="line">mysql&gt; select</span><br><span class="line">    -&gt;   count(*),</span><br><span class="line">    -&gt;   count(distinct left(reverse(name),4)) as L4,</span><br><span class="line">    -&gt;   count(distinct left(reverse(name),5)) as L5,</span><br><span class="line">    -&gt;   count(distinct left(reverse(name),6)) as L6,</span><br><span class="line">    -&gt;   count(distinct left(reverse(name),8)) as L7</span><br><span class="line">    -&gt; from file_store_record;</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">| count(*) | L4 | L5 | L6 | L7 |</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">|       13 |  1 |  9 | 13 | 13 |</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># 前缀索引 倒序存储的方式</span><br><span class="line"># 10 78 136	154</span><br><span class="line">mysql&gt; select</span><br><span class="line">    -&gt;   count(*),</span><br><span class="line">    -&gt;   count(distinct substr(reverse(name),5,1)) as L1,</span><br><span class="line">    -&gt;   count(distinct substr(reverse(name),5,2)) as L2,</span><br><span class="line">    -&gt;   count(distinct substr(reverse(name),5,3)) as L3,</span><br><span class="line">    -&gt;   count(distinct substr(reverse(name),5,4)) as L4</span><br><span class="line">    -&gt; from file_store_record;</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">| count(*) | L1 | L2 | L3 | L4 |</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">|       13 |  9 | 13 | 13 | 13 |</span><br><span class="line">+----------+----+----+----+----+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line"># crc32</span><br><span class="line">alter table file_store_record add name_crc int unsigned, add index(id_card_crc);</span><br><span class="line">UPDATE file_store_record SET name_crc = crc32(name);</span><br><span class="line">mysql&gt; select</span><br><span class="line">    -&gt;     count(*),</span><br><span class="line">    -&gt;     count(distinct left(name_crc,1)) as L1,</span><br><span class="line">    -&gt;     count(distinct left(name_crc,2)) as L2,</span><br><span class="line">    -&gt;     count(distinct left(name_crc,3)) as L3,</span><br><span class="line">    -&gt;     count(distinct left(name_crc,4)) as L4,</span><br><span class="line">    -&gt;     count(distinct left(name_crc,5)) as L5</span><br><span class="line">    -&gt;     from file_store_record;</span><br><span class="line">+----------+----+----+----+----+----+</span><br><span class="line">| count(*) | L1 | L2 | L3 | L4 | L5 |</span><br><span class="line">+----------+----+----+----+----+----+</span><br><span class="line">|       13 |  4 | 12 | 13 | 13 | 13 |</span><br><span class="line">+----------+----+----+----+----+----+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/07/23/长字符串如何建立索引/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -618,7 +800,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-06-24 00:31:01" itemprop="dateModified" datetime="2019-06-24T00:31:01+08:00">2019-06-24</time>
+                <time title="Modified: 2019-08-15 22:32:22" itemprop="dateModified" datetime="2019-08-15T22:32:22+08:00">2019-08-15</time>
               
             
           </span>
@@ -671,23 +853,16 @@
 
       
         
+          <p>每当你遇到难解的问题，不要悲伤，不要着急，总有一个人会给你答案，每次看连叔的解答都能让人产生信心，也能让你不断的去思考。</p>
+          <!--noindex-->
           
-            <p>每当你遇到难解的问题，不要悲伤，不要着急，总有一个人会给你答案，每次看连叔的解答都能让人产生信心，也能让你不断的去思考。</p>
-<blockquote><p>人与人之间的沟通，一大作用就是说服对方，让对方接受自己的观点。但这点又非常难做到，经常可以听到抱怨他人的冥顽不化。</p>
-<p>而只要一开始指责，说服工作就宣告失败，责怪他人，逻辑再顺，三观再正，对被责怪的人来说，也几乎不起作用，甚至只会起反作用，他为了维护自己的尊严与面子，更不会退让与改变。</p>
-<p>当你想说服一个人时，避免指责，不只是一个策略问题，更是一个核心技术，你得认真寻找到对方的优点。这点，任正非先生有完美的示范。</p>
-<p>从有限的资料来判断，任正非先生在企业内部管理上，风格是严厉的，被他批评可能并不好受。在企业管理上，这没有问题，企业就是变形的君主制度，老板说了算，尤其是任正非这样有声望有威信，钱又给得多的老板，员工被批评了只能改正，也比较乐意改正。</p>
-<p>但在对外谈判中，对方又相当强大，严厉指责就是错误的。任正非最近的对手是特朗普，他在采访中对特朗普的评价却很高：我认为特朗普是伟大的总统，是因为他把税降下来了，这在一个民主国家是极其艰难的事情。欧洲为什么形成了福利社会？税太重了，拼命努力工作，大多数钱都缴税了，不如少干一点，在大街上喝两杯咖啡，为什么要去干活呢？税减下来以后是有利于产业发展的。</p>
-<p>降税确实非常难，你只要办过一间小小的公司，就会知道，税的轻重，是生死攸关的事，利润就那么一点，加税，没钱赚，公司可能就得关门，降税，能够活下去，再小的公司都能提供几个就业机会，维持几个家庭的生计。美国开始降税，迫使全世界其他国家也得跟着降税，不然就要失去竞争力，这等于造福全球的企业。称赞特朗普这点，是适当的。特朗普又那么爱面子，喜欢自吹自擂，任正非先生真诚的夸奖会不会影响他？会的。</p>
-<p>始终给对手一个台阶下，相信对方能够改变，这是说服的艺术。任正非先生的这次示范（他在不同的采访中反复强调过特朗普降税的意义）,值得记住，并在自己的沟通中使用，你未必有机会劝说美国总统，但是你的对手可能比美国总统更难退让，美国总统有更大利益时，或者一意孤行成本过大，可能瞬间会改变，但是你的家人，你的长辈，可能就会跟你死磕到底。</p>
-<p>几天前，一位老朋友在评论区写下了完美说服的例子：</p>
-<p>“我爸曾经把‘穷开心穷开心，因为我穷所以我开心’挂在嘴边，我在听过n遍之后有一次好奇而温和的问他：‘您真觉得开心是因为穷吗？我倒觉得是因为您遇事想得开看的透才开心的呢，因为我们经历过为钱发愁的事情啊，一点都不开心。’</p>
-<p>老爸虽然没吭声，我知道老爸接受了我的说法，因为从那以后我没再听老爸说过这句让我感觉自相矛盾的话了。</p>
-<p>所以老爸的确是看的开想的透呢。”</p>
-<p>这次关键性说服，技术比任正非先生还高明。仔细观察，在生活中有不少沟通高手，批评都有本事以赞美的形式出现，但又真诚且真实，绝不是廉价的马屁。我们应该努力掌握这个技术。如果我们爱一个人（比如自己的父亲），如果我们爱自己的观念，认为它是正确的，对人有益的，那么，我们在说服一个人之前，应当相信他人能够改变，这样能够放弃恶意的、攻击性的、羞辱性的反效果沟通。</p>
-<p>沟通的内核是事实与逻辑，但前提还真是爱与温暖。</p>
-<footer><strong>连岳 微信公众号搜索连岳</strong></footer></blockquote>
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/23/说服艺术/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
     </div>
@@ -787,12 +962,24 @@
                 
               
 
-              <time title="Created: 2019-03-31 09:55:58 / Modified: 10:25:00" itemprop="dateCreated datePublished" datetime="2019-03-31T09:55:58+08:00">2019-03-31</time>
+              <time title="Created: 2019-03-31 09:55:58" itemprop="dateCreated datePublished" datetime="2019-03-31T09:55:58+08:00">2019-03-31</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-08-15 22:32:46" itemprop="dateModified" datetime="2019-08-15T22:32:46+08:00">2019-08-15</time>
               
             
           </span>
@@ -827,25 +1014,19 @@
 
       
         
-          
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>鄙人南下就业，以为掌握 <code>Dubbo</code>、<code>SpringCloud</code> 等技术栈就比较占优，不曾想到各种碰壁，事与愿违，在准备面试题的过程中，开始思考，痛并思痛，自己是不是该改变学习策略了；框架和基础知识那个更重要呢？</p>
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>鄙人南下就业，以为掌握 <code>Dubbo</code>、<code>SpringCloud</code> 等技术栈就比较占优，不曾想到各种碰壁，事与愿违，在准备面试题的过程中，开始思考，痛并思痛，自己是不是该改变学习策略了；框架和基础知识那个更重要呢？</p>
 <p>第一家面试的是亚马逊中国，上来就是一顿算法题，懵了；</p>
 <p>第二家面试的是懒人科技，上来也是一顿 Java 基础知识，GC 优化，多线程、并发编程，底层原理，哎… 又被打败了；</p>
 <p>刚好看到 <a href="https://time.geekbang.org/" target="_blank" rel="noopener">极客时间</a> 有相关的文章，甚是欣喜，特意引用，以史为诫。</p>
-<h3 id="极客时间-技术人员应该停止学习框架，专注基础知识"><a href="#极客时间-技术人员应该停止学习框架，专注基础知识" class="headerlink" title="极客时间 | 技术人员应该停止学习框架，专注基础知识"></a>极客时间 | 技术人员应该停止学习框架，专注基础知识</h3><p>作为一名开发人员，需要不停地学习新技术。那么，我们应该学习什么样的技术？关于这个话题，有着 15 年工作经验的软件工程师爱德华·兹西佐夫（Eduards Sizovs）发文表达了自己的看法。</p>
-<p>他认为，开发者需要掌握最新的技术，每天学习编程语言、框架和库，知道的工具越新越好，但这一切都是在浪费时间。科技以光速变化，这场比赛没有赢家，因为它没有终点。</p>
-<p>技术的未来预期寿命与其当前存在时间成正比，每一段额外的生存期都意味着更长的剩余预期寿命。技术存在的时间越长，学习它就越安全，对于技术人员来说，不要急于学习新技术，因为它有很高的消亡概率；时间是最好的导师，它会证明哪些技术值得学习，所以需要学会等待。</p>
-<p>曾经，兹西佐夫的导师给他上了重要一课。他的导师询问他正在做什么，他回答正在阅读一本关于如何用 GWT 构建现代 Java 应用程序的书，GWT 是必须跟进的技术。在此之前，他还读了一本 500 页的关于 Apache Tapestry 的书，但他现在根本没用到 Apache Tapestry ，这也没办法帮助他很好地解决 GWT 相关的问题。</p>
-<p>因此，导师建议他正确地设置优先级，把 80% 的时间花在基础学习上，然后剩下 20% 的时间留给框架，库和工具的学习即可。</p>
-<p>现如今，十年过去了，他经历了 50 个不同的软件项目。上述这些建议让他学到的所有东西都可以跨公司、团队、跨领域使用。他认为，只有深入研究项目本质，才会发现它们都是相似的：</p>
-<ol>
-<li>编程语言是不同的，但设计是相似的。</li>
-<li>框架是不同的，但设计模式是可以通用的。</li>
-<li>开发者是不同的，但与人打交道的规则是统一的。</li>
-</ol>
-<p>框架、库和工具是会变化的，但时间是宝贵的。开发者应该将宝贵的时间花在可移植的技能上，比如框架进化体系结构，干净的代码，设计模式，DDD、安全精简编码原则、容错模式、HTTP 和 REST 等技能上。</p>
-
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/03/31/框架-or-基础知识/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1191,199 +1372,6 @@
           
             <div class="post-button text-center">
               <a class="btn" href="/2019/02/02/Cloud-Toolkit-运用/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/09/玩转-Git-三剑客/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/01/09/玩转-Git-三剑客/" class="post-title-link" itemprop="url">玩转 Git 三剑客</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-01-09 23:56:44" itemprop="dateCreated datePublished" datetime="2019-01-09T23:56:44+08:00">2019-01-09</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 23:22:04" itemprop="dateModified" datetime="2019-02-02T23:22:04+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/vcs/" itemprop="url" rel="index"><span itemprop="name">vcs</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>[TOC]</p>
-<h5 id="01-版本管理的演变"><a href="#01-版本管理的演变" class="headerlink" title="01 | 版本管理的演变"></a>01 | 版本管理的演变</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">VCS 出现前</span><br><span class="line"><span class="number">1</span>. 用目录拷贝区别不用的版本</span><br><span class="line"><span class="number">2</span>. 公共文件容易被覆盖</span><br><span class="line"><span class="number">3</span>. 成员沟通成本很高，代码集成效率低下</span><br><span class="line"></span><br><span class="line">v1.<span class="number">0</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">v1.<span class="number">1</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">v1.<span class="number">2</span></span><br><span class="line">	app</span><br><span class="line">	config</span><br><span class="line">	db</span><br><span class="line">	</span><br><span class="line">集中式 VCS </span><br><span class="line"><span class="number">1</span>. 有集中的版本管理服务器</span><br><span class="line"><span class="number">2</span>. 具备文件版本管理和分支管理能力</span><br><span class="line"><span class="number">3</span>. 集成效率有明显地提高</span><br><span class="line"><span class="number">4</span>. 客户端必须时刻和服务器相连</span><br><span class="line"></span><br><span class="line">[computer A]		[Central VCS Server]		[computer B]</span><br><span class="line">   File ---------&gt;		version3		&lt;--------- File </span><br><span class="line">   						version2</span><br><span class="line">   						version3</span><br><span class="line"></span><br><span class="line">分布式 VCS</span><br><span class="line"><span class="number">1</span>. 服务端你和客户端都有完整的版本库</span><br><span class="line"><span class="number">2</span>. 脱离服务端，客户端照样可以管理版本</span><br><span class="line"><span class="number">3</span>. 查看历史和版本比较等多数操作，都不需要访问服务器，比集中式 VCS 更能提高版本管理效率</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[computer A]		[Server Computer]		[computer B]</span><br><span class="line">   File 			[version database]			File </span><br><span class="line">[version database]       version3				[version database]								</span><br><span class="line">   version3				 version2				   version3</span><br><span class="line">   version2				 version1				   version2</span><br><span class="line">   version1										   version1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">A version database-----&gt;		version database			&lt;-----B version database</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#### Git 的特点</span></span><br><span class="line"><span class="number">1</span>. 最优的存储能力</span><br><span class="line"><span class="number">2</span>. 非凡的性能</span><br><span class="line"><span class="number">3</span>. 开源的</span><br><span class="line"><span class="number">4</span>. 很容易做备份</span><br><span class="line"><span class="number">5</span>. 支持离线操作</span><br><span class="line"><span class="number">6</span>. 很容易制定工作流</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>Git 官网：</p>
-<p><a href="https://git-scm.com" target="_blank" rel="noopener">https://git-scm.com</a></p>
-</li>
-<li><p>GitHub：<br><a href="https://github.com" target="_blank" rel="noopener">https://github.com</a></p>
-</li>
-<li><p>GitLab：</p>
-<p><a href="https://about.gitlab.com" target="_blank" rel="noopener">https://about.gitlab.com</a></p>
-</li>
-<li><p>SVN：</p>
-<p><a href="https://subversion.apache.org" target="_blank" rel="noopener">https://subversion.apache.org</a></p>
-</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/01/09/玩转-Git-三剑客/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -2283,6 +2271,8 @@
                     
                       
                     
+                      
+                    
                     <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
@@ -2448,7 +2438,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">74</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">75</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
