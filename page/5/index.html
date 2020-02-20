@@ -390,6 +390,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/02/jEnv/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/02/02/jEnv/" class="post-title-link" itemprop="url">macOS 中 Java 版本管理的好帮手 jEnv</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-02-02 10:43:27" itemprop="dateCreated datePublished" datetime="2018-02-02T10:43:27+08:00">2018-02-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:12:43" itemprop="dateModified" datetime="2019-02-02T22:12:43+08:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/VC/" itemprop="url" rel="index"><span itemprop="name">VC</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h6 id="困恼"><a href="#困恼" class="headerlink" title="困恼"></a>困恼</h6><p>在开发的时候每个人配置 Java 环境都不一样， 或者开发者都有多个版本的 jdk，比如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前版本</span></span><br><span class="line">➜  ~ java -version</span><br><span class="line">java version <span class="string">"1.8.0_121"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_121-b13)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 所有的版本</span></span><br><span class="line">➜  ~ ll /Library/Java/JavaVirtualMachines</span><br><span class="line">total 0</span><br><span class="line">drwxr-xr-x  3 root  wheel   102B  6  3  2017 jdk1.7.0_80.jdk</span><br><span class="line">drwxr-xr-x  3 root  wheel   102B  4 12  2017 jdk1.8.0_121.jdk</span><br><span class="line">➜  ~</span><br></pre></td></tr></table></figure></p>
+<h6 id="jEnv-介绍"><a href="#jEnv-介绍" class="headerlink" title="jEnv 介绍"></a>jEnv 介绍</h6><blockquote><p>Java 生态中包含大量的你可能想使用的工具，包括 Java 本身到一些构建工具，如 Maven 和 Gradle，以及第三方应用如 ActiveMQ 和 Tomcat 等。经常你会需要同时使用这些工具的不同版本，用于不同的项目，或者想对一个项目在不同版本的环境中做兼容性测试。</p>
+<p>管理这些不同版本的工具是一项非常复杂的任务。每个工具有各自不同的获取方式，如果安装，如何控制都是很成问题的。</p>
+<p>值得庆幸的是，jenv 可以帮你轻松搞定这个复杂的工作（请注意该工具不同于 jEnv, 这是用来设置 JAVA_HOME 环境变量的）。jenv 支持 Windows、Mac 和 Linux – 可以轻松管理大量基于 Java 开发的工具的多个版本。目前已经支持超过 200 个不同的工具。</p>
+<footer><strong>jenv 介绍</strong><cite><a href="http://www.jenv.be/" target="_blank" rel="noopener">官网</a></cite></footer></blockquote>
+<h6 id="jEnv-安装"><a href="#jEnv-安装" class="headerlink" title="jEnv 安装"></a>jEnv 安装</h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ brew install jenv</span><br><span class="line"><span class="comment"># bash</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">'export PATH="$HOME/.jenv/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">'eval "$(jenv init -)"'</span> &gt;&gt; ~/.bash_profile</span><br><span class="line"><span class="comment"># zsh</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">'export PATH="$HOME/.jenv/bin:$PATH"'</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">'eval "$(jenv init -)"'</span> &gt;&gt; ~/.zshrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看版本</span></span><br><span class="line">➜  ~ jenv versions</span><br><span class="line">* system (<span class="built_in">set</span> by /Users/niuhesm/.jenv/version)</span><br><span class="line">➜  ~ bash</span><br><span class="line">bash-3.2$ jenv versions</span><br><span class="line">* system (<span class="built_in">set</span> by /Users/niuhesm/.jenv/version)</span><br><span class="line">bash-3.2$ zsh</span><br><span class="line">➜  ~ open ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<p>它只找到了系统默认的Java，即使我已经下载了其他版本的Java。*表示当前选择的版本。</p>
+<h6 id="添加-Java-版本"><a href="#添加-Java-版本" class="headerlink" title="添加 Java 版本"></a>添加 Java 版本</h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jenv add /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/</span><br><span class="line">oracle64-1.7.0.80 added</span><br><span class="line">1.7.0.80 added</span><br><span class="line">1.7 added</span><br><span class="line">➜  ~ jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/</span><br><span class="line">oracle64-1.8.0.121 added</span><br><span class="line">1.8.0.121 added</span><br><span class="line">1.8 added</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新查看版本</span></span><br><span class="line">➜  ~ jenv versions</span><br><span class="line">* system (<span class="built_in">set</span> by /Users/niuhesm/.jenv/version)</span><br><span class="line">  1.7</span><br><span class="line">  1.7.0.80</span><br><span class="line">  1.8</span><br><span class="line">  1.8.0.121</span><br><span class="line">  oracle64-1.7.0.80</span><br><span class="line">  oracle64-1.8.0.121</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 只保留一个版本</span></span><br><span class="line">➜  ~ ....</span><br><span class="line">➜  ~ jenv remove oracle64-1.7.0.80</span><br><span class="line">JDK oracle64-1.7.0.80 removed</span><br><span class="line">➜  ~ jenv remove oracle64-1.8.0.121</span><br><span class="line">JDK oracle64-1.8.0.121 removed</span><br><span class="line">➜  ~ jenv versions</span><br><span class="line">* system (<span class="built_in">set</span> by /Users/niuhesm/.jenv/version)</span><br><span class="line">  1.7.0.80</span><br><span class="line">  1.8.0.121</span><br><span class="line">➜  ~</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定版本</span></span><br><span class="line">➜  ~ java -version</span><br><span class="line">java version <span class="string">"1.7.0_80"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.7.0_80-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)</span><br><span class="line">➜  ~ jenv <span class="built_in">local</span> 1.8.0.121 <span class="comment"># 指定当前的运行版本</span></span><br><span class="line">➜  ~ java -version</span><br><span class="line">java version <span class="string">"1.8.0_121"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_121-b13)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)</span><br><span class="line">➜  ~ jenv <span class="built_in">which</span> java  <span class="comment"># 显示可执行的Java的完整路径</span></span><br><span class="line">/Users/niuhesm/.jenv/versions/1.8.0.121/bin/java</span><br><span class="line">➜  ~</span><br></pre></td></tr></table></figure>
+<p>这当然不是真实的路径，而是一个硬链接。你可以找到 /Users/kmyhy/.jenv/versions/ 目录，发现所有的 java 版本都被列在了这里，这些硬链接（相当于 windows 的快捷方式）都指向了对应的 java 安装目录。<br>你还可以指定一个全局的版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jenv global 1.7.0_80</span><br></pre></td></tr></table></figure><br>这样，默认的 java 版本就是 1.7.0_80 了。如果你想在某个项目中使用 1.7.0_80 版本，可以在项目文件夹下新建一个.java-version 文件，将文件内容编辑为 1.7.0_80 保存。这样，你进入这个文件夹时 jenv 会自动使用 1.7.0_80 作为当前版本（即 local 版本）。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/01/centos7-2搭建gitlab/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2232,183 +2413,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/27/我为何想建博客/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/07/27/我为何想建博客/" class="post-title-link" itemprop="url">搭建博客初衷</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2017-07-27 14:55:36" itemprop="dateCreated datePublished" datetime="2017-07-27T14:55:36+08:00">2017-07-27</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:13:26" itemprop="dateModified" datetime="2019-02-02T22:13:26+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>首先我要承认我是一个爱说话的人，无论是高中的三剑客，还是大学的133，随着高中、大学的逐个毕业，我们见面的机会并不是很多，有的半年一次，有的一年一次，可能是时代变了，或者说是移动互联网在中国的快速发展的几年，让很多人都习惯了朋友之间不用面对面的日子，可喜的是，“三剑客” 和 “133” 这两个 tag 的人，无论是多久没见，只有一见面，脸上总是漏出那种上下铺习惯的眼神，或者可耻的 “奸笑”，不用去猜是谁，懂的人就懂，gay 风说的是你，一个可以对着天空撸的男人。</p>
-<p>一开始是打算纯做技术博客，后面发现，无论是自己的资历还是水平都不足以完成。当然啦，这肯定不是最重要的原因，一直觉得写技术，没必要在自己的博客上写，因为有太多的技术博客的平台啦，无论是 <font color="gray" size="3"><a href="https://juejin.im/" target="_blank" rel="noopener">掘金</a></font>、<font color="Brown" size="3"><a href="http://www.jianshu.com/" target="_blank" rel="noopener">简书</a></font>，还是老牌的 <font color="gray" size="3"><a href="https://www.cnblogs.com/" target="_blank" rel="noopener">博客园</a></font>、<font color="Brown" size="3"><a href="http://blog.csdn.net/" target="_blank" rel="noopener">CSDN</a></font>， 还有我最近比较喜欢的 <font color="gray" size="3"><a href="https://segmentfault.com/" target="_blank" rel="noopener">segmentfault</a></font>，这些都能写技术文，而且我也建议大家在这上面写，为什么呢，因为程序员的我们都经常浏览这些网站，它们的风格也习惯了，倘如每片技术文章都以检索列表的形式陈列在 Google、百度上，那才是件尴尬的事情，你想想看，每个人的风格，样式繁多，眼花缭乱，或者说有的人就是 gay 里 gay 气，你为了解决技术上面的问题，要忍受这些，指不定哪天眼睛真瞎了，而且也没意义，不像平台是有人管理和维护的。</p>
-<p>信息爆炸的时代，“碎片时间” 词汇的出现，朋友圈，公众号，小密圈都是大家平台可以接触各种学习东西的路径或者渠道，当然了我也是，但是我发现一个问题，公众号太多了，多的我只吸收，不思考，我技术文章的收藏太多太多了，百分之八十的文章，是没看过第二遍的；公司也有工作，这也正常，周末睡懒觉，再或者说，天天搞技术，会性冷淡等等.. ； 归根到底，我就是想说：大家不必老看着别人怎么活，做什么事，怎么奋斗，自己也可以忍受种种寂寞，去干一件事情，任何一件自己想干的事情，这种的日子才有意思。比如我，看到一件事，我就在想呀想呀，终于想明白了，后来发现无人交谈，或者无人愿意听你交谈，比起聊天，还不是面对面的聊天，大家更愿意去 断手app, 咸鱼直播等，王者农药，打发时间；当然这也正常，我也常干。</p>
-<p>信息爆炸的时代，学会如何阅读，如何表达自己的思想（写博客），对于一个爱思考的人来说，就显得非常重要了。</p>
-<p>老妈是业余媒婆，居然最近老暗示我，有合适的人就谈，没车没房的屌丝，假如有相亲的一天，想过能不能让她先看看我的博客，觉得性格是否合适，哈哈。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2455,7 +2459,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2542,7 +2546,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">35</span>
+                      
+                    
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -2713,7 +2719,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">79</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -2831,7 +2841,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

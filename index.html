@@ -390,6 +390,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/服务器资源有限下的JVM调优/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2020/02/20/服务器资源有限下的JVM调优/" class="post-title-link" itemprop="url">服务器资源有限下的JVM调优</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-02-20 10:51:33 / Modified: 11:29:33" itemprop="dateCreated datePublished" datetime="2020-02-20T10:51:33+08:00">2020-02-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="疫情下的电话"><a href="#疫情下的电话" class="headerlink" title="疫情下的电话"></a>疫情下的电话</h4><p>有一天阿洋打我电话，问我系统执行的效率比较慢，而且定时任务总是会出现延迟，短暂时间的停顿阻塞问题，问我能不能优化</p>
+<h4 id="系统优化"><a href="#系统优化" class="headerlink" title="系统优化"></a>系统优化</h4><p>尽量的增加系统的性能和吞吐量，要想做到这两点必须需要系统优化，应该频繁的YoungGC、OldGC、FullGC会影响系统的性能和吞吐量，系统优化就是JVM优化，JVM优化就是分配合理的内存、参数设置，从而减少GC给系统带来的影响，想要解决这个问题，就必须了解JVM内存结构和GC的特点，不同的厂商JVM的实现不同，不同版本也存在差异；第二点就是没有绝对内存分配、参数设置的推荐值，必须结合系统的实际的运行模型，分析出系统比较占资源的核心业务，深入了解业务以及业务后续发展的规模做出评估，评估出QPS，以及每秒的内存占用情况，结合JVM的内存结构、GC特性来动态分配内存、参数设置从而尽可能的减少GC的次数，减少STW的时间；第三点就是就是很多时候机器资源是有限的，小公司更加看中成本，需要开发者自己去衡量，尽可能增加系统的性能，节约成本</p>
+<h4 id="实际线上分析"><a href="#实际线上分析" class="headerlink" title="实际线上分析"></a>实际线上分析</h4><p>阿洋说核心业务主要是后台计算和第三方接口的数据同步，并不涉及到前端展示，服务器大概的情况是：单台服务器2核4G，上面运行了Mysql、Redis、Python，Java服务，2个Java程序，由于都是SpringBoot项目，说明有2个JVM进程，我分析了项目中最核心的一个功能点，就是同步人员人脸是否下发到考勤机上，单个项目最多有10000+人，有个最大的失误就是直接用集合容器存储，POJO有10个属性，其中5个属性有数据，算100字节吧，100*10000这就将近1M大小的实例了，随着后续人员的增加出现直接进入FullGC概率越来越大，考虑分批处理，粗略分析了下系统的运行模型，每秒占用的内存 10M，Eden600M,S1S2都60M，老年代400MB；每分钟都会MinorGC一次，剩余30%，180MB的对象不能回收，哎，分析不下去了，终于知道为何有时会卡顿了；这边有个比较大的问题就是数据库查询出来的集合对象比较大，导致很多时候根本回收不了，加上服务器内存资源太有限了，得好好优化下</p>
+<h4 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h4><p>阿洋的公司开发相对比较简单，之前都是使用默认参数，没有设置过JVM参数，而且2核4G的配置部署了其他非相关的进程，分配了1G给JVM Heap，下面是我的配置，由于程序不怎么设计到用户页面的交互，每次YGC SWT 的时间47ms是能够接受的，有一点没太明白就是每次YGC后存活下来的对象由50-60M的样子，在下次YGC触发的时候并不会动态年龄判断，OU的值一直是0；</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=838860800 -XX:MaxNewSize=838860800 -XX:InitialHeapSize=1073741824 -XX:MaxHeapSize=1073741824 -XX:SurvivorRatio=6 -XX:MaxTenuringThreshold=15 -XX:PretenureSizeThreshold=1048576 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -jar App.jar</span><br></pre></td></tr></table></figure>
+<p> 新生代对象增长的速率 4m/s - Young GC的触发频率 1次/200ms - Young GC的耗时 47ms - 每次Young GC后有多少对象是存活下来的 50-60m - 每次Young GC过后有多少对象进入了老年代 0 - 老年代对象增长的速率 0 - Full GC的触发频率 0 - Full GC的耗时 257ms 在程序启动的时候触发4次</p>
+<h4 id="改进日志"><a href="#改进日志" class="headerlink" title="改进日志"></a>改进日志</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=800M -XX:MaxNewSize=800M -XX:InitialHeapSize=1024M </span><br><span class="line">-XX:MaxHeapSize=1024M -XX:SurvivorRatio=6  -XX:MaxTenuringThreshold=15 </span><br><span class="line">-XX:PretenureSizeThreshold=1M -XX:CMSInitiatingOccupancyFraction=92 </span><br><span class="line">-XX:MetaspaceSize=256M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:+DisableExplicitGC -jar App.jar &amp;</span><br></pre></td></tr></table></figure>
+<p>改进<br>-XX:+DisableExplicitGC。这个参数的意思就是禁止显式执行GC，不允许你来通过代码触发GC</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=800M -XX:MaxNewSize=800M -XX:InitialHeapSize=1024M -XX:MaxHeapSize=1024M -XX:SurvivorRatio=6  </span><br><span class="line">-XX:MaxTenuringThreshold=15 -XX:PretenureSizeThreshold=1M </span><br><span class="line">-XX:CMSInitiatingOccupancyFraction=92 -XX:MetaspaceSize=256M </span><br><span class="line">-XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:+DisableExplicitGC -jar App.jar &amp;</span><br></pre></td></tr></table></figure>
+<p>改进<br>在降低了Full GC频率之后，务必设置如下参数<br>-XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=0<br>每次Full GC后都整理一下内存碎片。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=800M -XX:MaxNewSize=800M </span><br><span class="line">-XX:InitialHeapSize=1024M -XX:MaxHeapSize=1024M -XX:SurvivorRatio=6  </span><br><span class="line">-XX:MaxTenuringThreshold=15 -XX:PretenureSizeThreshold=1M </span><br><span class="line">-XX:CMSInitiatingOccupancyFraction=92 -XX:MetaspaceSize=256M </span><br><span class="line">-XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC </span><br><span class="line">-XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=0 </span><br><span class="line">-jar App.jar &amp;</span><br></pre></td></tr></table></figure>
+<p>改进<br>一个参数是“-XX:+CMSParallelInitialMarkEnabled”，这个参数会在CMS垃圾回收器的“初始标记”阶段开启多线程并发执行。<br>大家应该还记得初始标记阶段，是会进行Stop the World的，会导致系统停顿，所以这个阶段开启多线程并发之后，可以尽可能优化这个阶段的性能，减少Stop the World的时间。</p>
+<p>另外一个参数是“-XX:+CMSScavengeBeforeRemark”，这个参数会在CMS的重新标记阶段之前，先尽量执行一次Young GC。<br>其实大家都记得，CMS的重新标记也是会Stop the World的，所以所以如果在重新标记之前，先执行一次Young GC，就会回收掉一些年轻代里没有人引用的对象。<br>所以如果先提前回收掉一些对象，那么在CMS的重新标记阶段就可以少扫描一些对象，此时就可以提升CMS的重新标记阶段的性能，减少他的耗时。</p>
+<p>所以当时在JVM参数模板中，同样加入了这两个参数：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=800M -XX:MaxNewSize=800M </span><br><span class="line">-XX:InitialHeapSize=1024M -XX:MaxHeapSize=1024M </span><br><span class="line">-XX:SurvivorRatio=6  -XX:MaxTenuringThreshold=15 </span><br><span class="line">-XX:PretenureSizeThreshold=1M -XX:CMSInitiatingOccupancyFraction=92 -XX:MetaspaceSize=256M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:+DisableExplicitGC -XX:+UseCMSCompactAtFullCollection </span><br><span class="line">-XX:CMSFullGCsBeforeCompaction=0 -XX:+CMSParallelInitialMarkEnabled -XX:+CMSScavengeBeforeRemark -jar App.jar &amp;</span><br></pre></td></tr></table></figure>
+<p>而且调整了参数“-XX:CMSInitiatingOccupancyFraction=92”，避免老年代仅仅占用68%就触发GC，现在必须要占用到92%才会触发GC。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java -XX:NewSize=800M -XX:MaxNewSize=800M </span><br><span class="line">-XX:InitialHeapSize=1024M -XX:MaxHeapSize=1024M </span><br><span class="line">-XX:SurvivorRatio=6  -XX:MaxTenuringThreshold=15 </span><br><span class="line">-XX:PretenureSizeThreshold=1M -XX:CMSInitiatingOccupancyFraction=92 -XX:MetaspaceSize=256M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:+DisableExplicitGC -XX:+UseCMSCompactAtFullCollection </span><br><span class="line">-XX:CMSFullGCsBeforeCompaction=0 -XX:+CMSParallelInitialMarkEnabled -XX:+CMSScavengeBeforeRemark -XX:CMSInitiatingOccupancyFaction=92 </span><br><span class="line">-jar App.jar &amp;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/10/优先队列和堆/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1948,186 +2125,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/06/Spring-Boot-web-应用加速/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/12/06/Spring-Boot-web-应用加速/" class="post-title-link" itemprop="url">Spring Boot web 应用加速</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-12-06 19:50:51" itemprop="dateCreated datePublished" datetime="2018-12-06T19:50:51+08:00">2018-12-06</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:11:56" itemprop="dateModified" datetime="2019-02-02T22:11:56+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Spring-Boot-Web-应用加速"><a href="#Spring-Boot-Web-应用加速" class="headerlink" title="Spring Boot Web 应用加速"></a>Spring Boot Web 应用加速</h1><p>默认情况下，Spring Boot Web 应用会装配一些功能组件 Bean。</p>
-<p>在大多数 Web 应用场景下，可以选择性地关闭一下自动装配的Spring 组件 Bean，以达到提升性能的目的。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/12/06/Spring-Boot-web-应用加速/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2174,7 +2171,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-count">53</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2261,7 +2258,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">35</span>
+                      
+                    
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -2432,7 +2431,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">77</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">79</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -2550,7 +2553,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
