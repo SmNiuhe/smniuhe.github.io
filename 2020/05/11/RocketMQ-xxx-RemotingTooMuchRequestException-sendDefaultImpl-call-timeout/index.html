@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="smniuhe">
 <meta property="og:description" content="单机环境搭建依赖 64 位操作系统，Linux/ Unix/Mac OS  64位JDK 1.8+  Maven 3.2.x  Git   代码下载1git clone https://github.com/apache/rocketmq.git">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-11T15:31:20.663Z">
+<meta property="og:updated_time" content="2020-05-11T15:31:48.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RocketMQ ...xxx.RemotingTooMuchRequestException: sendDefaultImpl call timeout">
 <meta name="twitter:description" content="单机环境搭建依赖 64 位操作系统，Linux/ Unix/Mac OS  64位JDK 1.8+  Maven 3.2.x  Git   代码下载1git clone https://github.com/apache/rocketmq.git">
@@ -434,7 +434,7 @@
                 
               
 
-              <time title="Created: 2020-05-11 22:49:49 / Modified: 23:31:20" itemprop="dateCreated datePublished" datetime="2020-05-11T22:49:49+08:00">2020-05-11</time>
+              <time title="Created: 2020-05-11 22:49:49 / Modified: 23:31:48" itemprop="dateCreated datePublished" datetime="2020-05-11T22:49:49+08:00">2020-05-11</time>
             
 
             
@@ -529,7 +529,7 @@
 <h4 id="部分参考"><a href="#部分参考" class="headerlink" title="部分参考"></a>部分参考</h4><blockquote><p>聊聊rocketmq的RemotingTooMuchRequestException</p>
 <footer><strong>codecraft</strong><cite><a href="https://segmentfault.com/a/1190000021290076" target="_blank" rel="noopener">地址</a></cite></footer></blockquote>
 <h3 id="两个容易忽悠的点"><a href="#两个容易忽悠的点" class="headerlink" title="两个容易忽悠的点"></a>两个容易忽悠的点</h3><ol>
-<li>需要配置 nameserver,  broker 内存大小，默认是4G，服务器内存不够的话，需要修改大小，否则启动失败</li>
+<li>需要配置 nameserver,  broker 内存大小，默认是4G，服务器内存不够的话，需要修改大小，否则导致启动失败</li>
 <li>org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException: sendDefaultImpl call timeout ，vim broker.conf ：新增 brokerIP1=106.11.xx.xx，nohup sh bin/mqbroker -n 106.11.xx.xx:9876 -c conf/broker.conf &amp; </li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">3.7. 修改启动脚本参数【两台机器】</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq/bin/runbroker.sh</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq-slave/bin/runbroker.sh</span><br><span class="line">JAVA_OPT="$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn512m"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq/bin/runserver.sh</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq-slave/bin/runserver.sh</span><br><span class="line">JAVA_OPT="$&#123;JAVA_OPT&#125; -server -Xms1g -Xmx1g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"</span><br></pre></td></tr></table></figure>
