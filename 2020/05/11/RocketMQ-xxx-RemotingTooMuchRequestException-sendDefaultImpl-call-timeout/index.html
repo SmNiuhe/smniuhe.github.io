@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="单机环境搭建依赖 64 位操作系统，Linux/ Unix/Mac OS  64位JDK 1.8+  Maven 3.2.x  Git   代码下载1git clone https://github.com/apache/rocketmq.git 项目构建12345&amp;gt; cd rocketmq# meavn打包&amp;gt; mvn -Prelease-all -DskipTests clean i">
+<meta name="keywords" content="RocketMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ ...xxx.RemotingTooMuchRequestException: sendDefaultImpl call timeout">
+<meta property="og:url" content="http://yoursite.com/2020/05/11/RocketMQ-xxx-RemotingTooMuchRequestException-sendDefaultImpl-call-timeout/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="单机环境搭建依赖 64 位操作系统，Linux/ Unix/Mac OS  64位JDK 1.8+  Maven 3.2.x  Git   代码下载1git clone https://github.com/apache/rocketmq.git 项目构建12345&amp;gt; cd rocketmq# meavn打包&amp;gt; mvn -Prelease-all -DskipTests clean i">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-11T15:23:54.618Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RocketMQ ...xxx.RemotingTooMuchRequestException: sendDefaultImpl call timeout">
+<meta name="twitter:description" content="单机环境搭建依赖 64 位操作系统，Linux/ Unix/Mac OS  64位JDK 1.8+  Maven 3.2.x  Git   代码下载1git clone https://github.com/apache/rocketmq.git 项目构建12345&amp;gt; cd rocketmq# meavn打包&amp;gt; mvn -Prelease-all -DskipTests clean i">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2020/05/11/RocketMQ-xxx-RemotingTooMuchRequestException-sendDefaultImpl-call-timeout/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>RocketMQ ...xxx.RemotingTooMuchRequestException: sendDefaultImpl call timeout | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>Schedule</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/11/RocketMQ-xxx-RemotingTooMuchRequestException-sendDefaultImpl-call-timeout/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RocketMQ ...xxx.RemotingTooMuchRequestException: sendDefaultImpl call timeout
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-05-11 22:49:49 / Modified: 23:23:54" itemprop="dateCreated datePublished" datetime="2020-05-11T22:49:49+08:00">2020-05-11</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/MQ/" itemprop="url" rel="index"><span itemprop="name">MQ</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="单机环境搭建"><a href="#单机环境搭建" class="headerlink" title="单机环境搭建"></a>单机环境搭建</h3><h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><ol>
+<li><p>64 位操作系统，<strong>Linux/ Unix/Mac OS</strong></p>
+</li>
+<li><p><strong>64位JDK 1.8+</strong></p>
+</li>
+<li><p><strong>Maven 3.2.x</strong></p>
+</li>
+<li><p><strong>Git</strong></p>
+</li>
+</ol>
+<h4 id="代码下载"><a href="#代码下载" class="headerlink" title="代码下载"></a>代码下载</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq.git</span><br></pre></td></tr></table></figure>
+<h4 id="项目构建"><a href="#项目构建" class="headerlink" title="项目构建"></a>项目构建</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> cd rocketmq</span><br><span class="line"><span class="meta">#</span> meavn打包</span><br><span class="line"><span class="meta">&gt;</span> mvn -Prelease-all -DskipTests clean install -U</span><br><span class="line"><span class="meta">#</span> 这里的4.5.x是版本号，可能不同，请注意自己的版本</span><br><span class="line"><span class="meta">&gt;</span> cd distribution/target/rocketmq-4.5.x/rocketmq-4.5.x</span><br></pre></td></tr></table></figure>
+<h4 id="启动-NameServer"><a href="#启动-NameServer" class="headerlink" title="启动 NameServer"></a>启动 NameServer</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动NameServer</span><br><span class="line"><span class="meta">&gt;</span> nohup sh bin/mqnamesrv &amp;</span><br><span class="line"><span class="meta">#</span> 查看日志，确认是否成功</span><br><span class="line"><span class="meta">&gt;</span> tail -f ~/logs/rocketmqlogs/namesrv.log</span><br><span class="line"></span><br><span class="line">2019-9-27 21:04:10 INFO NSScheduledThread1 - ----</span><br><span class="line">...</span><br><span class="line"><span class="meta">#</span>出现下面信息成功</span><br><span class="line">  The Name Server boot success...</span><br></pre></td></tr></table></figure>
+<p>启动 Broker</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 启动Broker</span><br><span class="line"><span class="meta">&gt;</span> nohup sh bin/mqbroker -n localhost:9876 &amp;</span><br><span class="line"><span class="meta">#</span> 查看日志，确认是否成功</span><br><span class="line"><span class="meta">&gt;</span> tail -f ~/logs/rocketmqlogs/broker.log </span><br><span class="line">  The broker[%s, 172.30.30.233:10911] boot success...</span><br></pre></td></tr></table></figure>
+<h5 id="发送和接收消息"><a href="#发送和接收消息" class="headerlink" title="发送和接收消息"></a>发送和接收消息</h5><h5 id="生产者发送消息"><a href="#生产者发送消息" class="headerlink" title="生产者发送消息"></a>生产者发送消息</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> export NAMESRV_ADDR=localhost:9876</span><br><span class="line"><span class="meta">&gt;</span> sh bin/tools.sh org.apache.rocketmq.example.quickstart.Producer</span><br><span class="line"><span class="meta">#</span> 出现下面信息成功发送</span><br><span class="line"> SendResult [sendStatus=SEND_OK, msgId= ...</span><br></pre></td></tr></table></figure>
+<h5 id="消费者消费消息"><a href="#消费者消费消息" class="headerlink" title="消费者消费消息"></a>消费者消费消息</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> sh bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer</span><br><span class="line"><span class="meta">#</span> 出现下面信息成功消费</span><br><span class="line"><span class="meta"> ConsumeMessageThread_%</span>d Receive New Messages: [MessageExt...</span><br></pre></td></tr></table></figure>
+<h4 id="关闭服务"><a href="#关闭服务" class="headerlink" title="关闭服务"></a>关闭服务</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 关闭 broker</span><br><span class="line"><span class="meta">&gt;</span> sh bin/mqshutdown broker</span><br><span class="line">The mqbroker(36695) is running...</span><br><span class="line">Send shutdown request to mqbroker(36695) OK</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 关闭 namesrv</span><br><span class="line"><span class="meta">&gt;</span> sh bin/mqshutdown namesrv</span><br><span class="line">The mqnamesrv(36664) is running...</span><br><span class="line">Send shutdown request to mqnamesrv(36664) OK</span><br></pre></td></tr></table></figure>
+<h3 id="RocketMQ-控制台"><a href="#RocketMQ-控制台" class="headerlink" title="RocketMQ - 控制台"></a>RocketMQ - 控制台</h3><ul>
+<li>RocketMQ扩展组件： <a href="http://github.com/apache/rocketmq-externals/tree/master/" target="_blank" rel="noopener">http://github.com/apache/rocketmq-externals/tree/master/</a></li>
+<li>控制台使用：直接引入工程后，修改配置文件即可</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq-externals.git</span><br><span class="line">cd rocketmq-externals/rocketmq-console</span><br><span class="line">mvn package -DskipTests</span><br><span class="line">java -jar rocketmq-console-ng-1.0.1.jar --server.port=8081 --rocketmq.config.namesrvAddr=127.0.0.1:9876</span><br></pre></td></tr></table></figure>
+<h3 id="SpringBoot-整合流程三步骤"><a href="#SpringBoot-整合流程三步骤" class="headerlink" title="SpringBoot 整合流程三步骤"></a>SpringBoot 整合流程三步骤</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">三流程，添加依赖，配置注解，配置属性</span></span><br><span class="line"><span class="string">rocketmq-spring-boot-starter</span></span><br><span class="line"></span><br><span class="line"><span class="attr">rocketmq:</span></span><br><span class="line"><span class="attr">  name-server:</span> <span class="string">smniuhe.com:9876</span></span><br><span class="line"><span class="attr">  producer:</span></span><br><span class="line">    <span class="comment"># 小坑: 必须指定group</span></span><br><span class="line"><span class="attr">    group:</span> <span class="string">test-grep</span></span><br></pre></td></tr></table></figure>
+<h3 id="Spring-消息编程模型"><a href="#Spring-消息编程模型" class="headerlink" title="Spring 消息编程模型"></a>Spring 消息编程模型</h3><p>RocketMQ: RocketMQTemplate 来 convertAndSend 提示 <code>org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException: sendDefaultImpl call timeout</code></p>
+<h4 id="RemotingTooMuchRequestException"><a href="#RemotingTooMuchRequestException" class="headerlink" title="RemotingTooMuchRequestException"></a>RemotingTooMuchRequestException</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RemotingTooMuchRequestException</span> <span class="keyword">extends</span> <span class="title">RemotingException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">4326919581254519654L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RemotingTooMuchRequestException</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="sendMessage"><a href="#sendMessage" class="headerlink" title="sendMessage"></a>sendMessage</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MQClientAPIImpl</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SendResult <span class="title">sendMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String addr,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String brokerName,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> Message msg,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendMessageRequestHeader requestHeader,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">long</span> timeoutMillis,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendMessageContext context,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> DefaultMQProducerImpl producer</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> <span class="keyword">throws</span> RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sendMessage(addr, brokerName, msg, requestHeader, timeoutMillis, communicationMode, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">0</span>, context, producer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SendResult <span class="title">sendMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String addr,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> String brokerName,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> Message msg,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendMessageRequestHeader requestHeader,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">long</span> timeoutMillis,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendCallback sendCallback,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> TopicPublishInfo topicPublishInfo,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> MQClientInstance instance,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">int</span> retryTimesWhenSendFailed,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendMessageContext context,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> DefaultMQProducerImpl producer</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> <span class="keyword">throws</span> RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> beginStartTime = System.currentTimeMillis();</span><br><span class="line">        RemotingCommand request = <span class="keyword">null</span>;</span><br><span class="line">        String msgType = msg.getProperty(MessageConst.PROPERTY_MESSAGE_TYPE);</span><br><span class="line">        <span class="keyword">boolean</span> isReply = msgType != <span class="keyword">null</span> &amp;&amp; msgType.equals(MixAll.REPLY_MESSAGE_FLAG);</span><br><span class="line">        <span class="keyword">if</span> (isReply) &#123;</span><br><span class="line">            <span class="keyword">if</span> (sendSmartMsg) &#123;</span><br><span class="line">                SendMessageRequestHeaderV2 requestHeaderV2 = SendMessageRequestHeaderV2.createSendMessageRequestHeaderV2(requestHeader);</span><br><span class="line">                request = RemotingCommand.createRequestCommand(RequestCode.SEND_REPLY_MESSAGE_V2, requestHeaderV2);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                request = RemotingCommand.createRequestCommand(RequestCode.SEND_REPLY_MESSAGE, requestHeader);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (sendSmartMsg || msg <span class="keyword">instanceof</span> MessageBatch) &#123;</span><br><span class="line">                SendMessageRequestHeaderV2 requestHeaderV2 = SendMessageRequestHeaderV2.createSendMessageRequestHeaderV2(requestHeader);</span><br><span class="line">                request = RemotingCommand.createRequestCommand(msg <span class="keyword">instanceof</span> MessageBatch ? RequestCode.SEND_BATCH_MESSAGE : RequestCode.SEND_MESSAGE_V2, requestHeaderV2);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                request = RemotingCommand.createRequestCommand(RequestCode.SEND_MESSAGE, requestHeader);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        request.setBody(msg.getBody());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (communicationMode) &#123;</span><br><span class="line">            <span class="keyword">case</span> ONEWAY:</span><br><span class="line">                <span class="keyword">this</span>.remotingClient.invokeOneway(addr, request, timeoutMillis);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">case</span> ASYNC:</span><br><span class="line">                <span class="keyword">final</span> AtomicInteger times = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line">                <span class="keyword">long</span> costTimeAsync = System.currentTimeMillis() - beginStartTime;</span><br><span class="line">                <span class="keyword">if</span> (timeoutMillis &lt; costTimeAsync) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">"sendMessage call timeout"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">this</span>.sendMessageAsync(addr, brokerName, msg, timeoutMillis - costTimeAsync, request, sendCallback, topicPublishInfo, instance,</span><br><span class="line">                    retryTimesWhenSendFailed, times, context, producer);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">case</span> SYNC:</span><br><span class="line">                <span class="keyword">long</span> costTimeSync = System.currentTimeMillis() - beginStartTime;</span><br><span class="line">                <span class="keyword">if</span> (timeoutMillis &lt; costTimeSync) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">"sendMessage call timeout"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.sendMessageSync(addr, brokerName, msg, timeoutMillis - costTimeSync, request);</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">assert</span> <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="sendKernelImpl"><a href="#sendKernelImpl" class="headerlink" title="sendKernelImpl"></a>sendKernelImpl</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultMQProducerImpl</span> <span class="keyword">implements</span> <span class="title">MQProducerInner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> SendResult <span class="title">sendKernelImpl</span><span class="params">(<span class="keyword">final</span> Message msg,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> MessageQueue mq,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendCallback sendCallback,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> TopicPublishInfo topicPublishInfo,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> beginStartTime = System.currentTimeMillis();</span><br><span class="line">        String brokerAddr = <span class="keyword">this</span>.mQClientFactory.findBrokerAddressInPublish(mq.getBrokerName());</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == brokerAddr) &#123;</span><br><span class="line">            tryToFindTopicPublishInfo(mq.getTopic());</span><br><span class="line">            brokerAddr = <span class="keyword">this</span>.mQClientFactory.findBrokerAddressInPublish(mq.getBrokerName());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        SendMessageContext context = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (brokerAddr != <span class="keyword">null</span>) &#123;</span><br><span class="line">            brokerAddr = MixAll.brokerVIPChannel(<span class="keyword">this</span>.defaultMQProducer.isSendMessageWithVIPChannel(), brokerAddr);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">byte</span>[] prevBody = msg.getBody();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//for MessageBatch,ID has been set in the generating process</span></span><br><span class="line">                <span class="keyword">if</span> (!(msg <span class="keyword">instanceof</span> MessageBatch)) &#123;</span><br><span class="line">                    MessageClientIDSetter.setUniqID(msg);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">boolean</span> topicWithNamespace = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> != <span class="keyword">this</span>.mQClientFactory.getClientConfig().getNamespace()) &#123;</span><br><span class="line">                    msg.setInstanceId(<span class="keyword">this</span>.mQClientFactory.getClientConfig().getNamespace());</span><br><span class="line">                    topicWithNamespace = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">int</span> sysFlag = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">boolean</span> msgBodyCompressed = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.tryToCompressMessage(msg)) &#123;</span><br><span class="line">                    sysFlag |= MessageSysFlag.COMPRESSED_FLAG;</span><br><span class="line">                    msgBodyCompressed = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">final</span> String tranMsg = msg.getProperty(MessageConst.PROPERTY_TRANSACTION_PREPARED);</span><br><span class="line">                <span class="keyword">if</span> (tranMsg != <span class="keyword">null</span> &amp;&amp; Boolean.parseBoolean(tranMsg)) &#123;</span><br><span class="line">                    sysFlag |= MessageSysFlag.TRANSACTION_PREPARED_TYPE;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (hasCheckForbiddenHook()) &#123;</span><br><span class="line">                    CheckForbiddenContext checkForbiddenContext = <span class="keyword">new</span> CheckForbiddenContext();</span><br><span class="line">                    checkForbiddenContext.setNameSrvAddr(<span class="keyword">this</span>.defaultMQProducer.getNamesrvAddr());</span><br><span class="line">                    checkForbiddenContext.setGroup(<span class="keyword">this</span>.defaultMQProducer.getProducerGroup());</span><br><span class="line">                    checkForbiddenContext.setCommunicationMode(communicationMode);</span><br><span class="line">                    checkForbiddenContext.setBrokerAddr(brokerAddr);</span><br><span class="line">                    checkForbiddenContext.setMessage(msg);</span><br><span class="line">                    checkForbiddenContext.setMq(mq);</span><br><span class="line">                    checkForbiddenContext.setUnitMode(<span class="keyword">this</span>.isUnitMode());</span><br><span class="line">                    <span class="keyword">this</span>.executeCheckForbiddenHook(checkForbiddenContext);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.hasSendMessageHook()) &#123;</span><br><span class="line">                    context = <span class="keyword">new</span> SendMessageContext();</span><br><span class="line">                    context.setProducer(<span class="keyword">this</span>);</span><br><span class="line">                    context.setProducerGroup(<span class="keyword">this</span>.defaultMQProducer.getProducerGroup());</span><br><span class="line">                    context.setCommunicationMode(communicationMode);</span><br><span class="line">                    context.setBornHost(<span class="keyword">this</span>.defaultMQProducer.getClientIP());</span><br><span class="line">                    context.setBrokerAddr(brokerAddr);</span><br><span class="line">                    context.setMessage(msg);</span><br><span class="line">                    context.setMq(mq);</span><br><span class="line">                    context.setNamespace(<span class="keyword">this</span>.defaultMQProducer.getNamespace());</span><br><span class="line">                    String isTrans = msg.getProperty(MessageConst.PROPERTY_TRANSACTION_PREPARED);</span><br><span class="line">                    <span class="keyword">if</span> (isTrans != <span class="keyword">null</span> &amp;&amp; isTrans.equals(<span class="string">"true"</span>)) &#123;</span><br><span class="line">                        context.setMsgType(MessageType.Trans_Msg_Half);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (msg.getProperty(<span class="string">"__STARTDELIVERTIME"</span>) != <span class="keyword">null</span> || msg.getProperty(MessageConst.PROPERTY_DELAY_TIME_LEVEL) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        context.setMsgType(MessageType.Delay_Msg);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">this</span>.executeSendMessageHookBefore(context);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                SendMessageRequestHeader requestHeader = <span class="keyword">new</span> SendMessageRequestHeader();</span><br><span class="line">                requestHeader.setProducerGroup(<span class="keyword">this</span>.defaultMQProducer.getProducerGroup());</span><br><span class="line">                requestHeader.setTopic(msg.getTopic());</span><br><span class="line">                requestHeader.setDefaultTopic(<span class="keyword">this</span>.defaultMQProducer.getCreateTopicKey());</span><br><span class="line">                requestHeader.setDefaultTopicQueueNums(<span class="keyword">this</span>.defaultMQProducer.getDefaultTopicQueueNums());</span><br><span class="line">                requestHeader.setQueueId(mq.getQueueId());</span><br><span class="line">                requestHeader.setSysFlag(sysFlag);</span><br><span class="line">                requestHeader.setBornTimestamp(System.currentTimeMillis());</span><br><span class="line">                requestHeader.setFlag(msg.getFlag());</span><br><span class="line">                requestHeader.setProperties(MessageDecoder.messageProperties2String(msg.getProperties()));</span><br><span class="line">                requestHeader.setReconsumeTimes(<span class="number">0</span>);</span><br><span class="line">                requestHeader.setUnitMode(<span class="keyword">this</span>.isUnitMode());</span><br><span class="line">                requestHeader.setBatch(msg <span class="keyword">instanceof</span> MessageBatch);</span><br><span class="line">                <span class="keyword">if</span> (requestHeader.getTopic().startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX)) &#123;</span><br><span class="line">                    String reconsumeTimes = MessageAccessor.getReconsumeTime(msg);</span><br><span class="line">                    <span class="keyword">if</span> (reconsumeTimes != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        requestHeader.setReconsumeTimes(Integer.valueOf(reconsumeTimes));</span><br><span class="line">                        MessageAccessor.clearProperty(msg, MessageConst.PROPERTY_RECONSUME_TIME);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    String maxReconsumeTimes = MessageAccessor.getMaxReconsumeTimes(msg);</span><br><span class="line">                    <span class="keyword">if</span> (maxReconsumeTimes != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        requestHeader.setMaxReconsumeTimes(Integer.valueOf(maxReconsumeTimes));</span><br><span class="line">                        MessageAccessor.clearProperty(msg, MessageConst.PROPERTY_MAX_RECONSUME_TIMES);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                SendResult sendResult = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">switch</span> (communicationMode) &#123;</span><br><span class="line">                    <span class="keyword">case</span> ASYNC:</span><br><span class="line">                        Message tmpMessage = msg;</span><br><span class="line">                        <span class="keyword">boolean</span> messageCloned = <span class="keyword">false</span>;</span><br><span class="line">                        <span class="keyword">if</span> (msgBodyCompressed) &#123;</span><br><span class="line">                            <span class="comment">//If msg body was compressed, msgbody should be reset using prevBody.</span></span><br><span class="line">                            <span class="comment">//Clone new message using commpressed message body and recover origin massage.</span></span><br><span class="line">                            <span class="comment">//Fix bug:https://github.com/apache/rocketmq-externals/issues/66</span></span><br><span class="line">                            tmpMessage = MessageAccessor.cloneMessage(msg);</span><br><span class="line">                            messageCloned = <span class="keyword">true</span>;</span><br><span class="line">                            msg.setBody(prevBody);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (topicWithNamespace) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (!messageCloned) &#123;</span><br><span class="line">                                tmpMessage = MessageAccessor.cloneMessage(msg);</span><br><span class="line">                                messageCloned = <span class="keyword">true</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                            msg.setTopic(NamespaceUtil.withoutNamespace(msg.getTopic(), <span class="keyword">this</span>.defaultMQProducer.getNamespace()));</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">long</span> costTimeAsync = System.currentTimeMillis() - beginStartTime;</span><br><span class="line">                        <span class="keyword">if</span> (timeout &lt; costTimeAsync) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">"sendKernelImpl call timeout"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        sendResult = <span class="keyword">this</span>.mQClientFactory.getMQClientAPIImpl().sendMessage(</span><br><span class="line">                            brokerAddr,</span><br><span class="line">                            mq.getBrokerName(),</span><br><span class="line">                            tmpMessage,</span><br><span class="line">                            requestHeader,</span><br><span class="line">                            timeout - costTimeAsync,</span><br><span class="line">                            communicationMode,</span><br><span class="line">                            sendCallback,</span><br><span class="line">                            topicPublishInfo,</span><br><span class="line">                            <span class="keyword">this</span>.mQClientFactory,</span><br><span class="line">                            <span class="keyword">this</span>.defaultMQProducer.getRetryTimesWhenSendAsyncFailed(),</span><br><span class="line">                            context,</span><br><span class="line">                            <span class="keyword">this</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ONEWAY:</span><br><span class="line">                    <span class="keyword">case</span> SYNC:</span><br><span class="line">                        <span class="keyword">long</span> costTimeSync = System.currentTimeMillis() - beginStartTime;</span><br><span class="line">                        <span class="keyword">if</span> (timeout &lt; costTimeSync) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">"sendKernelImpl call timeout"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        sendResult = <span class="keyword">this</span>.mQClientFactory.getMQClientAPIImpl().sendMessage(</span><br><span class="line">                            brokerAddr,</span><br><span class="line">                            mq.getBrokerName(),</span><br><span class="line">                            msg,</span><br><span class="line">                            requestHeader,</span><br><span class="line">                            timeout - costTimeSync,</span><br><span class="line">                            communicationMode,</span><br><span class="line">                            context,</span><br><span class="line">                            <span class="keyword">this</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">default</span>:</span><br><span class="line">                        <span class="keyword">assert</span> <span class="keyword">false</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.hasSendMessageHook()) &#123;</span><br><span class="line">                    context.setSendResult(sendResult);</span><br><span class="line">                    <span class="keyword">this</span>.executeSendMessageHookAfter(context);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> sendResult;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (RemotingException e) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.hasSendMessageHook()) &#123;</span><br><span class="line">                    context.setException(e);</span><br><span class="line">                    <span class="keyword">this</span>.executeSendMessageHookAfter(context);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> e;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (MQBrokerException e) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.hasSendMessageHook()) &#123;</span><br><span class="line">                    context.setException(e);</span><br><span class="line">                    <span class="keyword">this</span>.executeSendMessageHookAfter(context);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> e;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.hasSendMessageHook()) &#123;</span><br><span class="line">                    context.setException(e);</span><br><span class="line">                    <span class="keyword">this</span>.executeSendMessageHookAfter(context);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> e;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                msg.setBody(prevBody);</span><br><span class="line">                msg.setTopic(NamespaceUtil.withoutNamespace(msg.getTopic(), <span class="keyword">this</span>.defaultMQProducer.getNamespace()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">"The broker["</span> + mq.getBrokerName() + <span class="string">"] not exist"</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="sendDefaultImpl"><a href="#sendDefaultImpl" class="headerlink" title="sendDefaultImpl"></a>sendDefaultImpl</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultMQProducerImpl</span> <span class="keyword">implements</span> <span class="title">MQProducerInner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> SendResult <span class="title">sendDefaultImpl</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        Message msg,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> SendCallback sendCallback,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">final</span> <span class="keyword">long</span> timeout</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> <span class="keyword">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.makeSureStateOK();</span><br><span class="line">        Validators.checkMessage(msg, <span class="keyword">this</span>.defaultMQProducer);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">long</span> invokeID = random.nextLong();</span><br><span class="line">        <span class="keyword">long</span> beginTimestampFirst = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">long</span> beginTimestampPrev = beginTimestampFirst;</span><br><span class="line">        <span class="keyword">long</span> endTimestamp = beginTimestampFirst;</span><br><span class="line">        TopicPublishInfo topicPublishInfo = <span class="keyword">this</span>.tryToFindTopicPublishInfo(msg.getTopic());</span><br><span class="line">        <span class="keyword">if</span> (topicPublishInfo != <span class="keyword">null</span> &amp;&amp; topicPublishInfo.ok()) &#123;</span><br><span class="line">            <span class="keyword">boolean</span> callTimeout = <span class="keyword">false</span>;</span><br><span class="line">            MessageQueue mq = <span class="keyword">null</span>;</span><br><span class="line">            Exception exception = <span class="keyword">null</span>;</span><br><span class="line">            SendResult sendResult = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">int</span> timesTotal = communicationMode == CommunicationMode.SYNC ? <span class="number">1</span> + <span class="keyword">this</span>.defaultMQProducer.getRetryTimesWhenSendFailed() : <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> times = <span class="number">0</span>;</span><br><span class="line">            String[] brokersSent = <span class="keyword">new</span> String[timesTotal];</span><br><span class="line">            <span class="keyword">for</span> (; times &lt; timesTotal; times++) &#123;</span><br><span class="line">                String lastBrokerName = <span class="keyword">null</span> == mq ? <span class="keyword">null</span> : mq.getBrokerName();</span><br><span class="line">                MessageQueue mqSelected = <span class="keyword">this</span>.selectOneMessageQueue(topicPublishInfo, lastBrokerName);</span><br><span class="line">                <span class="keyword">if</span> (mqSelected != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    mq = mqSelected;</span><br><span class="line">                    brokersSent[times] = mq.getBrokerName();</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        beginTimestampPrev = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">if</span> (times &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                            <span class="comment">//Reset topic with namespace during resend.</span></span><br><span class="line">                            msg.setTopic(<span class="keyword">this</span>.defaultMQProducer.withNamespace(msg.getTopic()));</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">long</span> costTime = beginTimestampPrev - beginTimestampFirst;</span><br><span class="line">                        <span class="keyword">if</span> (timeout &lt; costTime) &#123;</span><br><span class="line">                            callTimeout = <span class="keyword">true</span>;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        sendResult = <span class="keyword">this</span>.sendKernelImpl(msg, mq, communicationMode, sendCallback, topicPublishInfo, timeout - costTime);</span><br><span class="line">                        endTimestamp = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">false</span>);</span><br><span class="line">                        <span class="keyword">switch</span> (communicationMode) &#123;</span><br><span class="line">                            <span class="keyword">case</span> ASYNC:</span><br><span class="line">                                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                            <span class="keyword">case</span> ONEWAY:</span><br><span class="line">                                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                            <span class="keyword">case</span> SYNC:</span><br><span class="line">                                <span class="keyword">if</span> (sendResult.getSendStatus() != SendStatus.SEND_OK) &#123;</span><br><span class="line">                                    <span class="keyword">if</span> (<span class="keyword">this</span>.defaultMQProducer.isRetryAnotherBrokerWhenNotStoreOK()) &#123;</span><br><span class="line">                                        <span class="keyword">continue</span>;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">return</span> sendResult;</span><br><span class="line">                            <span class="keyword">default</span>:</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (RemotingException e) &#123;</span><br><span class="line">                        endTimestamp = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">true</span>);</span><br><span class="line">                        log.warn(String.format(<span class="string">"sendKernelImpl exception, resend at once, InvokeID: %s, RT: %sms, Broker: %s"</span>, invokeID, endTimestamp - beginTimestampPrev, mq), e);</span><br><span class="line">                        log.warn(msg.toString());</span><br><span class="line">                        exception = e;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (MQClientException e) &#123;</span><br><span class="line">                        endTimestamp = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">true</span>);</span><br><span class="line">                        log.warn(String.format(<span class="string">"sendKernelImpl exception, resend at once, InvokeID: %s, RT: %sms, Broker: %s"</span>, invokeID, endTimestamp - beginTimestampPrev, mq), e);</span><br><span class="line">                        log.warn(msg.toString());</span><br><span class="line">                        exception = e;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (MQBrokerException e) &#123;</span><br><span class="line">                        endTimestamp = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">true</span>);</span><br><span class="line">                        log.warn(String.format(<span class="string">"sendKernelImpl exception, resend at once, InvokeID: %s, RT: %sms, Broker: %s"</span>, invokeID, endTimestamp - beginTimestampPrev, mq), e);</span><br><span class="line">                        log.warn(msg.toString());</span><br><span class="line">                        exception = e;</span><br><span class="line">                        <span class="keyword">switch</span> (e.getResponseCode()) &#123;</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.TOPIC_NOT_EXIST:</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.SERVICE_NOT_AVAILABLE:</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.SYSTEM_ERROR:</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.NO_PERMISSION:</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.NO_BUYER_ID:</span><br><span class="line">                            <span class="keyword">case</span> ResponseCode.NOT_IN_CURRENT_UNIT:</span><br><span class="line">                                <span class="keyword">continue</span>;</span><br><span class="line">                            <span class="keyword">default</span>:</span><br><span class="line">                                <span class="keyword">if</span> (sendResult != <span class="keyword">null</span>) &#123;</span><br><span class="line">                                    <span class="keyword">return</span> sendResult;</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">throw</span> e;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        endTimestamp = System.currentTimeMillis();</span><br><span class="line">                        <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">false</span>);</span><br><span class="line">                        log.warn(String.format(<span class="string">"sendKernelImpl exception, throw exception, InvokeID: %s, RT: %sms, Broker: %s"</span>, invokeID, endTimestamp - beginTimestampPrev, mq), e);</span><br><span class="line">                        log.warn(msg.toString());</span><br><span class="line"></span><br><span class="line">                        log.warn(<span class="string">"sendKernelImpl exception"</span>, e);</span><br><span class="line">                        log.warn(msg.toString());</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (sendResult != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> sendResult;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String info = String.format(<span class="string">"Send [%d] times, still failed, cost [%d]ms, Topic: %s, BrokersSent: %s"</span>,</span><br><span class="line">                times,</span><br><span class="line">                System.currentTimeMillis() - beginTimestampFirst,</span><br><span class="line">                msg.getTopic(),</span><br><span class="line">                Arrays.toString(brokersSent));</span><br><span class="line"></span><br><span class="line">            info += FAQUrl.suggestTodo(FAQUrl.SEND_MSG_FAILED);</span><br><span class="line"></span><br><span class="line">            MQClientException mqClientException = <span class="keyword">new</span> MQClientException(info, exception);</span><br><span class="line">            <span class="keyword">if</span> (callTimeout) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">"sendDefaultImpl call timeout"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> MQBrokerException) &#123;</span><br><span class="line">                mqClientException.setResponseCode(((MQBrokerException) exception).getResponseCode());</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> RemotingConnectException) &#123;</span><br><span class="line">                mqClientException.setResponseCode(ClientErrorCode.CONNECT_BROKER_EXCEPTION);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> RemotingTimeoutException) &#123;</span><br><span class="line">                mqClientException.setResponseCode(ClientErrorCode.ACCESS_BROKER_TIMEOUT);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (exception <span class="keyword">instanceof</span> MQClientException) &#123;</span><br><span class="line">                mqClientException.setResponseCode(ClientErrorCode.BROKER_NOT_EXIST_EXCEPTION);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> mqClientException;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        validateNameServerSetting();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">"No route info of this topic: "</span> + msg.getTopic() + FAQUrl.suggestTodo(FAQUrl.NO_TOPIC_ROUTE_INFO),</span><br><span class="line">            <span class="keyword">null</span>).setResponseCode(ClientErrorCode.NOT_FOUND_TOPIC_EXCEPTION);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>RemotingTooMuchRequestException继承了RemotingException；MQClientAPIImpl的sendMessage方法在调用sendMessageAsync或者sendMessageSync方法之前会先判断是否已经超时，如果超时则抛出RemotingTooMuchRequestException(“sendMessage call timeout”)</li>
+<li>DefaultMQProducerImpl的sendKernelImpl方法在communicationMode为ASYNC或者SYNC时，在执行mQClientFactory.getMQClientAPIImpl().sendMessage之前也会先判断是否超时，超时则抛出RemotingTooMuchRequestException(“sendKernelImpl call timeout”)</li>
+<li>DefaultMQProducerImpl的sendDefaultImpl方法内部会通过selectOneMessageQueue选择MessageQueue，然后通过sendKernelImpl来执行消息发送，在调用sendKernelImpl方法之前会先判断是否超时，超时的话则设置callTimeout为true，跳出循环，之后抛出RemotingTooMuchRequestException(“sendDefaultImpl call timeout”)；sendSelectImpl方法通过MessageQueueSelector来选择MessageQueue，在通过sendKernelImpl发送消息之前会判断是否超时，超时则抛出RemotingTooMuchRequestException(“sendSelectImpl call timeout”)</li>
+</ul>
+<h4 id="部分参考"><a href="#部分参考" class="headerlink" title="部分参考"></a>部分参考</h4><blockquote><p>聊聊rocketmq的RemotingTooMuchRequestException</p>
+<footer><strong>codecraft</strong><cite><a href="https://segmentfault.com/a/1190000021290076" target="_blank" rel="noopener">地址</a></cite></footer></blockquote>
+<h3 id="两个容易忽悠的点"><a href="#两个容易忽悠的点" class="headerlink" title="两个容易忽悠的点"></a>两个容易忽悠的点</h3><ol>
+<li>需要配置 nameserver,  broker 内存大小，默认是4G，否则启动失败</li>
+<li>org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException: sendDefaultImpl call timeout ，vim broker.conf ：新增 brokerIP1=106.11.xx.xx，nohup sh bin/mqbroker -n 106.11.xx.xx:9876 -c conf/broker.conf &amp; </li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">3.7. 修改启动脚本参数【两台机器】</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq/bin/runbroker.sh</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq-slave/bin/runbroker.sh</span><br><span class="line">JAVA_OPT="$&#123;JAVA_OPT&#125; -server -Xms512m -Xmx512m -Xmn512m"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq/bin/runserver.sh</span><br><span class="line"><span class="meta">#</span>vim /usr/local/rocketmq-slave/bin/runserver.sh</span><br><span class="line">JAVA_OPT="$&#123;JAVA_OPT&#125; -server -Xms1g -Xmx1g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m"</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> vim broker.config &gt;&gt; brokerIP1=106.11.xx.xx</span><br><span class="line"><span class="meta">&gt;</span> nohup sh bin/mqbroker -n 106.11.xx.xx:9876 -c conf/broker.conf &amp;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RocketMQ/" rel="tag"># RocketMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/20/服务器资源有限下的JVM调优/" rel="next" title="服务器资源有限下的JVM调优">
+                <i class="fa fa-chevron-left"></i> 服务器资源有限下的JVM调优
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <div class="site-description motion-element" itemprop="description">大家好，我是牛河</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">80</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/SmNiuhe" title="GitHub &rarr; https://github.com/SmNiuhe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:smniuhe@gmail.com" title="E-Mail &rarr; mailto:smniuhe@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="http://jm.taobao.org" rel="noopener" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="https://tech.meituan.com" rel="noopener" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="https://mercyblitz.github.io" rel="noopener" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="https://coolshell.cn" rel="noopener" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="http://www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="http://www.itmuch.com" rel="noopener" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="http://www.iocoder.cn" rel="noopener" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="http://blog.didispace.com" rel="noopener" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="http://blog.720ui.com" rel="noopener" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="http://www.ityouknow.com" rel="noopener" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#单机环境搭建"><span class="nav-number">1.</span> <span class="nav-text">单机环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖"><span class="nav-number">1.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码下载"><span class="nav-number">1.2.</span> <span class="nav-text">代码下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目构建"><span class="nav-number">1.3.</span> <span class="nav-text">项目构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动-NameServer"><span class="nav-number">1.4.</span> <span class="nav-text">启动 NameServer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#发送和接收消息"><span class="nav-number">1.4.1.</span> <span class="nav-text">发送和接收消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#生产者发送消息"><span class="nav-number">1.4.2.</span> <span class="nav-text">生产者发送消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#消费者消费消息"><span class="nav-number">1.4.3.</span> <span class="nav-text">消费者消费消息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭服务"><span class="nav-number">1.5.</span> <span class="nav-text">关闭服务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RocketMQ-控制台"><span class="nav-number">2.</span> <span class="nav-text">RocketMQ - 控制台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot-整合流程三步骤"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot 整合流程三步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-消息编程模型"><span class="nav-number">4.</span> <span class="nav-text">Spring 消息编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RemotingTooMuchRequestException"><span class="nav-number">4.1.</span> <span class="nav-text">RemotingTooMuchRequestException</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sendMessage"><span class="nav-number">4.2.</span> <span class="nav-text">sendMessage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sendKernelImpl"><span class="nav-number">4.3.</span> <span class="nav-text">sendKernelImpl</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sendDefaultImpl"><span class="nav-number">4.4.</span> <span class="nav-text">sendDefaultImpl</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部分参考"><span class="nav-number">4.5.</span> <span class="nav-text">部分参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个容易忽悠的点"><span class="nav-number">5.</span> <span class="nav-text">两个容易忽悠的点</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

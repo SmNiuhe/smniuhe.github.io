@@ -390,6 +390,186 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/10/二进制思维设定权限/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/06/10/二进制思维设定权限/" class="post-title-link" itemprop="url">二进制思维设定权限</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-10 23:04:49" itemprop="dateCreated datePublished" datetime="2018-06-10T23:04:49+08:00">2018-06-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:13:16" itemprop="dateModified" datetime="2019-02-02T22:13:16+08:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/operator/" itemprop="url" rel="index"><span itemprop="name">operator</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>之前做权限判定的基本都是通过<code>Boolean</code>类型，但是当权限比较多的时候，此时数据库的<code>字段</code>和持久层的<code>pojo</code>的维护都会比较麻烦，比如如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_BIND_PHONE = <span class="number">1L</span> &lt;&lt; <span class="number">0</span>; <span class="comment">// 用户绑定手机状态码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_BIND_EMAIL = <span class="number">1L</span> &lt;&lt; <span class="number">1</span>; <span class="comment">// 用户绑定邮箱</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_BASIC_INFO = <span class="number">1L</span> &lt;&lt; <span class="number">2</span>;<span class="comment">// 用户是否填写基本资料</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_REAL_AUTH = <span class="number">1L</span> &lt;&lt; <span class="number">3</span>;<span class="comment">// 用户是否实名认证</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_VEDIO_AUTH = <span class="number">1L</span> &lt;&lt; <span class="number">4</span>;<span class="comment">// 用户是否视频认证</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_HAS_BIDREQUEST_PROCESS = <span class="number">1L</span> &lt;&lt; <span class="number">5</span>;<span class="comment">// 用户是否有一个借款正在处理流程当中</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_BIND_BANKINFO = <span class="number">1L</span> &lt;&lt; <span class="number">6</span>;<span class="comment">// 用户是否绑定银行卡</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Long OP_HAS_MONEYWITHDRAW_PROCESS = <span class="number">1L</span> &lt;&lt; <span class="number">7</span>;<span class="comment">// 用户是否有一个提现申请在处理中</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/06/10/二进制思维设定权限/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/12/汶川地震时的历史课/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1984,185 +2164,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/ActiveMQ-的搭建/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/03/16/ActiveMQ-的搭建/" class="post-title-link" itemprop="url">ActiveMQ 的搭建</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-03-16 09:31:49" itemprop="dateCreated datePublished" datetime="2018-03-16T09:31:49+08:00">2018-03-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:11:37" itemprop="dateModified" datetime="2019-02-02T22:11:37+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/middleware/" itemprop="url" rel="index"><span itemprop="name">middleware</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 通过sftp上传压缩包</span></span><br><span class="line">sftp&gt; put /Users/niuhesm/resouces/major/remoteServer/apache-activemq-5.15.3-bin.tar.gz /root</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动消息队列服务</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]<span class="comment"># tar zxvf apache-activemq-5.15.3-bin.tar.gz</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ ~]<span class="comment"># cd apache-activemq-5.15.3/bin</span></span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]<span class="comment"># ./activemq start</span></span><br><span class="line">INFO: Loading <span class="string">'/root/apache-activemq-5.15.3//bin/env'</span></span><br><span class="line">INFO: Using java <span class="string">'/usr/bin/java'</span></span><br><span class="line">INFO: Starting - inspect logfiles specified <span class="keyword">in</span> logging.properties and log4j.properties to get details</span><br><span class="line">INFO: pidfile created : <span class="string">'/root/apache-activemq-5.15.3//data/activemq.pid'</span> (pid <span class="string">'15876'</span>)</span><br><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ bin]<span class="comment">#</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/03/16/ActiveMQ-的搭建/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2209,7 +2210,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2298,7 +2299,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">36</span>
+                      
+                    
+                    <span class="site-state-item-count">37</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -2473,7 +2476,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">79</span>
+                      
+                    
+                    <span class="site-state-item-count">80</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
