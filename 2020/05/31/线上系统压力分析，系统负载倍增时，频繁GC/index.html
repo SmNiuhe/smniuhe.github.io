@@ -96,20 +96,20 @@
 
 
 
-  <meta name="description" content="线上系统部署架构4核8G的机器，分配了4G给JVM，3G的内存给堆，新生代和老年代各1.5G，元数据区是256兆，栈的内存空间是1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden内存每秒2M速度在新增，600s左右Eden区才满，5分钟左右一次YoungGC，GC系统停顿35">
+  <meta name="description" content="线上系统部署架构4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分">
 <meta name="keywords" content="JVM,线上系统压力分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线上系统压力分析，系统负载倍增时，频繁GC">
 <meta property="og:url" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/index.html">
 <meta property="og:site_name" content="smniuhe">
-<meta property="og:description" content="线上系统部署架构4核8G的机器，分配了4G给JVM，3G的内存给堆，新生代和老年代各1.5G，元数据区是256兆，栈的内存空间是1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden内存每秒2M速度在新增，600s左右Eden区才满，5分钟左右一次YoungGC，GC系统停顿35">
+<meta property="og:description" content="线上系统部署架构4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/2.png">
-<meta property="og:updated_time" content="2020-05-31T08:28:01.723Z">
+<meta property="og:updated_time" content="2020-05-31T08:35:20.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上系统压力分析，系统负载倍增时，频繁GC">
-<meta name="twitter:description" content="线上系统部署架构4核8G的机器，分配了4G给JVM，3G的内存给堆，新生代和老年代各1.5G，元数据区是256兆，栈的内存空间是1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden内存每秒2M速度在新增，600s左右Eden区才满，5分钟左右一次YoungGC，GC系统停顿35">
+<meta name="twitter:description" content="线上系统部署架构4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分">
 <meta name="twitter:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png">
 
 
@@ -437,7 +437,7 @@
                 
               
 
-              <time title="Created: 2020-05-31 15:06:23 / Modified: 16:28:01" itemprop="dateCreated datePublished" datetime="2020-05-31T15:06:23+08:00">2020-05-31</time>
+              <time title="Created: 2020-05-31 15:06:23 / Modified: 16:35:20" itemprop="dateCreated datePublished" datetime="2020-05-31T15:06:23+08:00">2020-05-31</time>
             
 
             
@@ -494,14 +494,14 @@
       
 
       
-        <h4 id="线上系统部署架构"><a href="#线上系统部署架构" class="headerlink" title="线上系统部署架构"></a>线上系统部署架构</h4><p>4核8G的机器，分配了4G给JVM，3G的内存给堆，新生代和老年代各1.5G，元数据区是256兆，栈的内存空间是1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；<br>jstat -gc 命令观察到，Eden内存每秒2M速度在新增，600s左右Eden区才满，5分钟左右一次YoungGC，GC系统停顿350ms，每次YoungGC完大概 200~300kb 的存活对象存入S区，等到下次GC，之前存活的 200~300kb 可以同步被回收，从而达到 Old GC 保持的次数一直在零次，此时的系统JVM垃圾回收器使用 NewPar+CMS 是没问题的，因为这是一个后台计算同步的系统，不需要直接面向用户，所以5分钟一次GC，每次停顿350ms，对用户的影响也是无感知的</p>
+        <h4 id="线上系统部署架构"><a href="#线上系统部署架构" class="headerlink" title="线上系统部署架构"></a>线上系统部署架构</h4><p>4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；<br>jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分钟左右一次YoungGC，GC 系统停顿 350ms，每次 YoungGC 完大概 200~300kb 的存活对象存入 S 区，等到下次 GC，之前存活的 200~300kb 可以同步被回收，从而达到 Old GC 保持的次数一直在零次，此时的系统JVM垃圾回收器使用 NewPar+CMS 是没问题的，因为这是一个后台计算同步的系统，不需要直接面向用户，所以 5 分钟一次 GC，每次停顿 350 ms，对用户的影响也是无感知的</p>
 <img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png" title="线上系统优化分析">
 <p>线上的 JVM 参数配置，基本可以满足</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Xms3072M -Xmx3072M -Xmn2048M -Xss1M -XX:MetaspaceSize=<span class="number">256</span>M </span><br><span class="line">-XX:MaxMetaspaceSize=<span class="number">256</span>M -XX:SurvivorRatio=<span class="number">8</span> -XX:MaxTenuringThreshold=<span class="number">5</span> </span><br><span class="line">-XX:PretenureSizeThreshold=<span class="number">1</span>M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:CMSInitiatingOccupancyFaction=<span class="number">92</span> -XX:+UseCMSCompactAtFullCollection </span><br><span class="line">-XX:CMSFullGCsBeforeCompaction=<span class="number">0</span></span><br></pre></td></tr></table></figure>
 <p>由于系统过于简单，Yong GC 发生的频繁一点对系统造成都不会造成太大的影响，但是随着系统功能的迭代和使用的用户越多，导致系统的复杂度和数据同步的数据量越来越大，这个系统的影响会有变化么</p>
 <h4 id="系统负载-10-倍，100-倍"><a href="#系统负载-10-倍，100-倍" class="headerlink" title="系统负载 10 倍，100 倍"></a>系统负载 10 倍，100 倍</h4><p>当系统负载增加到 10 倍时，进入 Eden 的对象是 20m/s，一分钟左右 Eden 就满了，此时会触发 Young GC，Young GC 前会检查老年代的可用空间大小 &gt; 历次年轻代GC升入老年代对象大小之和的平均大小，由于老年代的内存分配是 1.5G，成立老年代内存空间担保成立，此时直接 Young GC，之前存活的对象大小在 200~300kb 左右，系统负载增加了10倍，CPU资源和磁盘和网络带宽资源都是有限的，部分任务处理的速度会下降，Young GC 后存活的对象大小在 5MB 左右，每次 GC 系统停顿的时间是 500ms，得益于是计算型的服务系统，不需要面向用户，还是扛得住</p>
-<p>当系统负载增加到 100 倍时，进入 Eden 的对象是 200m/s，6 秒钟左右 Eden 就满了，第一次 Young GC 内存空间担保是成功的，直接 Young GC，系统停顿 10s，存活的对象是100M，此时的系统CPU、磁盘、网络各方面的压力都会显著增加，处理任务的时间越来越慢，虽然 Survivor 区能够存放 100M 的对象大小，但是也存在突然某次存活的对象大于 Survivor 150MB，直接进入老年代；而且不要忽略了动态年龄判断规则，当 Survivor 区的一组对象的内存 &gt; Survivor内存x50%，大于这组对象的最大年龄的对象直接进入老年代，可能有点绕，就是 1 + 2 + n &gt; Survivor内存x50%，n 以上年龄的对象直接进入老年代，此时进入老年代的对象越来越多</p>
-<p>如果评估每次 YoungGC 进入老年代的对象是 50 MB，3 分钟左右一次 Old GC，老年代的对象存活率是远远高于新生代的，并且老年代用是不是复制算法，是标记整理算法，设计到初始标记-并发标记-重新标记-并发清理，内存整理多个步骤，Old GC 导致系统停止的时间是 Young GC 的10几倍，6 秒一次 Young GC，3 分钟一次 Old GC，由于CPU和内存资源压力非常大，系统宕机的可能性也是非常高，同时系统由于高负载，比较属于不停卡顿的状态，导致大量的任务阻塞，尽可能的减少 Old GC，尽可能的合理分配内存空间，预估系统压力是非常重要的一件事</p>
+<p>当系统负载增加到 100 倍时，进入 Eden 的对象是 200m/s，6 秒钟左右 Eden 就满了，第一次 Young GC 内存空间担保是成功的，直接 Young GC，系统停顿 10s，存活的对象是 100M，此时的系统 CPU、磁盘、网络各方面的压力都会显著增加，处理任务的时间越来越慢，虽然 Survivor 区能够存放 100M 的对象大小，但是也存在突然某次存活的对象大于 Survivor 150MB，直接进入老年代；而且不要忽略了动态年龄判断规则，当 Survivor 区的一组对象的内存 &gt; Survivor内存x50%，大于这组对象的最大年龄的对象直接进入老年代，可能有点绕，就是 1 + 2 + n &gt; Survivor内存x50%，n 以上年龄的对象直接进入老年代，此时进入老年代的对象越来越多</p>
+<p>如果评估每次 YoungGC 进入老年代的对象是 50 MB，3 分钟左右一次 Old GC，老年代的对象存活率是远远高于新生代的，并且老年代用是不是复制算法，是标记整理算法，设计到初始标记-并发标记-重新标记-并发清理，内存整理多个步骤，Old GC 导致系统停止的时间是 Young GC 的 10几倍，6 秒一次 Young GC，3 分钟一次 Old GC，由于 CPU 和内存资源压力非常大，系统宕机的可能性也是非常高，同时系统由于高负载，比较属于不停卡顿的状态，导致大量的任务阻塞，尽可能的减少 Old GC，尽可能的合理分配内存空间，预估系统压力是非常重要的一件事</p>
 <p>下面是老年代 CMS 垃圾回收工作时的几个状态</p>
 <img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/2.png" title="老年代垃圾回收原理分析">
       
