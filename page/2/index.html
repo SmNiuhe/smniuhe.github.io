@@ -390,6 +390,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/多条件查询遵循-Restful-API-规范的改如何设计？/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/12/多条件查询遵循-Restful-API-规范的改如何设计？/" class="post-title-link" itemprop="url">多条件查询遵循 Restful API 规范的改如何设计？</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-12-12 23:50:52" itemprop="dateCreated datePublished" datetime="2018-12-12T23:50:52+08:00">2018-12-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-02-02 22:13:24" itemprop="dateModified" datetime="2019-02-02T22:13:24+08:00">2019-02-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/RESTful/" itemprop="url" rel="index"><span itemprop="name">RESTful</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="SF提问"><a href="#SF提问" class="headerlink" title="SF提问"></a>SF提问</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">#### 问题描述</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">1. </span>由于遵循 Restful API 规范，Get 请求的方式针对于多条件查询来说，不好设计接口</span><br><span class="line"></span><br><span class="line"><span class="section">#### 问题出现的环境背景及自己尝试过哪些方法</span></span><br><span class="line"></span><br><span class="line">有人提供过两种方式</span><br><span class="line"></span><br><span class="line"><span class="bullet">1. </span>http://localhost:8080/app/names?queryDtoStr=&#123;"query1":12,"query2":2,"query3":2&#125; </span><br><span class="line"><span class="bullet">2. </span>或者直接使用 POST 请求</span><br><span class="line"></span><br><span class="line"><span class="section">#### 相关代码</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 你期待的结果是什么？实际看到的错误信息又是什么？</span></span><br><span class="line"></span><br><span class="line">有没有其他设计方式，尽量遵循 Restful API 规范</span><br></pre></td></tr></table></figure>
+<h2 id="回答"><a href="#回答" class="headerlink" title="回答"></a>回答</h2><blockquote><p>如果Action不符合CRUD操作那该怎么办？</p>
+<ol>
+<li>重新构造这个Action，使得它像一个资源的field（我理解为部分域或者部分字段）。这种方法在Action不包含参数的情况下可以奏效。例如一个有效的action可以映射成布尔类型field，并且可以通过PATCH更新资源。</li>
+<li>利用RESTful原则像处理子资源一样处理它。例如，Github的API让你通过<code>PUT /gists/:id/star</code> 来 star a gist ，而通过<code>DELETE /gists/:id/star</code>来进行 unstar 。</li>
+<li>有时候你实在是没有办法将Action映射到任何有意义的RESTful结构。例如，多资源搜索没办法真正地映射到任何一个资源接入点。这种情况，<code>/search</code> 将非常有意义，虽然它不是一个名词。这样做没有问题 - 你只需要从API消费者的角度做正确的事，并确保所做的一切都用文档清晰记录下来了以避免（API消费者的）困惑。</li>
+</ol>
+<footer><strong>RESTful API 设计最佳实践</strong><cite><a href="https://www.oschina.net/translate/best-practices-for-a-pragmatic-restful-api" target="_blank" rel="noopener">引用于</a></cite></footer></blockquote>
+<p>所以题主完全可以提供 <code>/app/names/search</code> 服务专门用于搜索功能，查询参数一般是通过 <code>query parameters</code> 的方式传递。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/07/SpringBoot整合shiro-密码加密/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1983,185 +2164,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/springboot-druid-passwordEncrypt/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="smniuhe">
-      <meta itemprop="description" content="大家好，我是牛河">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="smniuhe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/08/03/springboot-druid-passwordEncrypt/" class="post-title-link" itemprop="url">springboot+druid+passwordEncrypt</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-08-03 21:35:18" itemprop="dateCreated datePublished" datetime="2018-08-03T21:35:18+08:00">2018-08-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-02-02 22:13:14" itemprop="dateModified" datetime="2019-02-02T22:13:14+08:00">2019-02-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Database-Pool/" itemprop="url" rel="index"><span itemprop="name">Database Pool</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h4><p>最近在读《大型网站技术架构:核心原理与案例分析》，并且在极客时间看了一场知道创宇研发中心潘少华的分享，分享最新区块链安全态势，发现安全问题不可忽视，比如我们在 showdoc 上分享线上接口 API，或者将代码托管到码云的企业级管理账号上，总是存在着各种风险，我们能做的就是尽量暴露少量的核心信息，数据库连接密码就是最为关键的之一</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/08/03/springboot-druid-passwordEncrypt/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2208,7 +2210,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-count">55</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2476,7 +2478,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">80</span>
+                      
+                    
+                    <span class="site-state-item-count">81</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
