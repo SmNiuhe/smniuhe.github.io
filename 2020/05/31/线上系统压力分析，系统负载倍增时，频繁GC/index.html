@@ -106,7 +106,8 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/2.png">
-<meta property="og:updated_time" content="2020-05-31T08:35:20.177Z">
+<meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3.png">
+<meta property="og:updated_time" content="2020-06-01T00:56:50.712Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上系统压力分析，系统负载倍增时，频繁GC">
 <meta name="twitter:description" content="线上系统部署架构4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分">
@@ -437,12 +438,24 @@
                 
               
 
-              <time title="Created: 2020-05-31 15:06:23 / Modified: 16:35:20" itemprop="dateCreated datePublished" datetime="2020-05-31T15:06:23+08:00">2020-05-31</time>
+              <time title="Created: 2020-05-31 15:06:23" itemprop="dateCreated datePublished" datetime="2020-05-31T15:06:23+08:00">2020-05-31</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-06-01 08:56:50" itemprop="dateModified" datetime="2020-06-01T08:56:50+08:00">2020-06-01</time>
               
             
           </span>
@@ -504,6 +517,11 @@
 <p>如果评估每次 YoungGC 进入老年代的对象是 50 MB，3 分钟左右一次 Old GC，老年代的对象存活率是远远高于新生代的，并且老年代用是不是复制算法，是标记整理算法，设计到初始标记-并发标记-重新标记-并发清理，内存整理多个步骤，Old GC 导致系统停止的时间是 Young GC 的 10几倍，6 秒一次 Young GC，3 分钟一次 Old GC，由于 CPU 和内存资源压力非常大，系统宕机的可能性也是非常高，同时系统由于高负载，比较属于不停卡顿的状态，导致大量的任务阻塞，尽可能的减少 Old GC，尽可能的合理分配内存空间，预估系统压力是非常重要的一件事</p>
 <p>下面是老年代 CMS 垃圾回收工作时的几个状态</p>
 <img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/2.png" title="老年代垃圾回收原理分析">
+<h4 id="G1垃圾回收器规则"><a href="#G1垃圾回收器规则" class="headerlink" title="G1垃圾回收器规则"></a>G1垃圾回收器规则</h4><p>一旦新生代达到了设定的占据堆内存的最大大小 60%，此时就会触发GC，和之前不一样的是，会根据预设的系统停顿时间来评估各个 region，有最短的垃圾回收时间尽可能的回收更多的垃圾，还是采用的是复制算法<br>（1）对象在新生代躲过了很多次的垃圾回收，达到了一定的年龄了，“-XX:MaxTenuringThreshold” 参数可以设置这个年龄，他就会进入老年代</p>
+<p>（2）动态年龄判定规则，如果一旦发现某次新生代GC过后，存活对象超过了Survivor 的 50%</p>
+<p>老年代的region内存大小占到堆内存的 45% 的时候，触发混合GC，混合GC是新生代和老年代一起回收，首先是初始标记-并发标记-最终标记，混合回收阶段，初始标记和最终标记都需要STW，为了保证系统停顿的时间不超过 MaxPauseMillis，需要进行多次最后阶段的混合GC，-XX:G1MixedGCCountTarget=8，如果设置了如下参数 -XX:G1HeapWastePercent=5%，表示当回收过程中空闲的Region占内存大小比例的 5% 时，就停止回收，也不需要内存整理，-XX:G1MixedGCLiveThresholdPercent，这个参数是表示在回收过程中如果Region中存活的对象占比是低于 85%，才进行回收，由于基于G1垃圾回收整体是采用复制算法，不太容易产生内存碎片，</p>
+<img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3.png" title="G1老年代垃圾回收原理分析">
+
       
     </div>
 
@@ -1002,7 +1020,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#线上系统部署架构"><span class="nav-number">1.</span> <span class="nav-text">线上系统部署架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统负载-10-倍，100-倍"><span class="nav-number">2.</span> <span class="nav-text">系统负载 10 倍，100 倍</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#线上系统部署架构"><span class="nav-number">1.</span> <span class="nav-text">线上系统部署架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统负载-10-倍，100-倍"><span class="nav-number">2.</span> <span class="nav-text">系统负载 10 倍，100 倍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1垃圾回收器规则"><span class="nav-number">3.</span> <span class="nav-text">G1垃圾回收器规则</span></a></li></ol></div>
             
 
           </div>
