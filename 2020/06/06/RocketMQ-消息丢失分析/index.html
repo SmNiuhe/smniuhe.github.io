@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="消息丢失消息中间件使用过程中，消息丢失是一件不可避免和难以处理和分析的事情，需要打印相关日志，并且深入研究消息中间件底层去分析数据丢失的潜在环节，才能结合业务去调整处理，生产者、消费者、消息中间件都会存在消息丢失，当然除了网络因素外，绝大部分都是开发者自身没有很好的处理和思考该问题，所以容易在排查问题的时候直接抛出服务正常 劳务实名制系统：服务正常的 中间件维护人员：服务正常的 人脸库管理系统：服">
+<meta name="keywords" content="RocketMQ,事务消息,消息零丢失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ 消息零丢失分析">
+<meta property="og:url" content="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/index.html">
+<meta property="og:site_name" content="smniuhe">
+<meta property="og:description" content="消息丢失消息中间件使用过程中，消息丢失是一件不可避免和难以处理和分析的事情，需要打印相关日志，并且深入研究消息中间件底层去分析数据丢失的潜在环节，才能结合业务去调整处理，生产者、消费者、消息中间件都会存在消息丢失，当然除了网络因素外，绝大部分都是开发者自身没有很好的处理和思考该问题，所以容易在排查问题的时候直接抛出服务正常 劳务实名制系统：服务正常的 中间件维护人员：服务正常的 人脸库管理系统：服">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/2.png">
+<meta property="og:updated_time" content="2020-06-06T10:07:21.828Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RocketMQ 消息零丢失分析">
+<meta name="twitter:description" content="消息丢失消息中间件使用过程中，消息丢失是一件不可避免和难以处理和分析的事情，需要打印相关日志，并且深入研究消息中间件底层去分析数据丢失的潜在环节，才能结合业务去调整处理，生产者、消费者、消息中间件都会存在消息丢失，当然除了网络因素外，绝大部分都是开发者自身没有很好的处理和思考该问题，所以容易在排查问题的时候直接抛出服务正常 劳务实名制系统：服务正常的 中间件维护人员：服务正常的 人脸库管理系统：服">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/1.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>RocketMQ 消息零丢失分析 | smniuhe</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">smniuhe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">春风十里，不如你...</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>Schedule</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/06/RocketMQ-消息丢失分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="smniuhe">
+      <meta itemprop="description" content="大家好，我是牛河">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="smniuhe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RocketMQ 消息零丢失分析
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2020-06-06 16:43:54 / Modified: 18:07:21" itemprop="dateCreated datePublished" datetime="2020-06-06T16:43:54+08:00">2020-06-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/MQ/" itemprop="url" rel="index"><span itemprop="name">MQ</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="消息丢失"><a href="#消息丢失" class="headerlink" title="消息丢失"></a>消息丢失</h3><p>消息中间件使用过程中，消息丢失是一件不可避免和难以处理和分析的事情，需要打印相关日志，并且深入研究消息中间件底层去分析数据丢失的潜在环节，才能结合业务去调整处理，生产者、消费者、消息中间件都会存在消息丢失，当然除了网络因素外，绝大部分都是开发者自身没有很好的处理和思考该问题，所以容易在排查问题的时候直接抛出服务正常</p>
+<p>劳务实名制系统：服务正常的</p>
+<p>中间件维护人员：服务正常的</p>
+<p>人脸库管理系统：服务正常的</p>
+<img src="/2020/06/06/RocketMQ-消息丢失分析/1.png" title="消息丢失">
+<h3 id="消息生产环节"><a href="#消息生产环节" class="headerlink" title="消息生产环节"></a>消息生产环节</h3><p>RokcetMQ 生产者发送的模式有三种，异步发送、同步发送、单向发送；基于大家使用消息中间件的高性能和高吞吐，默认都是异步发送模式</p>
+<h4 id="异步发送模式"><a href="#异步发送模式" class="headerlink" title="异步发送模式"></a>异步发送模式</h4><p>异步发送数据后，只要没有抛出异常，该消息默认是发送成功的，如果抛出异常，直接回滚本地事务，这种做法处理普通业务也可行的，但是当存在调用第三方组件的时候，操作缓存 Redis、搜索引擎 Elasticsearch 的时候不是很适用</p>
+<h4 id="同步发送模式-反复多次重试"><a href="#同步发送模式-反复多次重试" class="headerlink" title="同步发送模式+反复多次重试"></a>同步发送模式+反复多次重试</h4><p>这种方式用的也比较多，主要的原因是比较简单和高效，直接同步发送，等待消息的响应信息，确保消息发送成功，再去处理第三方组件问题，但是也存在一个问题就是，如果此时第三方组件不可用或者其他业务子系统不可用，单方面的发送消息也会导致数据的不一致，你想想看，如果此时消费者读取到了这条消息，然而你其他业务系统和组件不可用</p>
+<h4 id="事务消息机制"><a href="#事务消息机制" class="headerlink" title="事务消息机制"></a>事务消息机制</h4><p>事务消息机制可以保证在第三方组件和业务子系统不可用的同时，告诉消息中间件服务，我发的是事务消息，先别急着给消费者看到，我要确保我的第三方组件、业务子系统都操作成功，也可以理解为本地事务操作成功，你再给我 commit，否则 rollback 这条发送的消息，同时解决 <strong>同步发送模式+反复多次重试</strong> 导致消息发送性能降低，不过部分业务是可以退化到该方案，毕竟不是所有的业务都需要这么高的性能，大部分情况下也不会出现网络抖动、延迟，导致重复的发送</p>
+<h3 id="消息中间件环节"><a href="#消息中间件环节" class="headerlink" title="消息中间件环节"></a>消息中间件环节</h3><p>消息中间件的作用就是接受生产者的消息，给消费者提供消息；此时需要在此基础上增加高性能的写入和读取，以及高可用、高吞吐；所以这个环节是最不能出现消息丢失的，毕竟公司的很多业务系统都是使用同一套 MQ 服务组件，对应的生产者和消费者都是多对一的关系</p>
+<p>刚刚说到保持高性能的读写基本是离不开内存和文件IO读写，mmap 内存技术的使用和 Netty 被运用其中；CommitLog 文件一般是 1 G 的大小，是因为 mmap 操作内存的大小也就是 1 ~ 1.5 G；此时 CommitLog 在 OS Cache 和磁盘文件做了一个内存映射，所有的消息都是直接写入到 OS cache 中，如果此时 Broker 宕机或者 正好在 Leader 的重新选举，都是会丢失消息数据的，OS Cache + 异步刷盘保证到 Broker 的高性能、高吞吐处理生产者写入的消息</p>
+<p>Broker 默认是使用异步刷盘的，可以修改 Broker Config 文件来进行更改，当然如果所有的写入消息都需要直接写入磁盘文件，那么 Borker 的处理性能会降低几十倍、上百倍，内存的性能和磁盘IO的性能是有非常大的差距，不够还有一种方案是，采用数据冗余的形式，Master Broker 集群模式派上用场，此时某台机器宕机导致消息丢失，冗余的那台 Master Broker 可以立马顶上，<strong>冗余备份 + 异步刷盘</strong> 可以同时兼备高性能的写入和消息不丢失</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@iZuf6iq8e7ya9v3ix71k0pZ conf]# vim broker.conf</span><br><span class="line"><span class="meta">#</span> contributor license agreements.  See the NOTICE file distributed with</span><br><span class="line"><span class="meta">#</span> this work for additional information regarding copyright ownership.</span><br><span class="line"><span class="meta">#</span> The ASF licenses this file to You under the Apache License, Version 2.0</span><br><span class="line"><span class="meta">#</span> (the "License"); you may not use this file except in compliance with</span><br><span class="line"><span class="meta">#</span> the License.  You may obtain a copy of the License at</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span>     http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span>  Unless required by applicable law or agreed to in writing, software</span><br><span class="line"><span class="meta">#</span>  distributed under the License is distributed on an "AS IS" BASIS,</span><br><span class="line"><span class="meta">#</span>  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line"><span class="meta">#</span>  See the License for the specific language governing permissions and</span><br><span class="line"><span class="meta">#</span>  limitations under the License.</span><br><span class="line"></span><br><span class="line">brokerClusterName = DefaultCluster</span><br><span class="line">brokerName = broker-a</span><br><span class="line">brokerId = 0</span><br><span class="line">deleteWhen = 04</span><br><span class="line">fileReservedTime = 48</span><br><span class="line">brokerRole = ASYNC_MASTER</span><br><span class="line">flushDiskType = ASYNC_FLUSH</span><br></pre></td></tr></table></figure>
+<h3 id="消息消费环节"><a href="#消息消费环节" class="headerlink" title="消息消费环节"></a>消息消费环节</h3><p>消息消费环节的丢失，消费者正好读取一批消息到内存中，宕机了，此时消息就丢失了，可以这么理解么，这种情况的消息丢失反而影响不大，因为消息是否被消费是由消息中间件的 Broker 来标记的，此时你并没有提交消息的 offset 到 Broker 去，机器重启后，下一次消息的拉取还是这批消息，因为这批消息并消费，消费者只要保证业务处理完的同时，手动的提交 offset 到 Broker 中，这批消息业务的处理此时需要同步执行，防止子线程异步处理的形式，导致消息并未处理而提前提交 offset 问题</p>
+<h3 id="全链路消息零丢失方案"><a href="#全链路消息零丢失方案" class="headerlink" title="全链路消息零丢失方案"></a>全链路消息零丢失方案</h3><img src="/2020/06/06/RocketMQ-消息丢失分析/2.png" title="全链路消息零丢失方案">
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RocketMQ/" rel="tag"># RocketMQ</a>
+          
+            <a href="/tags/事务消息/" rel="tag"># 事务消息</a>
+          
+            <a href="/tags/消息零丢失/" rel="tag"># 消息零丢失</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/" rel="next" title="线上系统压力分析，系统负载倍增时，频繁GC">
+                <i class="fa fa-chevron-left"></i> 线上系统压力分析，系统负载倍增时，频繁GC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">smniuhe</p>
+              <div class="site-description motion-element" itemprop="description">大家好，我是牛河</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">83</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/SmNiuhe" title="GitHub &rarr; https://github.com/SmNiuhe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:smniuhe@gmail.com" title="E-Mail &rarr; mailto:smniuhe@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jm.taobao.org" title="http://jm.taobao.org" rel="noopener" target="_blank">阿里中间件</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tech.meituan.com" title="https://tech.meituan.com" rel="noopener" target="_blank">美团技术团队</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://mercyblitz.github.io" title="https://mercyblitz.github.io" rel="noopener" target="_blank">Mercy Ma</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn" title="https://coolshell.cn" rel="noopener" target="_blank">CoolShell</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.yinwang.org" title="http://www.yinwang.org" rel="noopener" target="_blank">当然我在扯淡</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.itmuch.com" title="http://www.itmuch.com" rel="noopener" target="_blank">周立</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.iocoder.cn" title="http://www.iocoder.cn" rel="noopener" target="_blank">芋道源码</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.didispace.com" title="http://blog.didispace.com" rel="noopener" target="_blank">程序猿DD</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.720ui.com" title="http://blog.720ui.com" rel="noopener" target="_blank">梁桂钊</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ityouknow.com" title="http://www.ityouknow.com" rel="noopener" target="_blank">纯洁的微笑</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息丢失"><span class="nav-number">1.</span> <span class="nav-text">消息丢失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息生产环节"><span class="nav-number">2.</span> <span class="nav-text">消息生产环节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#异步发送模式"><span class="nav-number">2.1.</span> <span class="nav-text">异步发送模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步发送模式-反复多次重试"><span class="nav-number">2.2.</span> <span class="nav-text">同步发送模式+反复多次重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务消息机制"><span class="nav-number">2.3.</span> <span class="nav-text">事务消息机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息中间件环节"><span class="nav-number">3.</span> <span class="nav-text">消息中间件环节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息消费环节"><span class="nav-number">4.</span> <span class="nav-text">消息消费环节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全链路消息零丢失方案"><span class="nav-number">5.</span> <span class="nav-text">全链路消息零丢失方案</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">smniuhe</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

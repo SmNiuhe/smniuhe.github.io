@@ -106,8 +106,8 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/2.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3-1.png">
-<meta property="og:updated_time" content="2020-06-01T01:13:46.094Z">
+<meta property="og:image" content="http://yoursite.com/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3-2.png">
+<meta property="og:updated_time" content="2020-06-06T10:09:14.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线上系统压力分析，系统负载倍增时，频繁GC">
 <meta name="twitter:description" content="线上系统部署架构4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分">
@@ -455,7 +455,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-06-01 09:13:46" itemprop="dateModified" datetime="2020-06-01T09:13:46+08:00">2020-06-01</time>
+                <time title="Modified: 2020-06-06 18:09:14" itemprop="dateModified" datetime="2020-06-06T18:09:14+08:00">2020-06-06</time>
               
             
           </span>
@@ -508,6 +508,7 @@
 
       
         <h4 id="线上系统部署架构"><a href="#线上系统部署架构" class="headerlink" title="线上系统部署架构"></a>线上系统部署架构</h4><p>4 核 8 GB 的机器，分配了 4GB 给 JVM，3G的内存给堆，新生代和老年代各 1.5 GB，元数据区是 256 MB，栈的内存空间是 1M，人脸库管理系统有几个定时器任务，设备人脸同步任务，设备时间同步任务，还有其他框架的后台线程，和jvm的后台线程，大概几十个线程；<br>jstat -gc 命令观察到，Eden 内存每秒 2M 速度在新增，600s 左右 Eden区才满，5分钟左右一次YoungGC，GC 系统停顿 350ms，每次 YoungGC 完大概 200~300kb 的存活对象存入 S 区，等到下次 GC，之前存活的 200~300kb 可以同步被回收，从而达到 Old GC 保持的次数一直在零次，此时的系统JVM垃圾回收器使用 NewPar+CMS 是没问题的，因为这是一个后台计算同步的系统，不需要直接面向用户，所以 5 分钟一次 GC，每次停顿 350 ms，对用户的影响也是无感知的</p>
+<a id="more"></a>
 <img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/1.png" title="线上系统优化分析">
 <p>线上的 JVM 参数配置，基本可以满足</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-Xms3072M -Xmx3072M -Xmn2048M -Xss1M -XX:MetaspaceSize=<span class="number">256</span>M </span><br><span class="line">-XX:MaxMetaspaceSize=<span class="number">256</span>M -XX:SurvivorRatio=<span class="number">8</span> -XX:MaxTenuringThreshold=<span class="number">5</span> </span><br><span class="line">-XX:PretenureSizeThreshold=<span class="number">1</span>M -XX:+UseParNewGC -XX:+UseConcMarkSweepGC </span><br><span class="line">-XX:CMSInitiatingOccupancyFaction=<span class="number">92</span> -XX:+UseCMSCompactAtFullCollection </span><br><span class="line">-XX:CMSFullGCsBeforeCompaction=<span class="number">0</span></span><br></pre></td></tr></table></figure>
@@ -520,7 +521,7 @@
 <h4 id="G1垃圾回收器规则"><a href="#G1垃圾回收器规则" class="headerlink" title="G1垃圾回收器规则"></a>G1垃圾回收器规则</h4><p>一旦新生代达到了设定的占据堆内存的最大大小 60%，此时就会触发GC，和之前不一样的是，会根据预设的系统停顿时间来评估各个 region，有最短的垃圾回收时间尽可能的回收更多的垃圾，还是采用的是复制算法<br>（1）对象在新生代躲过了很多次的垃圾回收，达到了一定的年龄了，“-XX:MaxTenuringThreshold” 参数可以设置这个年龄，他就会进入老年代</p>
 <p>（2）动态年龄判定规则，如果一旦发现某次新生代GC过后，存活对象超过了Survivor 的 50%</p>
 <p>老年代的region内存大小占到堆内存的 45% 的时候，触发混合GC，混合GC是新生代和老年代一起回收，首先是初始标记-并发标记-最终标记，混合回收阶段，初始标记和最终标记都需要STW，为了保证系统停顿的时间不超过 MaxPauseMillis，需要进行多次最后阶段的混合GC，-XX:G1MixedGCCountTarget=8，如果设置了如下参数 -XX:G1HeapWastePercent=5%，表示当回收过程中空闲的Region占内存大小比例的 5% 时，就停止回收，也不需要内存整理，-XX:G1MixedGCLiveThresholdPercent，这个参数是表示在回收过程中如果Region中存活的对象占比是低于 85%，才进行回收，由于基于G1垃圾回收整体是采用复制算法，不太容易产生内存碎片，</p>
-<img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3-1.png" title="G1老年代垃圾回收原理分析">
+<img src="/2020/05/31/线上系统压力分析，系统负载倍增时，频繁GC/3-2.png" title="G1老年代垃圾回收原理分析">
 
       
     </div>
@@ -568,6 +569,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/06/RocketMQ-消息丢失分析/" rel="prev" title="RocketMQ 消息零丢失分析">
+                RocketMQ 消息零丢失分析 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -636,7 +641,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">55</span>
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -906,7 +911,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">81</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
